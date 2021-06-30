@@ -13,5 +13,3 @@ Have fun using MyNetia, I hope this will be useful for you :D
 To report any bugs or questions, anything, please send a mail to MyNetia-Help@outlook.com
 
 PS: Start with the "help" command ;)
-
-Evennou Adrien
