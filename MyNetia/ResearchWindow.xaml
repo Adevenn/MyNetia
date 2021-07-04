@@ -28,6 +28,7 @@
         <Style x:Key="txtBlock" BasedOn="{StaticResource txtBlockBase}" TargetType="TextBlock">
             <Setter Property="FontSize" Value="18"/>
             <Setter Property="Padding" Value="8"/>
+            <Setter Property="Margin" Value="0"/>
         </Style>
     </Window.Resources>
     <DockPanel>

@@ -8,7 +8,6 @@ namespace MyNetia.Model
     [Serializable]
     public class Chapter : INotifyPropertyChanged
     {
-        public int id;
         private string _chapTitle;
         public string chapTitle
         {
@@ -34,11 +33,11 @@ namespace MyNetia.Model
             chapTitle = "New chapter";
             texts = new ObservableCollection<string>
             {
-                "NEW TEXT CONTENT"
+                ""
             };
             images = new ObservableCollection<string>
             {
-                "NEW IMAGE CONTENT"
+                ""
             };
         }
 

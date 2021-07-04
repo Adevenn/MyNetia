@@ -11,10 +11,15 @@
         MinHeight="750" MaxHeight="800"
         MinWidth="750" MaxWidth="750">
     <Window.Resources>
-        <Style x:Key="labelTitleBar" BasedOn="{StaticResource labelBase}" TargetType="Label">
-            <Setter Property="FontSize" Value="20"/>
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="Margin" Value="5, 0, 0, 0"/>
+        <Style x:Key="tabControl" BasedOn="{StaticResource tabControlBase}"  TargetType="TabControl">
+            <Setter Property="BorderThickness" Value="0, 1, 0, 0"/>
+            <Setter Property="Padding" Value="0, 10"/>
+        </Style>
+
+        <Style x:Key="listBox" BasedOn="{StaticResource listBoxBase}" TargetType="ListBox">
+            <Setter Property="Background" Value="#2D142C"/>
+            <Setter Property="Foreground" Value="#C72C41"/>
+            <Setter Property="BorderThickness" Value="0"/>
         </Style>
 
         <Style x:Key="label" BasedOn="{StaticResource labelBase}" TargetType="Label">
@@ -24,6 +29,17 @@
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
             <Setter Property="Margin" Value="0 10 0 10"/>
+        </Style>
+
+        <Style x:Key="labelTitleBar" BasedOn="{StaticResource labelBase}" TargetType="Label">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Margin" Value="5, 0, 0, 0"/>
+        </Style>
+
+        <Style x:Key="txtBlock" BasedOn="{StaticResource txtBlockBase}" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Padding" Value="5"/>
         </Style>
 
         <Style x:Key="txtBox" BasedOn="{StaticResource txtBoxBase}" TargetType="TextBox">
@@ -38,28 +54,15 @@
             <Setter Property="Height" Value="70"/>
         </Style>
 
-        <Style x:Key="btnValid" BasedOn="{StaticResource btnBase}" TargetType="Button">
-            <Setter Property="Height" Value="40"/>
-            <Setter Property="Width" Value="120"/>
-            <Setter Property="Margin" Value="10"/>
-        </Style>
-
         <Style x:Key="btnChapters" BasedOn="{StaticResource btnBase}" TargetType="Button">
             <Setter Property="FontSize" Value="15"/>
             <Setter Property="Height" Value="20"/>
             <Setter Property="Width" Value="75"/>
-            <Setter Property="Margin" Value="10"/>
         </Style>
 
-        <Style x:Key="listBox" BasedOn="{StaticResource listBoxBase}" TargetType="ListBox">
-            <Setter Property="Background" Value="#2D142C"/>
-            <Setter Property="Foreground" Value="#C72C41"/>
-            <Setter Property="BorderThickness" Value="0"/>
-        </Style>
-
-        <Style x:Key="tabControl" BasedOn="{StaticResource tabControlBase}"  TargetType="TabControl">
-            <Setter Property="BorderThickness" Value="0, 1, 0, 0"/>
-            <Setter Property="Padding" Value="0, 10"/>
+        <Style x:Key="btnValid" BasedOn="{StaticResource btnBase}" TargetType="Button">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="120"/>
         </Style>
 
         <Style x:Key="image" TargetType="Image">
@@ -133,12 +136,8 @@
                 Style="{StaticResource tabItem}"
                 Header="Add/Update">
                 <DockPanel>
-                    <StackPanel
-                        DockPanel.Dock="Top"
-                        Style="{StaticResource spV}">
-                        <Border
-                            Style="{StaticResource borderBot}"
-                            Padding="0 10 0 10">
+                    <StackPanel DockPanel.Dock="Top">
+                        <Border Style="{StaticResource borderBot}">
                             <StackPanel Style="{StaticResource spH}">
                                 <Label
                                     Style="{StaticResource label}"
@@ -146,8 +145,7 @@
                                 <TextBox
                                     x:Name="selectionTxtBox"
                                     KeyDown="selectionTxtBox_KeyDown"
-                                    Style="{StaticResource txtBox}"
-                                    HorizontalContentAlignment="Center"/>
+                                    Style="{StaticResource txtBox}"/>
                             </StackPanel>
                         </Border>
                     </StackPanel>
@@ -263,13 +261,23 @@
             <TabItem
                 Style="{StaticResource tabItem}"
                 Header="Delete">
-                <StackPanel Style="{StaticResource spV}">
+                <StackPanel>
+                    <Border Style="{StaticResource borderBot}">
+                        <StackPanel Style="{StaticResource spH}">
+                            <Label
+                                Style="{StaticResource label}"
+                                Content="Select element :"/>
+                            <TextBox
+                                x:Name="selectionDelete"
+                                GotFocus="selectionDelete_GotFocus"
+                                KeyDown="selectionDelete_KeyDown"
+                                TextChanged="onTextChangedDelete"
+                                Style="{StaticResource txtBox}"/>
+                        </StackPanel>
+                    </Border>
                     <TextBlock
-                        Style="{StaticResource txtBlockBase}"
-                        Text="Work in progress"/>
-                    <TextBlock
-                        Style="{StaticResource txtBlockBase}"
-                        Text="This ll content every external infos, like database server, etc .."/>
+                        x:Name="txtBlockDelete"
+                        Style="{StaticResource txtBlock}"/>
                 </StackPanel>
             </TabItem>
             <TabItem

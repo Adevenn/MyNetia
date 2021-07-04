@@ -18,6 +18,7 @@ namespace MyNetia.Model
             _db.Add(new DB_Element(title));
             sortDB();
         }
+
         public void addElement(string title, string subtitle, ObservableCollection<Chapter> chapList)
         {
             _db.Add(new DB_Element(title, subtitle, chapList));

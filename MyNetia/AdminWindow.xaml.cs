@@ -8,13 +8,13 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Media.Animation;
 using System;
+using System.Collections.Generic;
 
 namespace MyNetia
 {
     public partial class AdminWindow : Window
     {
         private InfoBinding binding = new InfoBinding();
-
         private bool _isElemSelected;
         private bool isElemSelected
         {
@@ -24,14 +24,14 @@ namespace MyNetia
             }
             set
             {
-                if(value == true && value != _isElemSelected)
+                if (value == true && value != _isElemSelected)
                 {
                     spElemPart.Visibility = Visibility.Visible;
                     chaptersListPart.Visibility = Visibility.Visible;
                     chapContentPart.Visibility = Visibility.Visible;
                     _isElemSelected = value;
                 }
-                else if(value != _isElemSelected)
+                else if (value != _isElemSelected)
                 {
                     spElemPart.Visibility = Visibility.Hidden;
                     chaptersListPart.Visibility = Visibility.Hidden;
@@ -41,11 +41,13 @@ namespace MyNetia
             }
         }
         private readonly string infoContent = "- Select element :\n" +
-                                              "   Return => add or update the element selected\n\n" +
+                                              "   Return => add or update the\n" +
+                                              "             element selected\n\n" +
                                               "- Text part :\n" +
                                               "   LCtrl + Return => New paragraph\n\n" +
                                               "- Image part :\n" +
                                               "   Enter => New Image Zone";
+        List<string> matchingResearch = null;
 
         public AdminWindow()
         {
@@ -53,7 +55,6 @@ namespace MyNetia
             isElemSelected = false;
             InitializeComponent();
         }
-
 
 
         #region EVENTS ADD/UPDATE
@@ -68,7 +69,10 @@ namespace MyNetia
             else if (e.Key == Key.Return)
             {
                 //Confirmation dialog to confirm element's creation
-                ConfirmationWindow window = new ConfirmationWindow("Do you want to add " + selectionTxtBox.Text + " ?");
+                ConfirmationWindow window = new ConfirmationWindow("Do you want to add " + selectionTxtBox.Text + " ?")
+                {
+                    Owner = this
+                };
                 if (window.ShowDialog() == true)
                 {
                     //Add new Element
@@ -90,7 +94,7 @@ namespace MyNetia
         private void addChapter(object sender, RoutedEventArgs e)
         {
             binding.chapters.Add(new Chapter());
-            //Mettre la selection sur le nouveau chapitre
+            //Select the new chapter
         }
 
         private void chapTitle_TextChanged(object sender, TextChangedEventArgs e)
@@ -118,13 +122,14 @@ namespace MyNetia
 
         private void txtBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            //Save chapter content
+            //Save chapter's content
             binding.chapters[listBoxChapters.SelectedIndex].texts = getSPContent(spTxtBoxTxt);
             binding.chapters[listBoxChapters.SelectedIndex].images = getSPContent(spTxtBoxImg);
         }
 
         private void validate(object sender, RoutedEventArgs e)
         {
+            //Update selected element
             AppResources.dbManager.updateElement(binding.oldElemTitle ,binding.elemTitle, binding.elemSubtitle, binding.chapters);
             DirectoryManager.createDirectory(Path.GetFullPath(@".\AppResources\Images\" + binding.elemTitle));
             imageValidation.Visibility = Visibility.Visible;
@@ -132,6 +137,57 @@ namespace MyNetia
         }
         #endregion
 
+
+        #region EVENTS DELETE
+        private void selectionDelete_GotFocus(object sender, RoutedEventArgs e)
+        {
+            helpResearchBar();
+        }
+
+        private void selectionDelete_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Return && AppResources.dbManager.isElementExist(selectionDelete.Text))
+            {
+                //Confirmation dialog to confirm element's creation
+                ConfirmationWindow window = new ConfirmationWindow("Do you want to delete " + selectionDelete.Text + " ?")
+                {
+                    Owner = this
+                };
+                if (window.ShowDialog() == true)
+                {
+                    //Delete element
+                    DirectoryManager.deleteDirectory(Path.GetFullPath(@".\AppResources\Images\" + selectionDelete.Text));
+                    AppResources.dbManager.deleteElement(selectionDelete.Text);
+                    helpResearchBar();
+                }
+            }
+            else if (e.Key == Key.Tab && matchingResearch.Count > 0)
+            {
+                selectionTxtBox.Text = matchingResearch[0];
+                //Set Keyboard focus at the end
+                selectionTxtBox.CaretIndex = selectionTxtBox.Text.Length;
+            }
+        }
+
+        private void onTextChangedDelete(object sender, TextChangedEventArgs e)
+        {
+            helpResearchBar();
+        }
+
+        private void helpResearchBar()
+        {
+            matchingResearch = new List<string>();
+            txtBlockDelete.Text = null;
+            foreach (string txt in AppResources.dbManager.getTitles())
+            {
+                if (txt.Contains(selectionDelete.Text))
+                {
+                    txtBlockDelete.Text += txt + "\n";
+                    matchingResearch.Add(txt);
+                }
+            }
+        }
+        #endregion
 
 
         #region UI
@@ -146,14 +202,7 @@ namespace MyNetia
             Style = (Style)Resources["txtBoxTxt"],
             Text = content
         };
-
-        private ListBoxItem listItemChapters(string content) => new ListBoxItem
-        {
-            Style = (Style)Resources["listBoxItem"],
-            Content = content
-        };
         #endregion
-
 
 
         #region OTHERS METHODS
@@ -209,7 +258,6 @@ namespace MyNetia
             imageValidation.BeginAnimation(OpacityProperty, da);
         }
         #endregion
-
 
 
         #region TITLE BAR
@@ -270,7 +318,6 @@ namespace MyNetia
         #endregion
 
         #endregion
-
 
 
         private class InfoBinding : INotifyPropertyChanged

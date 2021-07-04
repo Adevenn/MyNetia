@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace MyNetia.Model
@@ -32,14 +31,6 @@ namespace MyNetia.Model
         public void deleteChapter(string title)
         {
             _chapters.RemoveAt(getChapterID(title));
-        }
-
-        public List<string> getChaptersTitles()
-        {
-            List<string> titles = new List<string>();
-            foreach(Chapter ch in chapters)
-                titles.Add(ch.chapTitle);
-            return titles;
         }
 
         private int getChapterID(string title)
