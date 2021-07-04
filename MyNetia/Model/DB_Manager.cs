@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 
 namespace MyNetia.Model
@@ -8,86 +9,94 @@ namespace MyNetia.Model
     [Serializable]
     public class DB_Manager
     {
-        private List<DB_Element> _db = new List<DB_Element>();
-        public List<DB_Element> db => _db;
+        private ObservableCollection<DB_Element> _db = new ObservableCollection<DB_Element>();
+        public ObservableCollection<DB_Element> db => _db;
 
         #region DB modifications
-        public void add(string name, string port, List<string> theoryTxt, List<string> hackingTxt, List<string> theoryImg, List<string> hackingImg)
+        public void addElement(string title)
         {
-            _db.Add(new DB_Element(name, port, theoryTxt, hackingTxt, theoryImg, hackingImg, DateTime.Now));
-            sort();
-            saveAsJson(Path.GetFullPath(@".\AppResources"));
+            _db.Add(new DB_Element(title));
+            sortDB();
         }
-        public void remove(string name)
+        public void addElement(string title, string subtitle, ObservableCollection<Chapter> chapList)
+        {
+            _db.Add(new DB_Element(title, subtitle, chapList));
+            sortDB();
+        }
+
+        public void updateElement(string oldTitle, string title, string subtitle, ObservableCollection<Chapter> chapList)
+        {
+            int id = getElementID(oldTitle);
+            _db[id] = new DB_Element(title, subtitle, chapList);
+            sortDB();
+        }
+
+        public void deleteElement(string title)
         {
             for (int i = 0; i < db.Count; i++)
             {
-                if (db[i].name == name)
+                if (db[i].title == title)
                 {
                     _db.RemoveAt(i);
                     break;
                 }
             }
-            sort();
-            saveAsJson(Path.GetFullPath(@".\AppResources"));
+            sortDB();
         }
-        public void update(int id, DB_Element element)
-        {
-            _db[id] = element;
-            saveAsJson(Path.GetFullPath(@".\AppResources"));
-        }
-        public void sort()
+
+        private void sortDB()
         {
             for (int i = 1; i < db.Count; i++)
             {
-                if (_db[i].name.CompareTo(_db[i - 1].name) == -1)
+                if (_db[i].title.CompareTo(_db[i - 1].title) == -1)
                 {
-                    DB_Element element = _db[i];
+                    DB_Element elem = _db[i];
                     _db[i] = _db[i - 1];
-                    _db[i - 1] = element;
-                    i = 0;
+                    _db[i - 1] = elem;
+                    i = 1;
                 }
             }
+            saveJson(Path.GetFullPath(@".\AppResources"));
         }
-
         #endregion
 
         #region Access to DB
-        public DB_Element getElement(string name)
+        public DB_Element getElement(string title)
         {
             for (int i = 0; i < db.Count; i++)
             {
-                if (name == db[i].name)
-                {
+                if (title == db[i].title)
                     return db[i];
-                }
             }
-            return null;
+            return new DB_Element(title);
         }
-        public bool isExist(string name)
+
+        public bool isElementExist(string title)
         {
             for (int i = 0; i < db.Count; i++)
             {
-                if (db[i].name == name)
+                if (db[i].title.Equals(title))
                     return true;
             }
             return false;
         }
-        public int getId(string name)
+
+        private int getElementID(string title)
         {
             for (int i = 0; i < db.Count; i++)
             {
-                if (db[i].name == name)
+                if (db[i].title.Equals(title))
                     return i;
             }
             return -1;
         }
-        public List<string> getNames()
+
+        public List<string> getTitles()
         {
-            List<string> names = new List<string>();
-            foreach (DB_Element element in db)
-                names.Add(element.name);
-            return names;
+            List<string> titles = new List<string>();
+            foreach (DB_Element elem in db)
+                titles.Add(elem.title);
+            return titles;
         }
         #endregion
 
@@ -98,7 +107,8 @@ namespace MyNetia.Model
             if (!string.IsNullOrWhiteSpace(jsonContent))
                 _db = JsonConvert.DeserializeObject<DB_Manager>(jsonContent).db;
         }
-        public void saveAsJson(string path)
+
+        public void saveJson(string path)
         {
             string jsonString = JsonConvert.SerializeObject(new { db }, Formatting.None);
             File.WriteAllText(path + @"\SaveDB.json", jsonString);

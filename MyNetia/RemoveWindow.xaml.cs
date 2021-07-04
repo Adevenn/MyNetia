@@ -21,13 +21,13 @@ namespace MyNetia
         {
             if (e.Key == Key.Return)
             {
-                if (AppResources.dbManager.isExist(selectionTxtBox.Text))
+                if (AppResources.dbManager.isElementExist(selectionTxtBox.Text))
                 {
                     MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Are you sure you want to remove this element ?", "Delete Confirmation", System.Windows.MessageBoxButton.YesNo);
                     if (messageBoxResult == MessageBoxResult.Yes)
                     {
                         DirectoryManager.deleteDirectory(Path.GetFullPath(@".\AppResources\Images\" + selectionTxtBox.Text));
-                        AppResources.dbManager.remove(selectionTxtBox.Text);
+                        AppResources.dbManager.deleteElement(selectionTxtBox.Text);
                         helpResearchBar();
                     }
                 }
@@ -50,7 +50,7 @@ namespace MyNetia
         {
             matchingResearch = new List<string>();
             txtBlock.Text = null;
-            foreach (string txt in AppResources.dbManager.getNames())
+            foreach (string txt in AppResources.dbManager.getTitles())
             {
                 if (txt.Contains(selectionTxtBox.Text))
                 {

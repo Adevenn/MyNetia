@@ -21,7 +21,6 @@ namespace MyNetia
         private void closeBtn_Click(object sender, RoutedEventArgs e)
         {
             Close();
-            ResearchWindow.isAddWindowOpen = false;
         }
         private void titleBar_MouseDown(object sender, MouseButtonEventArgs e)
         {

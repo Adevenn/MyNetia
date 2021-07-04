@@ -1,0 +1,4 @@
+﻿- DB  externe
+- Lien hypertext
+- Avoir un point de vue du résultat final (autre fenetre ? Miniature ? Btn pour Show/Hide ?)
+- Ajouter le fait d avoir des titres (différenciation entre simple texte et titre)

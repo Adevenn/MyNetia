@@ -9,6 +9,7 @@ namespace MyNetia.Model
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
         }
+
         public static void deleteDirectory(string path)
         {
             if (Directory.Exists(path))

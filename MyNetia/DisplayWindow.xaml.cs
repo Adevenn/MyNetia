@@ -10,10 +10,10 @@ namespace MyNetia
 {
     public partial class DisplayWindow : Window
     {
-        private readonly DB_Element element;
-        public DisplayWindow(string name)
+        private readonly DB_Element elem;
+        public DisplayWindow(string title)
         {
-            element = AppResources.dbManager.getElement(name);
+            elem = AppResources.dbManager.getElement(title);
             InitializeComponent();
             setValues();
         }
@@ -39,7 +39,7 @@ namespace MyNetia
                 {
                     if (!string.IsNullOrWhiteSpace(img[idImg]))
                     {
-                        string path = Path.GetFullPath(@".\AppResources\Images\" + element.name + @"\" + img[idImg]);
+                        string path = Path.GetFullPath(@".\AppResources\Images\" + elem.title + @"\" + img[idImg]);
                         if (File.Exists(path))
                             spHoriz.Children.Add(image(File.ReadAllBytes(path)));
                         else
@@ -52,11 +52,13 @@ namespace MyNetia
                     break;
             }
         }
+
         private TextBlock setTxtBlock(string text) => new TextBlock
         {
             Text = text,
             Style = (Style)Resources["txtBlock"]
         };
+
         private Image image(byte[] imageFile) => new Image
         {
             Source = loadImage(imageFile),
@@ -67,18 +69,20 @@ namespace MyNetia
         #region OTHERS METHODS
         private void setValues()
         {
-            txtTitle.Text = element.name;
-            if (!string.IsNullOrWhiteSpace(element.port))
-                txtPort.Text = "PORT : " + element.port;
-            setUI(element.theoryTxt, element.theoryImg, spContentTheory);
-            setUI(element.hackingTxt, element.hackingImg, spContentHacking);
-            txtLastUpdate.Text = "Last update : " + element.lastUpdate.Month.ToString() + "/" + element.lastUpdate.Day.ToString() + "/" + element.lastUpdate.Year.ToString();
+            txtTitle.Text = elem.title;
+            if (!string.IsNullOrWhiteSpace(elem.subtitle))
+                txtPort.Text = elem.subtitle;
+            //setUI(element.theoryTxt, element.theoryImg, spContentTheory);
+            //setUI(element.hackingTxt, element.hackingImg, spContentHacking);
+            txtLastUpdate.Text = "Last update : " + elem.lastUpdate.Month.ToString() + "/" + elem.lastUpdate.Day.ToString() + "/" + elem.lastUpdate.Year.ToString();
         }
+
         private static BitmapImage loadImage(byte[] imageData)
         {
-            if (imageData == null || imageData.Length == 0) return null;
-            var image = new BitmapImage();
-            using (var mem = new MemoryStream(imageData))
+            if (imageData == null || imageData.Length == 0)
+                return null;
+            BitmapImage image = new BitmapImage();
+            using (MemoryStream mem = new MemoryStream(imageData))
             {
                 mem.Position = 0;
                 image.BeginInit();

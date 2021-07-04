@@ -1,6 +1,7 @@
 ﻿using MyNetia.Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,13 +15,37 @@ namespace MyNetia
         //Only 1 window open at a time
         public static bool isUpdateWindowOpen = false;
         public static bool isHelpWindowOpen = false;
-        public static bool isAddWindowOpen = false;
         public static bool isRemoveWindowOpen = false;
+        public static bool isAdminWindowOpen = false;
+
         public ResearchWindow()
         {
             InitializeComponent();
-            if (File.Exists(Path.GetFullPath(@".\AppResources\SaveDB.json")))
-                AppResources.dbManager.readJson();
+            /*if (File.Exists(Path.GetFullPath(@".\AppResources\SaveDB.json")))
+                AppResources.dbManager.readJson();*/
+            ObservableCollection<string> texts = new ObservableCollection<string>
+            {
+                "TEST",
+                "TEST",
+                "TEST",
+                "TEST"
+            };
+            ObservableCollection<string> images = new ObservableCollection<string>
+            {
+                "TEST",
+                "TEST",
+                "TEST",
+                "TEST"
+            };
+            ObservableCollection<Chapter> chapList = new ObservableCollection<Chapter>
+            {
+                new Chapter("TEST CHAPTER", texts, images),
+                new Chapter("TEST CHAPTER", texts, images)
+            };
+            AppResources.dbManager.addElement("ARP", "port 123", chapList);
+            AppResources.dbManager.addElement("AAA", "port 123", chapList);
+            AppResources.dbManager.addElement("BBB", "port 123", chapList);
+            AppResources.dbManager.addElement("CCC", "port 123", chapList);
             helpResearchBar();
         }
 
@@ -29,46 +54,31 @@ namespace MyNetia
         {
             helpResearchBar();
         }
+
         private void onKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Return)
             {
-                if (AppResources.dbManager.isExist(txtBox.Text))
+                if (AppResources.dbManager.isElementExist(txtBox.Text))
                 {
-                    DB_Element element = AppResources.dbManager.getElement(txtBox.Text);
-                    DisplayWindow displayWindow = new DisplayWindow(element.name);
+                    DB_Element elem = AppResources.dbManager.getElement(txtBox.Text);
+                    DisplayWindow displayWindow = new DisplayWindow(elem.title);
                     displayWindow.Show();
                 }
                 if (txtBox.Text.StartsWith("-") || txtBox.Text.Equals("Help") || txtBox.Text.Equals("help") || string.IsNullOrWhiteSpace(txtBox.Text))
                 {
                     switch (txtBox.Text)
                     {
-                        case Commands.add:
-                            if (!isAddWindowOpen)
+                        case Commands.admin: 
+                            if (!isAdminWindowOpen)
                             {
-                                AddWindow addWindow = new AddWindow();
-                                addWindow.Show();
-                                isAddWindowOpen = true;
-                            }
-                            break;
-                        case Commands.remove:
-                            if (!isRemoveWindowOpen)
-                            {
-                                RemoveWindow removeWindow = new RemoveWindow();
-                                removeWindow.Show();
-                                isRemoveWindowOpen = true;
+                                AdminWindow adminWindow = new AdminWindow();
+                                adminWindow.Show();
+                                isAdminWindowOpen = true;
                             }
                             break;
                         case Commands.saveAsJson:
-                            AppResources.dbManager.saveAsJson(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
-                            break;
-                        case Commands.update:
-                            if (!isUpdateWindowOpen)
-                            {
-                                UpdateWindow updateWindow = new UpdateWindow();
-                                updateWindow.Show();
-                                isUpdateWindowOpen = true;
-                            }
+                            AppResources.dbManager.saveJson(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
                             break;
                         case Commands.help:
                         default:
@@ -96,7 +106,7 @@ namespace MyNetia
         {
             matchingResearch = new List<string>();
             txtBlock.Text = null;
-            foreach (string txt in AppResources.dbManager.getNames())
+            foreach (string txt in AppResources.dbManager.getTitles())
             {
                 if (txt.Contains(txtBox.Text))
                 {

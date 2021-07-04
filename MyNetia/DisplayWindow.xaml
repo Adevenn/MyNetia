@@ -35,46 +35,14 @@
             <Setter Property="MaxWidth" Value="512"/>
             <Setter Property="Margin" Value="15"/>
         </Style>
-        
+
         <Style x:Key="spHCustom" BasedOn="{StaticResource spH}" TargetType="StackPanel">
             <Setter Property="Margin" Value="10, 30, 20, 30"/>
         </Style>
-        
-        <Style x:Key="tabControl" TargetType="TabControl">
+
+        <Style x:Key="tabControl" BasedOn="{StaticResource tabControlBase}" TargetType="TabControl">
             <Setter Property="TabStripPlacement" Value="Left"/>
-            <Setter Property="Background" Value="#2D142C"/>
-            <Setter Property="Foreground" Value="#C72C41"/>
-            <Setter Property="BorderThickness" Value="0"/>
-        </Style>
-        
-        <Style x:Key="tabItem" TargetType="TabItem">
-            <Setter Property="Foreground" Value="#C72C41"/>
-            <Setter Property="FontSize" Value="15"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate
-                        TargetType="TabItem">
-                        <Border Name="Border"
-                                BorderThickness="1"
-                                BorderBrush="#510A32"
-                                Margin="10">
-                            <ContentPresenter
-                                x:Name="ContentSite"
-                                Height="20"
-                                ContentSource="Header"
-                                Margin="10,2"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="#510A32" />
-                            </Trigger>
-                            <Trigger Property="IsSelected" Value="False">
-                                <Setter TargetName="Border" Property="Background" Value="#2D142C" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
+            <Setter Property="BorderThickness" Value="1, 0, 0, 0"/>
         </Style>
     </Window.Resources>
 
@@ -155,6 +123,13 @@
                 DockPanel.Dock="Bottom"
                 Style="{StaticResource txtBlock}"
                 Margin="5"/>
+            <FlowDocumentScrollViewer>
+                <FlowDocument>
+                    <Paragraph>
+                        
+                    </Paragraph>
+                </FlowDocument>
+            </FlowDocumentScrollViewer>
             <TabControl Style="{StaticResource tabControl}">
                 <TabItem
                     Header="Theory"

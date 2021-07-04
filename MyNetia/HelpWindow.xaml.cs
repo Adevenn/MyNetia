@@ -27,7 +27,7 @@ namespace MyNetia
                 for (int j = i; j < i + 4; j++)
                 {
                     if (j < AppResources.dbManager.db.Count)
-                        s.Children.Add(setLabel(AppResources.dbManager.db[j].name));
+                        s.Children.Add(setLabel(AppResources.dbManager.db[j].title));
                     else
                         break;
                 }
