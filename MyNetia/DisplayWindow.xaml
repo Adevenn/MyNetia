@@ -10,6 +10,13 @@
         MinWidth="1100"
         Height="800" Width="1200">
     <Window.Resources>
+        <Style x:Key="listBox" BasedOn="{StaticResource listBoxBase}" TargetType="ListBox">
+            <Setter Property="Background" Value="#2D142C"/>
+            <Setter Property="Foreground" Value="#C72C41"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="10"/>
+        </Style>
+        
         <Style x:Key="txtBlock" BasedOn="{StaticResource txtBlockBase}" TargetType="TextBlock">
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="MaxWidth" Value="500"/>
@@ -113,7 +120,7 @@
                         x:Name="txtTitle"
                         FontSize="40"/>
                     <TextBlock
-                        x:Name="txtPort"
+                        x:Name="txtSubtitle"
                         Style="{StaticResource txtBlock}"
                         VerticalAlignment="Bottom"/>
                 </Grid>
@@ -122,34 +129,42 @@
                 x:Name="txtLastUpdate"
                 DockPanel.Dock="Bottom"
                 Style="{StaticResource txtBlock}"
-                Margin="5"/>
-            <FlowDocumentScrollViewer>
-                <FlowDocument>
-                    <Paragraph>
-                        
-                    </Paragraph>
-                </FlowDocument>
-            </FlowDocumentScrollViewer>
-            <TabControl Style="{StaticResource tabControl}">
-                <TabItem
-                    Header="Theory"
-                    Style="{StaticResource tabItem}">
-                    <ScrollViewer Style="{StaticResource scrollViewer}">
+                Margin="8"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="5*"/>
+                </Grid.ColumnDefinitions>
+                <Border
+                    Style="{StaticResource borderRight}"
+                    Grid.Column="0">
+                    <ListBox
+                        x:Name="listChapters"
+                        Style="{StaticResource listBox}"
+                        SelectionChanged="listChapters_SelectionChanged"
+                        ItemsSource="{Binding chapters, UpdateSourceTrigger=PropertyChanged}"
+                        DisplayMemberPath="chapTitle"/>
+                </Border>
+                <ScrollViewer
+                    Grid.Column="1"
+                    x:Name="scrollViewer"
+                    Style="{StaticResource scrollViewer}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="100"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Label
+                            Grid.Row="0"
+                            x:Name="chapTitleLabel"
+                            Style="{StaticResource label}"
+                            Content="{Binding chapTitle, UpdateSourceTrigger=PropertyChanged}"/>
                         <StackPanel
-                            x:Name="spContentTheory"
-                            Style="{StaticResource spV}"/>
-                    </ScrollViewer>
-                </TabItem>
-                <TabItem
-                    Header="Hacking"
-                    Style="{StaticResource tabItem}">
-                    <ScrollViewer Style="{StaticResource scrollViewer}">
-                        <StackPanel
-                            x:Name="spContentHacking"
-                            Style="{StaticResource spV}"/>
-                    </ScrollViewer>
-                </TabItem>
-            </TabControl>
+                            Grid.Row="1"
+                            x:Name="spContent"/>
+                    </Grid>
+                </ScrollViewer>
+            </Grid>
         </DockPanel>
     </DockPanel>
 </Window>

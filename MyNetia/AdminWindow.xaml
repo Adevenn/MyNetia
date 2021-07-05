@@ -194,11 +194,11 @@
                                     Content="+"/>
                             </StackPanel>
                             <ListBox
+                                Grid.Row="1"
                                 x:Name="listBoxChapters"
                                 Style="{StaticResource listBox}"
                                 SelectionChanged="listBoxChapters_SelectionChanged"
                                 ItemsSource="{Binding chapters, UpdateSourceTrigger=PropertyChanged}"
-                                Grid.Row="1"
                                 DisplayMemberPath="chapTitle">
                             </ListBox>
                         </Grid>

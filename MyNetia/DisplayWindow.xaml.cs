@@ -1,6 +1,10 @@
 ﻿using MyNetia.Model;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -10,17 +14,44 @@ namespace MyNetia
 {
     public partial class DisplayWindow : Window
     {
-        private readonly DB_Element elem;
+        InfoBinding binding = new InfoBinding();
         public DisplayWindow(string title)
         {
-            elem = AppResources.dbManager.getElement(title);
+            DataContext = binding;
             InitializeComponent();
-            setValues();
+            setValues(title);
         }
 
-        #region UI CREATOR
-        private void setUI(List<string> txt, List<string> img, StackPanel sp)
+        #region EVENTS
+        private void listChapters_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            setChapterValues((Chapter)listChapters.SelectedItem);
+        }
+
+        private void setValues(string title)
+        {
+            DB_Element elem = AppResources.dbManager.getElement(title);
+            txtTitle.Text = elem.title;
+            txtSubtitle.Text = elem.subtitle;
+            binding.chapters = elem.chapters;
+            listChapters.SelectedIndex = 0;
+            //chapTitleLabel.Content = elem
+            //setUI(elem.te);
+            txtLastUpdate.Text = "Last update : " + elem.lastUpdate.Month.ToString() + "/" + elem.lastUpdate.Day.ToString() + "/" + elem.lastUpdate.Year.ToString();
+        }
+
+        private void setChapterValues(Chapter ch)
+        {
+            scrollViewer.ScrollToTop();
+            binding.chapTitle = ch.chapTitle;
+            setUI(ch.texts, ch.images, spContent);
+        }
+        #endregion
+
+        #region UI CREATOR
+        private void setUI(ObservableCollection<string> txt, ObservableCollection<string> img, StackPanel sp)
+        {
+            sp.Children.Clear();
             int idTxt = 0;
             int idImg = 0;
             while (true)
@@ -39,7 +70,7 @@ namespace MyNetia
                 {
                     if (!string.IsNullOrWhiteSpace(img[idImg]))
                     {
-                        string path = Path.GetFullPath(@".\AppResources\Images\" + elem.title + @"\" + img[idImg]);
+                        string path = Path.GetFullPath(@".\AppResources\Images\" + txtTitle.Text + @"\" + img[idImg]);
                         if (File.Exists(path))
                             spHoriz.Children.Add(image(File.ReadAllBytes(path)));
                         else
@@ -67,17 +98,7 @@ namespace MyNetia
         #endregion
 
         #region OTHERS METHODS
-        private void setValues()
-        {
-            txtTitle.Text = elem.title;
-            if (!string.IsNullOrWhiteSpace(elem.subtitle))
-                txtPort.Text = elem.subtitle;
-            //setUI(element.theoryTxt, element.theoryImg, spContentTheory);
-            //setUI(element.hackingTxt, element.hackingImg, spContentHacking);
-            txtLastUpdate.Text = "Last update : " + elem.lastUpdate.Month.ToString() + "/" + elem.lastUpdate.Day.ToString() + "/" + elem.lastUpdate.Year.ToString();
-        }
-
-        private static BitmapImage loadImage(byte[] imageData)
+        private BitmapImage loadImage(byte[] imageData)
         {
             if (imageData == null || imageData.Length == 0)
                 return null;
@@ -135,5 +156,89 @@ namespace MyNetia
         #endregion
 
         #endregion
+
+        private class InfoBinding : INotifyPropertyChanged
+        {
+            public string oldElemTitle;
+            private string _elemTitle;
+            public string elemTitle
+            {
+                get
+                {
+                    return _elemTitle;
+                }
+
+                set
+                {
+                    if (_elemTitle != value)
+                    {
+                        _elemTitle = value;
+                        OnPropertyChanged();
+                    }
+                }
+            }
+
+            private string _elemSubtitle;
+            public string elemSubtitle
+            {
+                get
+                {
+                    return _elemSubtitle;
+                }
+
+                set
+                {
+                    if (_elemSubtitle != value)
+                    {
+                        _elemSubtitle = value;
+                        OnPropertyChanged();
+                    }
+                }
+            }
+
+            private string _chapTitle;
+            public string chapTitle
+            {
+                get
+                {
+                    return _chapTitle;
+                }
+
+                set
+                {
+                    if (_chapTitle != value)
+                    {
+                        _chapTitle = value;
+                        OnPropertyChanged();
+                    }
+                }
+            }
+
+            private ObservableCollection<Chapter> _chapters;
+            public ObservableCollection<Chapter> chapters
+            {
+                get
+                {
+                    return _chapters;
+                }
+
+                set
+                {
+                    if (_chapters != value)
+                    {
+                        _chapters = value;
+                        OnPropertyChanged();
+                    }
+                }
+            }
+
+            public event PropertyChangedEventHandler PropertyChanged;
+            protected void OnPropertyChanged([CallerMemberName] string name = null)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            }
+        }
+
+        
     }
 }
