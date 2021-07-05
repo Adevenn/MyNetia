@@ -78,46 +78,6 @@
     </Style>
     
 
-    <Style x:Key="listBoxBase" TargetType="ListBox">
-        <Setter Property="Background" Value="#2D142C"/>
-        <Setter Property="Foreground" Value="#C72C41"/>
-        <Setter Property="SelectionMode" Value="Single"/>
-        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Hidden"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="ItemContainerStyle">
-            <Setter.Value>
-                <Style TargetType="ListBoxItem" >
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="ListBoxItem">
-                                <Border
-                                    Name="Border"
-                                    BorderThickness="1"
-                                    BorderBrush="#510A32"
-                                    Padding="5"
-                                    Margin="10, 5">
-                                    <ContentPresenter
-                                        x:Name="ContentSite"
-                                        VerticalAlignment="Center"
-                                        HorizontalAlignment="Center"/>
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsSelected" Value="True">
-                                        <Setter TargetName="Border" Property="Background" Value="#510A32"/>
-                                    </Trigger>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="Border" Property="Background" Value="#510A32"/>
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </Setter.Value>
-        </Setter>
-    </Style>
-    
-
     <Style x:Key="borderFull" TargetType="Border">
         <Setter Property="BorderBrush" Value="#510A32"/>
         <Setter Property="BorderThickness" Value="1"/>
@@ -133,7 +93,43 @@
         <Setter Property="BorderThickness" Value="0, 0, 0, 1"/>
         <Setter Property="Padding" Value="0, 0, 0, 10"/>
     </Style>
-    
+
+
+    <Style x:Key="listBoxBase" TargetType="ListBox">
+        <Setter Property="Background" Value="#2D142C"/>
+        <Setter Property="Foreground" Value="#C72C41"/>
+        <Setter Property="SelectionMode" Value="Single"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Hidden"/>
+        <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+
+    <Style x:Key="listBoxItemBase" TargetType="ListBoxItem">
+        <Setter Property="AllowDrop" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Border
+                        Name="Border"
+                        Style="{StaticResource borderFull}"
+                        Padding="5"
+                        Margin="10, 5">
+                        <ContentPresenter
+                            x:Name="ContentSite"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#510A32" TargetName="Border"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#510A32" TargetName="Border"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
     <Style x:Key="spV" TargetType="StackPanel">
         <Setter Property="VerticalAlignment" Value="Center"/>

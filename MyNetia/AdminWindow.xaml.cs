@@ -8,11 +8,15 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Media.Animation;
 using System;
+using System.Windows.Media;
+using System.Collections.Generic;
 
 namespace MyNetia
 {
     public partial class AdminWindow : Window
     {
+        private Point _dragStartPoint;
+        private bool isDraging = false;
         private readonly InfoBinding binding = new InfoBinding();
         private bool _isElemSelected;
         private bool isElemSelected
@@ -120,14 +124,15 @@ namespace MyNetia
         private void txtBox_LostFocus(object sender, RoutedEventArgs e)
         {
             //Save chapter's content
-            binding.chapters[listChapters.SelectedIndex].texts = getSPContent(spTxtBoxTxt);
-            binding.chapters[listChapters.SelectedIndex].images = getSPContent(spTxtBoxImg);
+            int id = listChapters.SelectedIndex;
+            binding.chapters[id].texts = getSPContent(spTxtBoxTxt);
+            binding.chapters[id].images = getSPContent(spTxtBoxImg);
         }
 
         private void validate(object sender, RoutedEventArgs e)
         {
             //Update selected element
-            AppResources.dbManager.updateElement(binding.oldElemTitle ,binding.elemTitle, binding.elemSubtitle, binding.chapters);
+            AppResources.dbManager.updateElement(binding.oldElemTitle ,binding.elemTitle, binding.elemSubtitle, (ObservableCollection<Chapter>)binding.chapters);
             DirectoryManager.createDirectory(Path.GetFullPath(@".\AppResources\Images\" + binding.elemTitle));
             imageValidation.Visibility = Visibility.Visible;
             animValidationOpacity();
@@ -143,9 +148,12 @@ namespace MyNetia
         }
         private void setChapterValues(Chapter ch)
         {
-            binding.chapTitle = ch.chapTitle;
-            setSPTxtContent(spTxtBoxTxt, ch.texts);
-            setSPImgContent(spTxtBoxImg, ch.images);
+            if (!isDraging)
+            {
+                binding.chapTitle = ch.chapTitle;
+                setSPTxtContent(spTxtBoxTxt, ch.texts);
+                setSPImgContent(spTxtBoxImg, ch.images);
+            }
         }
 
         private ObservableCollection<string> getSPContent(StackPanel sp)
@@ -179,6 +187,74 @@ namespace MyNetia
                 Duration = new Duration(TimeSpan.FromSeconds(3))
             };
             imageValidation.BeginAnimation(OpacityProperty, da);
+        }
+
+        //Drag and drop ItemListBox
+        private void ListBoxItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            _dragStartPoint = e.GetPosition(null);
+        }
+
+        private T FindVisualParent<T>(DependencyObject child)
+            where T : DependencyObject
+        {
+            DependencyObject parentObject = VisualTreeHelper.GetParent(child);
+            if (parentObject == null)
+                return null;
+            if (parentObject is T parent)
+                return parent;
+            return FindVisualParent<T>(parentObject);
+        }
+
+        private void ListBox_PreviewMouseMove(object sender, MouseEventArgs e)
+        {
+            Point point = e.GetPosition(null);
+            Vector diff = _dragStartPoint - point;
+            if (e.LeftButton == MouseButtonState.Pressed &&
+                (Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance ||
+                    Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance))
+            {
+                ListBox lb = sender as ListBox;
+                ListBoxItem lbi = FindVisualParent<ListBoxItem>((DependencyObject)e.OriginalSource);
+                if (lbi != null)
+                {
+                    DragDrop.DoDragDrop(lbi, lbi.DataContext, DragDropEffects.Move);
+                }
+            }
+        }
+
+        private void ListBoxItem_Drop(object sender, DragEventArgs e)
+        {
+
+            if (sender is ListBoxItem)
+            {
+                isDraging = true;
+                Chapter source = e.Data.GetData(typeof(Chapter)) as Chapter;
+                Chapter target = ((ListBoxItem)sender).DataContext as Chapter;
+                int sourceIndex = listChapters.Items.IndexOf(source);
+                int targetIndex = listChapters.Items.IndexOf(target);
+
+                Move(source, sourceIndex, targetIndex);
+                isDraging = false;
+            }
+        }
+
+        private void Move(Chapter source, int sourceIndex, int targetIndex)
+        {
+            if (sourceIndex < targetIndex)
+            {
+                binding.chapters.Insert(targetIndex + 1, source);
+                binding.chapters.RemoveAt(sourceIndex);
+            }
+            else
+            {
+                int removeIndex = sourceIndex + 1;
+                if (binding.chapters.Count + 1 > removeIndex)
+                {
+                    binding.chapters.Insert(targetIndex, source);
+                    binding.chapters.RemoveAt(removeIndex);
+                }
+            }
         }
         #endregion
 

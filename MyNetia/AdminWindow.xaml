@@ -17,12 +17,19 @@
             <Setter Property="Padding" Value="0, 10"/>
         </Style>
 
-        <Style x:Key="listBox" BasedOn="{StaticResource listBoxBase}" TargetType="ListBox">
-            <Setter Property="Background" Value="#2D142C"/>
-            <Setter Property="Foreground" Value="#C72C41"/>
-            <Setter Property="BorderThickness" Value="0"/>
+        <Style x:Key="listBoxItem" BasedOn="{StaticResource listBoxItemBase}" TargetType="ListBoxItem">
+            <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ListBoxItem_PreviewMouseLeftButtonDown"/>
+            <EventSetter Event="Drop" Handler="ListBoxItem_Drop"/>
         </Style>
 
+        <Style x:Key="listBox" BasedOn="{StaticResource listBoxBase}" TargetType="ListBox">
+            <EventSetter Event="SelectionChanged" Handler="listBoxChapters_SelectionChanged"/>
+            <EventSetter Event="PreviewMouseMove" Handler="ListBox_PreviewMouseMove"/>
+            <Setter Property="ItemsSource" Value="{Binding chapters, UpdateSourceTrigger=PropertyChanged}"/>
+            <Setter Property="DisplayMemberPath" Value="chapTitle"/>
+            <Setter Property="ItemContainerStyle" Value="{StaticResource listBoxItem}"/>
+        </Style>
+        
         <Style x:Key="label" BasedOn="{StaticResource labelBase}" TargetType="Label">
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="Width" Value="160"/>
@@ -138,8 +145,8 @@
                                     Content="Select element :"/>
                                 <TextBox
                                     x:Name="selectionTxtBox"
-                                    KeyDown="selectionTxtBox_KeyDown"
-                                    Style="{StaticResource txtBox}"/>
+                                    Style="{StaticResource txtBox}"
+                                    KeyDown="selectionTxtBox_KeyDown"/>
                             </StackPanel>
                         </Border>
                     </StackPanel>
@@ -147,7 +154,7 @@
                         DockPanel.Dock="Top"
                         x:Name="spElemPart"
                         Style="{StaticResource spV}"
-                        Visibility="Hidden"
+                        Visibility="Visible"
                         Margin="10">
                         <StackPanel Style="{StaticResource spH}">
                             <Label
@@ -169,7 +176,7 @@
                     <Border
                         x:Name="chaptersListPart"
                         Style="{StaticResource borderRight}"
-                        Visibility="Hidden">
+                        Visibility="Visible">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="120"/>
@@ -190,16 +197,12 @@
                             <ListBox
                                 Grid.Row="1"
                                 x:Name="listChapters"
-                                Style="{StaticResource listBox}"
-                                SelectionChanged="listBoxChapters_SelectionChanged"
-                                ItemsSource="{Binding chapters, UpdateSourceTrigger=PropertyChanged}"
-                                DisplayMemberPath="chapTitle">
-                            </ListBox>
+                                Style="{StaticResource listBox}"/>
                         </Grid>
                     </Border>
                     <Grid
                         x:Name="chapContentPart"
-                        Visibility="Hidden">
+                        Visibility="Visible">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="60"/>

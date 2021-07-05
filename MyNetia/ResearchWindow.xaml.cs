@@ -24,9 +24,10 @@ namespace MyNetia
             ObservableCollection<string> texts = new ObservableCollection<string>
             {
                 "TEST",
-                "TEST",
-                "TEST",
-                "TEST"
+                "TEST2",
+                "TEST3",
+                "TEST4",
+                "TEST5"
             };
             ObservableCollection<string> images = new ObservableCollection<string>
             {
@@ -38,11 +39,11 @@ namespace MyNetia
             ObservableCollection<Chapter> chapList = new ObservableCollection<Chapter>
             {
                 new Chapter("TEST CHAPTER", texts, images),
-                new Chapter("TEST CHAPTER", texts, images)
+                new Chapter("TEST CHAPTERS", texts, images)
             };
-            AppResources.dbManager.addElement("AAAAAAAAAA", "port 123", chapList);
-            AppResources.dbManager.addElement("BAAAAAAAAA", "port 123", chapList);
-            AppResources.dbManager.addElement("CAAAAAAAAA", "port 123", chapList);
+            AppResources.dbManager.addElement("A", "port 123", chapList);
+            AppResources.dbManager.addElement("B", "port 123", chapList);
+            AppResources.dbManager.addElement("C", "port 123", chapList);
             AppResources.dbManager.addElement("DAAAAAAAAA", "port 123", chapList);
             AppResources.dbManager.addElement("EAAAAAAAAA", "port 123", chapList);
             AppResources.dbManager.addElement("FAAAAAAAAA", "port 123", chapList);
