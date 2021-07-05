@@ -63,6 +63,7 @@
         </Style>
 
         <Style x:Key="btnValid" BasedOn="{StaticResource btnBase}" TargetType="Button">
+            <EventSetter Event="Click" Handler="validate"/>
             <Setter Property="Height" Value="40"/>
             <Setter Property="Width" Value="120"/>
         </Style>
@@ -154,7 +155,7 @@
                         DockPanel.Dock="Top"
                         x:Name="spElemPart"
                         Style="{StaticResource spV}"
-                        Visibility="Visible"
+                        Visibility="Hidden"
                         Margin="10">
                         <StackPanel Style="{StaticResource spH}">
                             <Label
@@ -176,7 +177,7 @@
                     <Border
                         x:Name="chaptersListPart"
                         Style="{StaticResource borderRight}"
-                        Visibility="Visible">
+                        Visibility="Hidden">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="120"/>
@@ -202,7 +203,7 @@
                     </Border>
                     <Grid
                         x:Name="chapContentPart"
-                        Visibility="Visible">
+                        Visibility="Hidden">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="60"/>
@@ -245,7 +246,6 @@
                             Grid.Row="1"
                             Style="{StaticResource spH}">
                             <Button
-                                Click="validate"
                                 Style="{StaticResource btnValid}"
                                 Content="Valid"/>
                             <Image

@@ -9,6 +9,10 @@
     <FontFamily x:Key="OrkneyRegularItalic">pack://application:,,,/Fonts/#Orkney Regular Italic</FontFamily>
     <FontFamily x:Key="OrkneyRegular">pack://application:,,,/Fonts/#Orkney Regular</FontFamily>
 
+    <SolidColorBrush x:Key="Background" Color="#2D142C"/>
+    <SolidColorBrush x:Key="Border" Color="#510A32"/>
+    <SolidColorBrush x:Key="Foreground" Color="#C72C41"/>
+
     <!--Disable the white border of resize-->
     <WindowChrome x:Key="WindowChromeKey">
         <WindowChrome.ResizeBorderThickness>
@@ -19,8 +23,8 @@
 
     
     <Style x:Key="window" TargetType="Window">
-        <Setter Property="Background" Value="#2D142C"/>
-        <Setter Property="Foreground" Value="#C72C41"/>
+        <Setter Property="Background" Value="{StaticResource Background}"/>
+        <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
         <Setter Property="WindowStyle" Value="None"/>
         <Setter Property="FontFamily" Value="{StaticResource OrkneyLight}"/>
         <Setter Property="WindowChrome.WindowChrome" Value="{StaticResource WindowChromeKey}"/>
@@ -42,20 +46,20 @@
     
 
     <Style x:Key="tabControlBase" TargetType="TabControl">
-        <Setter Property="Background" Value="#2D142C"/>
-        <Setter Property="Foreground" Value="#C72C41"/>
-        <Setter Property="BorderBrush" Value="#510A32"/>
+        <Setter Property="Background" Value="{StaticResource Background}"/>
+        <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Border}"/>
     </Style>
 
     <Style x:Key="tabItem" TargetType="TabItem">
-        <Setter Property="Foreground" Value="#C72C41"/>
+        <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
         <Setter Property="FontSize" Value="15"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TabItem">
                     <Border Name="Border"
                                 BorderThickness="1"
-                                BorderBrush="#510A32"
+                                BorderBrush="{StaticResource Border}"
                                 Margin="10">
                         <ContentPresenter
                                 x:Name="ContentSite"
@@ -66,10 +70,10 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="#510A32"/>
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource Border}"/>
                         </Trigger>
                         <Trigger Property="IsSelected" Value="False">
-                            <Setter TargetName="Border" Property="Background" Value="#2D142C"/>
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource Background}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -79,25 +83,25 @@
     
 
     <Style x:Key="borderFull" TargetType="Border">
-        <Setter Property="BorderBrush" Value="#510A32"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Border}"/>
         <Setter Property="BorderThickness" Value="1"/>
     </Style>
 
     <Style x:Key="borderRight" TargetType="Border">
-        <Setter Property="BorderBrush" Value="#510A32"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Border}"/>
         <Setter Property="BorderThickness" Value="0, 0, 1, 0"/>
     </Style>
 
     <Style x:Key="borderBot" TargetType="Border">
-        <Setter Property="BorderBrush" Value="#510A32"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Border}"/>
         <Setter Property="BorderThickness" Value="0, 0, 0, 1"/>
         <Setter Property="Padding" Value="0, 0, 0, 10"/>
     </Style>
 
 
     <Style x:Key="listBoxBase" TargetType="ListBox">
-        <Setter Property="Background" Value="#2D142C"/>
-        <Setter Property="Foreground" Value="#C72C41"/>
+        <Setter Property="Background" Value="{StaticResource Background}"/>
+        <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
         <Setter Property="SelectionMode" Value="Single"/>
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Hidden"/>
         <Setter Property="BorderThickness" Value="0"/>
@@ -120,16 +124,17 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="#510A32" TargetName="Border"/>
+                            <Setter Property="Background" Value="{StaticResource Border}" TargetName="Border"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="#510A32" TargetName="Border"/>
+                            <Setter Property="Background" Value="{StaticResource Border}" TargetName="Border"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
+    
 
     <Style x:Key="spV" TargetType="StackPanel">
         <Setter Property="VerticalAlignment" Value="Center"/>
@@ -149,9 +154,9 @@
     
 
     <Style x:Key="txtBoxBase" TargetType="TextBox">
-        <Setter Property="Background" Value="#2D142C"/>
-        <Setter Property="Foreground" Value="#C72C41"/>
-        <Setter Property="BorderBrush" Value="#510A32"/>
+        <Setter Property="Background" Value="{StaticResource Background}"/>
+        <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Border}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Padding" Value="4, 0"/>
         <Setter Property="Template">
@@ -165,10 +170,10 @@
                             <Setter Property="Opacity" TargetName="border" Value="0.56"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="BorderBrush" TargetName="border" Value="#510A32"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Border}"/>
                         </Trigger>
                         <Trigger Property="IsFocused" Value="true">
-                            <Setter Property="BorderBrush" TargetName="border" Value="#510A32"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Border}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -178,7 +183,7 @@
     
 
     <Style x:Key="labelBase" TargetType="Label">
-        <Setter Property="Foreground" Value="#C72C41"/>
+        <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
         <Setter Property="FontFamily" Value="{StaticResource OrkneyLight}"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -192,15 +197,15 @@
     
 
     <Style x:Key="btnEssential" TargetType="Button">
-        <Setter Property="Background" Value="#510A32"/>
-        <Setter Property="Foreground" Value="#C72C41"/>
+        <Setter Property="Background" Value="{StaticResource Border}"/>
+        <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="FontFamily" Value="{StaticResource OrkneyLight}"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#2D142C"/>
+                <Setter Property="Background" Value="{StaticResource Background}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -212,7 +217,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border Background="{TemplateBinding Background}" BorderBrush="#510A32" BorderThickness="1">
+                    <Border Background="{TemplateBinding Background}" BorderBrush="{StaticResource Border}" BorderThickness="1">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                 </ControlTemplate>
@@ -230,7 +235,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border Background="{TemplateBinding Background}" BorderBrush="#510A32" BorderThickness="1" CornerRadius="30">
+                    <Border Background="{TemplateBinding Background}" BorderBrush="{StaticResource Border}" BorderThickness="1" CornerRadius="30">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                 </ControlTemplate>
