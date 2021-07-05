@@ -11,11 +11,7 @@ namespace MyNetia.Model
         private string _chapTitle;
         public string chapTitle
         {
-            get
-            {
-                return _chapTitle;
-            }
-
+            get {  return _chapTitle; }
             set
             {
                 if(_chapTitle != value)

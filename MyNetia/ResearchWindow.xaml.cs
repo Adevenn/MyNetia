@@ -13,16 +13,14 @@ namespace MyNetia
     {
         private List<string> matchingResearch = null;
         //Only 1 window open at a time
-        public static bool isUpdateWindowOpen = false;
         public static bool isHelpWindowOpen = false;
-        public static bool isRemoveWindowOpen = false;
         public static bool isAdminWindowOpen = false;
 
         public ResearchWindow()
         {
             InitializeComponent();
-            /*if (File.Exists(Path.GetFullPath(@".\AppResources\SaveDB.json")))
-                AppResources.dbManager.readJson();*/
+            //if (File.Exists(Path.GetFullPath(@".\AppResources\SaveDB.json")))
+            //    AppResources.dbManager.readJson();
             ObservableCollection<string> texts = new ObservableCollection<string>
             {
                 "TEST",
@@ -42,10 +40,16 @@ namespace MyNetia
                 new Chapter("TEST CHAPTER", texts, images),
                 new Chapter("TEST CHAPTER", texts, images)
             };
-            AppResources.dbManager.addElement("ARP", "port 123", chapList);
-            AppResources.dbManager.addElement("AAA", "port 123", chapList);
-            AppResources.dbManager.addElement("BBB", "port 123", chapList);
-            AppResources.dbManager.addElement("CCC", "port 123", chapList);
+            AppResources.dbManager.addElement("AAAAAAAAAA", "port 123", chapList);
+            AppResources.dbManager.addElement("BAAAAAAAAA", "port 123", chapList);
+            AppResources.dbManager.addElement("CAAAAAAAAA", "port 123", chapList);
+            AppResources.dbManager.addElement("DAAAAAAAAA", "port 123", chapList);
+            AppResources.dbManager.addElement("EAAAAAAAAA", "port 123", chapList);
+            AppResources.dbManager.addElement("FAAAAAAAAA", "port 123", chapList);
+            AppResources.dbManager.addElement("GAAAAAAAAA", "port 123", chapList);
+            AppResources.dbManager.addElement("HAAAAAAAAA", "port 123", chapList);
+            AppResources.dbManager.addElement("IAAAAAAAAA", "port 123", chapList);
+            AppResources.dbManager.addElement("JAAAAAAAAA", "port 123", chapList);
             helpResearchBar();
         }
 
@@ -131,14 +135,6 @@ namespace MyNetia
         private void closeBtn_Click(object sender, RoutedEventArgs e)
         {
             Close();
-        }
-        private void titleBar_MouseEnter(object sender, MouseEventArgs e)
-        {
-            titleBar.Opacity = 1;
-        }
-        private void titleBar_MouseLeave(object sender, MouseEventArgs e)
-        {
-            titleBar.Opacity = 0;
         }
         private void titleBar_MouseDown(object sender, MouseButtonEventArgs e)
         {

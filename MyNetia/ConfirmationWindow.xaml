@@ -11,12 +11,6 @@
         MinHeight="250" MaxHeight="250"
         MinWidth="400" MaxWidth="400">
     <Window.Resources>
-        <Style x:Key="labelTitleBar" BasedOn="{StaticResource labelBase}" TargetType="Label">
-            <Setter Property="FontSize" Value="20"/>
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="Margin" Value="5, 0, 0, 0"/>
-        </Style>
-
         <Style x:Key="label" BasedOn="{StaticResource labelBase}" TargetType="Label">
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="Height" Value="40"/>
@@ -31,6 +25,7 @@
             <Setter Property="Margin" Value="10"/>
         </Style>
     </Window.Resources>
+    
     <DockPanel>
         <!--#region TITLE BAR-->
         <Grid

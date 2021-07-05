@@ -8,7 +8,7 @@ namespace MyNetia.Model
     {
         public string title;
         public string subtitle;
-        private ObservableCollection<Chapter> _chapters = new ObservableCollection<Chapter>();
+        private readonly ObservableCollection<Chapter> _chapters = new ObservableCollection<Chapter>();
         public ObservableCollection<Chapter> chapters => _chapters;
         public DateTime lastUpdate;
 

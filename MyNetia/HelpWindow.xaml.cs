@@ -22,9 +22,9 @@ namespace MyNetia
             {
                 StackPanel s = new StackPanel
                 {
-                    Orientation = Orientation.Horizontal
+                    Style = (Style)Application.Current.TryFindResource("spH")
                 };
-                for (int j = i; j < i + 4; j++)
+                for (int j = i; j < i + 3; j++)
                 {
                     if (j < AppResources.dbManager.db.Count)
                         s.Children.Add(setLabel(AppResources.dbManager.db[j].title));
@@ -32,17 +32,12 @@ namespace MyNetia
                         break;
                 }
                 stackProtocols.Children.Add(s);
-                i += 3;
+                i += 2;
             }
         }
         private void loadCommands()
         {
             List<string> commands = AppResources.commandsList();
-            StackPanel sp = new StackPanel
-            {
-                Orientation = Orientation.Horizontal,
-                Style = (Style)Application.Current.TryFindResource("sp")
-            };
             foreach (string txt in commands)
                 stackCommands.Children.Add(setLabel(txt));
         }

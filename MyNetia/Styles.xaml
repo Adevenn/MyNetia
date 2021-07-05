@@ -17,6 +17,7 @@
         <WindowChrome.CaptionHeight>0</WindowChrome.CaptionHeight>
     </WindowChrome>
 
+    
     <Style x:Key="window" TargetType="Window">
         <Setter Property="Background" Value="#2D142C"/>
         <Setter Property="Foreground" Value="#C72C41"/>
@@ -24,17 +25,21 @@
         <Setter Property="FontFamily" Value="{StaticResource OrkneyLight}"/>
         <Setter Property="WindowChrome.WindowChrome" Value="{StaticResource WindowChromeKey}"/>
     </Style>
+    
 
     <Style x:Key="gridTitleBar" TargetType="Grid">
         <Setter Property="Panel.ZIndex" Value="1"/>
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Opacity" Value="0"/>
+        <Setter Property="Height" Value="30"/>
     </Style>
+    
 
     <Style x:Key="scrollViewer" TargetType="ScrollViewer">
         <Setter Property="VerticalScrollBarVisibility" Value="Hidden"/>
     </Style>
+    
 
     <Style x:Key="tabControlBase" TargetType="TabControl">
         <Setter Property="Background" Value="#2D142C"/>
@@ -71,6 +76,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
 
     <Style x:Key="listBoxBase" TargetType="ListBox">
         <Setter Property="Background" Value="#2D142C"/>
@@ -110,6 +116,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
 
     <Style x:Key="borderFull" TargetType="Border">
         <Setter Property="BorderBrush" Value="#510A32"/>
@@ -126,6 +133,7 @@
         <Setter Property="BorderThickness" Value="0, 0, 0, 1"/>
         <Setter Property="Padding" Value="0, 0, 0, 10"/>
     </Style>
+    
 
     <Style x:Key="spV" TargetType="StackPanel">
         <Setter Property="VerticalAlignment" Value="Center"/>
@@ -137,17 +145,19 @@
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
     </Style>
+    
 
     <Style x:Key="txtBlockBase" TargetType="TextBlock">
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
+    
 
     <Style x:Key="txtBoxBase" TargetType="TextBox">
         <Setter Property="Background" Value="#2D142C"/>
         <Setter Property="Foreground" Value="#C72C41"/>
         <Setter Property="BorderBrush" Value="#510A32"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="Padding" Value="4, 0, 4, 0"/>
+        <Setter Property="Padding" Value="4, 0"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TextBox}">
@@ -169,6 +179,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
 
     <Style x:Key="labelBase" TargetType="Label">
         <Setter Property="Foreground" Value="#C72C41"/>
@@ -176,6 +187,13 @@
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
     </Style>
+
+    <Style x:Key="labelTitleBar" BasedOn="{StaticResource labelBase}" TargetType="Label">
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="Height" Value="33"/>
+        <Setter Property="Margin" Value="5, 0, 0, 0"/>
+    </Style>
+    
 
     <Style x:Key="btnEssential" TargetType="Button">
         <Setter Property="Background" Value="#510A32"/>
@@ -207,6 +225,7 @@
     </Style>
 
     <Style x:Key="btnTitleBar" BasedOn="{StaticResource btnEssential}" TargetType="Button">
+        <Setter Property="IsTabStop" Value="False"/>
         <Setter Property="HorizontalAlignment" Value="Right"/>
         <Setter Property="FontSize" Value="12"/>
         <Setter Property="Height" Value="20"/>

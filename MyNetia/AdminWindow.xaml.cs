@@ -8,20 +8,16 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Media.Animation;
 using System;
-using System.Collections.Generic;
 
 namespace MyNetia
 {
     public partial class AdminWindow : Window
     {
-        private InfoBinding binding = new InfoBinding();
+        private readonly InfoBinding binding = new InfoBinding();
         private bool _isElemSelected;
         private bool isElemSelected
         {
-            get
-            {
-                return _isElemSelected;
-            }
+            get { return _isElemSelected; }
             set
             {
                 if (value == true && value != _isElemSelected)
@@ -47,7 +43,7 @@ namespace MyNetia
                                               "   LCtrl + Return => New paragraph\n\n" +
                                               "- Image part :\n" +
                                               "   Enter => New Image Zone";
-        List<string> matchingResearch = null;
+        ObservableCollection<string> matchingResearch = null;
 
         public AdminWindow()
         {
@@ -63,7 +59,7 @@ namespace MyNetia
             if (e.Key == Key.Return && AppResources.dbManager.isElementExist(selectionTxtBox.Text))
             {
                 setElement(selectionTxtBox.Text);
-                listBoxChapters.SelectedIndex = 0;
+                listChapters.SelectedIndex = 0;
                 isElemSelected = true;
             }
             else if (e.Key == Key.Return)
@@ -78,7 +74,7 @@ namespace MyNetia
                     //Add new Element
                     AppResources.dbManager.addElement(selectionTxtBox.Text);
                     setElement(selectionTxtBox.Text);
-                    listBoxChapters.SelectedIndex = 0;
+                    listChapters.SelectedIndex = 0;
                     isElemSelected = true;
                 }
                 else
@@ -88,10 +84,10 @@ namespace MyNetia
 
         private void listBoxChapters_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            setChapterValues((Chapter)listBoxChapters.SelectedItem);
+            setChapterValues((Chapter)listChapters.SelectedItem);
         }
 
-        private void addChapter(object sender, RoutedEventArgs e)
+        private void addChapter_Click(object sender, RoutedEventArgs e)
         {
             binding.chapters.Add(new Chapter());
             //Select the new chapter
@@ -99,7 +95,8 @@ namespace MyNetia
 
         private void chapTitle_TextChanged(object sender, TextChangedEventArgs e)
         {
-            binding.chapters[listBoxChapters.SelectedIndex].chapTitle = chapTitleTxtBox.Text;
+            int id = listChapters.SelectedIndex;
+            binding.chapters[id].chapTitle = chapTitleTxtBox.Text;
         }
 
         private void txt_KeyDown(object sender, KeyEventArgs e)
@@ -123,8 +120,8 @@ namespace MyNetia
         private void txtBox_LostFocus(object sender, RoutedEventArgs e)
         {
             //Save chapter's content
-            binding.chapters[listBoxChapters.SelectedIndex].texts = getSPContent(spTxtBoxTxt);
-            binding.chapters[listBoxChapters.SelectedIndex].images = getSPContent(spTxtBoxImg);
+            binding.chapters[listChapters.SelectedIndex].texts = getSPContent(spTxtBoxTxt);
+            binding.chapters[listChapters.SelectedIndex].images = getSPContent(spTxtBoxImg);
         }
 
         private void validate(object sender, RoutedEventArgs e)
@@ -134,6 +131,54 @@ namespace MyNetia
             DirectoryManager.createDirectory(Path.GetFullPath(@".\AppResources\Images\" + binding.elemTitle));
             imageValidation.Visibility = Visibility.Visible;
             animValidationOpacity();
+        }
+
+        private void setElement(string title)
+        {
+            DB_Element elem = AppResources.dbManager.getElement(title);
+            binding.oldElemTitle = elem.title;
+            binding.elemTitle = elem.title;
+            binding.elemSubtitle = elem.subtitle;
+            binding.chapters = elem.chapters;
+        }
+        private void setChapterValues(Chapter ch)
+        {
+            binding.chapTitle = ch.chapTitle;
+            setSPTxtContent(spTxtBoxTxt, ch.texts);
+            setSPImgContent(spTxtBoxImg, ch.images);
+        }
+
+        private ObservableCollection<string> getSPContent(StackPanel sp)
+        {
+            ObservableCollection<string> texts = new ObservableCollection<string>();
+            foreach (TextBox t in sp.Children)
+                texts.Add(t.Text);
+            return texts;
+        }
+
+        private void setSPImgContent(StackPanel sp, ObservableCollection<string> list)
+        {
+            sp.Children.Clear();
+            foreach (string text in list)
+                sp.Children.Add(txtBoxSingleLine(text));
+        }
+
+        private void setSPTxtContent(StackPanel sp, ObservableCollection<string> list)
+        {
+            sp.Children.Clear();
+            foreach (string text in list)
+                sp.Children.Add(txtBoxMultiLines(text));
+        }
+
+        private void animValidationOpacity()
+        {
+            DoubleAnimation da = new DoubleAnimation()
+            {
+                From = 1,
+                To = 0,
+                Duration = new Duration(TimeSpan.FromSeconds(3))
+            };
+            imageValidation.BeginAnimation(OpacityProperty, da);
         }
         #endregion
 
@@ -176,7 +221,7 @@ namespace MyNetia
 
         private void helpResearchBar()
         {
-            matchingResearch = new List<string>();
+            matchingResearch = new ObservableCollection<string>();
             txtBlockDelete.Text = null;
             foreach (string txt in AppResources.dbManager.getTitles())
             {
@@ -205,61 +250,6 @@ namespace MyNetia
         #endregion
 
 
-        #region OTHERS METHODS
-        private void setElement(string title)
-        {
-            DB_Element elem = AppResources.dbManager.getElement(title);
-            binding.oldElemTitle = elem.title;
-            binding.elemTitle = elem.title;
-            binding.elemSubtitle = elem.subtitle;
-            binding.chapters = elem.chapters;
-        }
-        private void setChapterValues(Chapter ch)
-        {
-            binding.chapTitle = ch.chapTitle;
-            setSPTxtContent(spTxtBoxTxt, ch.texts);
-            setSPImgContent(spTxtBoxImg, ch.images);
-        }
-
-        private ObservableCollection<string> getSPContent(StackPanel sp)
-        {
-            ObservableCollection<string> texts = new ObservableCollection<string>();
-            foreach (TextBox t in sp.Children)
-                texts.Add(t.Text);
-            return texts;
-        }
-
-        private void setSPImgContent(StackPanel sp, ObservableCollection<string> list)
-        {
-            sp.Children.Clear();
-            foreach (string text in list)
-            {
-                sp.Children.Add(txtBoxSingleLine(text));
-            }
-        }
-
-        private void setSPTxtContent(StackPanel sp, ObservableCollection<string> list)
-        {
-            sp.Children.Clear();
-            foreach ( string text in list)
-            {
-                sp.Children.Add(txtBoxMultiLines(text));
-            }
-        }
-
-        private void animValidationOpacity()
-        {
-            DoubleAnimation da = new DoubleAnimation()
-            {
-                From = 1,
-                To = 0,
-                Duration = new Duration(TimeSpan.FromSeconds(3))
-            };
-            imageValidation.BeginAnimation(OpacityProperty, da);
-        }
-        #endregion
-
-
         #region TITLE BAR
 
         #region EVENTS
@@ -279,7 +269,7 @@ namespace MyNetia
             ResearchWindow.isAdminWindowOpen = false;
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void Window_Closing(object sender, CancelEventArgs e)
         {
             ResearchWindow.isAdminWindowOpen = false;
         }
@@ -326,11 +316,7 @@ namespace MyNetia
             private string _elemTitle;
             public string elemTitle
             {
-                get
-                {
-                    return _elemTitle;
-                }
-
+                get { return _elemTitle; }
                 set
                 {
                     if(_elemTitle != value)
@@ -344,11 +330,7 @@ namespace MyNetia
             private string _elemSubtitle;
             public string elemSubtitle
             {
-                get
-                {
-                    return _elemSubtitle;
-                }
-
+                get { return _elemSubtitle; }
                 set
                 {
                     if (_elemSubtitle != value)
@@ -362,11 +344,7 @@ namespace MyNetia
             private string _chapTitle;
             public string chapTitle
             {
-                get
-                {
-                    return _chapTitle;
-                }
-
+                get { return _chapTitle; }
                 set
                 {
                     if (_chapTitle != value)
@@ -380,11 +358,7 @@ namespace MyNetia
             private ObservableCollection<Chapter> _chapters;
             public ObservableCollection<Chapter> chapters
             {
-                get
-                {
-                    return _chapters;
-                }
-
+                get { return _chapters; }
                 set
                 {
                     if(_chapters != value)
@@ -401,6 +375,5 @@ namespace MyNetia
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
             }
         }
-
     }
 }

@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Style="{StaticResource window}"
         Title="MyNetia-Admin"
+        WindowStartupLocation="CenterScreen"
         Closing="Window_Closing"
         MinHeight="750" MaxHeight="800"
         MinWidth="750" MaxWidth="750">
@@ -29,12 +30,6 @@
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
             <Setter Property="Margin" Value="0 10 0 10"/>
-        </Style>
-
-        <Style x:Key="labelTitleBar" BasedOn="{StaticResource labelBase}" TargetType="Label">
-            <Setter Property="FontSize" Value="20"/>
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="Margin" Value="5, 0, 0, 0"/>
         </Style>
 
         <Style x:Key="txtBlock" BasedOn="{StaticResource txtBlockBase}" TargetType="TextBlock">
@@ -72,6 +67,7 @@
             <Setter Property="Width" Value="70"/>
         </Style>
     </Window.Resources>
+    
     <DockPanel>
         <!--#region TITLE BAR-->
         <Grid
@@ -80,8 +76,7 @@
             Style="{StaticResource gridTitleBar}"
             MouseDown="titleBar_MouseDown">
             <Grid.Triggers>
-                <EventTrigger
-                    RoutedEvent="Grid.MouseEnter">
+                <EventTrigger RoutedEvent="Grid.MouseEnter">
                     <BeginStoryboard>
                         <Storyboard>
                             <DoubleAnimation
@@ -91,8 +86,7 @@
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger>
-                <EventTrigger
-                    RoutedEvent="Grid.MouseLeave">
+                <EventTrigger RoutedEvent="Grid.MouseLeave">
                     <BeginStoryboard>
                         <Storyboard>
                             <DoubleAnimation
@@ -190,12 +184,12 @@
                                     Content="Chapters :"/>
                                 <Button
                                     Style="{StaticResource btnChapters}"
-                                    Click="addChapter"
+                                    Click="addChapter_Click"
                                     Content="+"/>
                             </StackPanel>
                             <ListBox
                                 Grid.Row="1"
-                                x:Name="listBoxChapters"
+                                x:Name="listChapters"
                                 Style="{StaticResource listBox}"
                                 SelectionChanged="listBoxChapters_SelectionChanged"
                                 ItemsSource="{Binding chapters, UpdateSourceTrigger=PropertyChanged}"
@@ -285,11 +279,11 @@
                 Header="Options">
                 <StackPanel Style="{StaticResource spV}">
                     <TextBlock
-                        Style="{StaticResource txtBlockBase}"
+                        Style="{StaticResource txtBlock}"
                         Text="Work in progress"/>
                     <TextBlock
-                        Style="{StaticResource txtBlockBase}"
-                        Text="This ll content every external infos, like database server, etc .."/>
+                        Style="{StaticResource txtBlock}"
+                        Text="This'll content every external infos, like database server, etc .."/>
                 </StackPanel>
             </TabItem>
         </TabControl>

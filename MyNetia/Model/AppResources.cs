@@ -14,7 +14,7 @@ namespace MyNetia.Model
         {
             Commands commands = new Commands();
             List<string> list = new List<string>();
-            foreach (var field in getConstants(commands.GetType()))
+            foreach (FieldInfo field in getConstants(commands.GetType()))
                 list.Add((string)field.GetRawConstantValue());
             return list;
         }

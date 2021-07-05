@@ -11,17 +11,12 @@
         MinHeight="450" MaxHeight="450"
         MinWidth="400" MaxWidth="400">
     <Window.Resources>
-        <Style x:Key="labelTitleBar" BasedOn="{StaticResource labelBase}" TargetType="Label">
-            <Setter Property="FontSize" Value="20"/>
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="Margin" Value="5, 0, 0, 0"/>
-        </Style>
-        
         <Style x:Key="txtBlock" BasedOn="{StaticResource txtBlockBase}" TargetType="TextBlock">
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="Margin" Value="30"/>
         </Style>
     </Window.Resources>
+    
     <DockPanel>
         <!--#region TITLE BAR-->
         <Grid

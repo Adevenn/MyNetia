@@ -1,6 +1,4 @@
 ﻿using MyNetia.Model;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
@@ -14,7 +12,7 @@ namespace MyNetia
 {
     public partial class DisplayWindow : Window
     {
-        InfoBinding binding = new InfoBinding();
+        private readonly InfoBinding binding = new InfoBinding();
         public DisplayWindow(string title)
         {
             DataContext = binding;
@@ -35,8 +33,6 @@ namespace MyNetia
             txtSubtitle.Text = elem.subtitle;
             binding.chapters = elem.chapters;
             listChapters.SelectedIndex = 0;
-            //chapTitleLabel.Content = elem
-            //setUI(elem.te);
             txtLastUpdate.Text = "Last update : " + elem.lastUpdate.Month.ToString() + "/" + elem.lastUpdate.Day.ToString() + "/" + elem.lastUpdate.Year.ToString();
         }
 
@@ -159,51 +155,10 @@ namespace MyNetia
 
         private class InfoBinding : INotifyPropertyChanged
         {
-            public string oldElemTitle;
-            private string _elemTitle;
-            public string elemTitle
-            {
-                get
-                {
-                    return _elemTitle;
-                }
-
-                set
-                {
-                    if (_elemTitle != value)
-                    {
-                        _elemTitle = value;
-                        OnPropertyChanged();
-                    }
-                }
-            }
-
-            private string _elemSubtitle;
-            public string elemSubtitle
-            {
-                get
-                {
-                    return _elemSubtitle;
-                }
-
-                set
-                {
-                    if (_elemSubtitle != value)
-                    {
-                        _elemSubtitle = value;
-                        OnPropertyChanged();
-                    }
-                }
-            }
-
             private string _chapTitle;
             public string chapTitle
             {
-                get
-                {
-                    return _chapTitle;
-                }
-
+                get { return _chapTitle; }
                 set
                 {
                     if (_chapTitle != value)
@@ -217,11 +172,7 @@ namespace MyNetia
             private ObservableCollection<Chapter> _chapters;
             public ObservableCollection<Chapter> chapters
             {
-                get
-                {
-                    return _chapters;
-                }
-
+                get { return _chapters; }
                 set
                 {
                     if (_chapters != value)
@@ -238,7 +189,5 @@ namespace MyNetia
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
             }
         }
-
-        
     }
 }
