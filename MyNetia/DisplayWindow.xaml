@@ -10,7 +10,7 @@
         Style="{StaticResource window}"
         MinWidth="1100"
         Height="800" Width="1200">
-    
+
     <Window.Resources>
         <Style x:Key="borderBotCustom" BasedOn="{StaticResource borderBot}" TargetType="Border">
             <Setter Property="Margin" Value="15, 0"/>

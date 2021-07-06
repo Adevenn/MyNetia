@@ -1,4 +1,5 @@
 ﻿using MyNetia.Model;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
@@ -31,7 +32,7 @@ namespace MyNetia
             DB_Element elem = AppResources.dbManager.getElement(title);
             elemTitle.Text = elem.title;
             elemSubtitle.Text = elem.subtitle;
-            binding.chapters = elem.chapters;
+            binding.chapters = new ObservableCollection<Chapter>(elem.chapters);
             listChapters.SelectedIndex = 0;
             elemLastUpdate.Text = "Last update : " + elem.lastUpdate.Month.ToString() + "/" + elem.lastUpdate.Day.ToString() + "/" + elem.lastUpdate.Year.ToString();
         }
@@ -45,7 +46,7 @@ namespace MyNetia
         #endregion
 
         #region UI CREATOR
-        private void setUI(ObservableCollection<string> txt, ObservableCollection<string> img, StackPanel sp)
+        private void setUI(List<string> txt, List<string> img, StackPanel sp)
         {
             sp.Children.Clear();
             int idTxt = 0;

@@ -21,7 +21,7 @@ namespace MyNetia
             InitializeComponent();
             //if (File.Exists(Path.GetFullPath(@".\AppResources\SaveDB.json")))
             //    AppResources.dbManager.readJson();
-            ObservableCollection<string> texts = new ObservableCollection<string>
+            List<string> texts = new List<string>
             {
                 "TEST",
                 "TEST2",
@@ -29,14 +29,14 @@ namespace MyNetia
                 "TEST4",
                 "TEST5"
             };
-            ObservableCollection<string> images = new ObservableCollection<string>
+            List<string> images = new List<string>
             {
                 "TEST",
                 "TEST",
                 "TEST",
                 "TEST"
             };
-            ObservableCollection<Chapter> chapList = new ObservableCollection<Chapter>
+            List<Chapter> chapList = new List<Chapter>
             {
                 new Chapter("TEST CHAPTER", texts, images),
                 new Chapter("TEST CHAPTERS", texts, images)

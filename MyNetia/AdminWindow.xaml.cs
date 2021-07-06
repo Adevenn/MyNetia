@@ -52,7 +52,7 @@ namespace MyNetia
             "   - Enter the name of your image\n" +
             "       e.g.: Image1.png and save your file inside\n" +
             "       MyNetia/AppRessources/Images/ElemTitle";
-        ObservableCollection<string> matchingResearch = null;
+        List<string> matchingResearch = null;
 
         public AdminWindow()
         {
@@ -151,7 +151,7 @@ namespace MyNetia
         private void validate(object sender, RoutedEventArgs e)
         {
             //Update selected element
-            AppResources.dbManager.updateElement(binding.oldElemTitle ,binding.elemTitle, binding.elemSubtitle, (ObservableCollection<Chapter>)binding.chapters);
+            AppResources.dbManager.updateElement(binding.oldElemTitle ,binding.elemTitle, binding.elemSubtitle, new List<Chapter>(binding.chapters));
             DirectoryManager.createDirectory(Path.GetFullPath(@".\AppResources\Images\" + binding.elemTitle));
             imageValid.Visibility = Visibility.Visible;
             animImageOpacity(imageValid);
@@ -163,7 +163,7 @@ namespace MyNetia
             binding.oldElemTitle = elem.title;
             binding.elemTitle = elem.title;
             binding.elemSubtitle = elem.subtitle;
-            binding.chapters = elem.chapters;
+            binding.chapters = new ObservableCollection<Chapter>(elem.chapters);
         }
         private void setChapterValues(Chapter ch)
         {
@@ -175,22 +175,22 @@ namespace MyNetia
             }
         }
 
-        private ObservableCollection<string> getSPContent(StackPanel sp)
+        private List<string> getSPContent(StackPanel sp)
         {
-            ObservableCollection<string> texts = new ObservableCollection<string>();
+            List<string> texts = new List<string>();
             foreach (TextBox t in sp.Children)
                 texts.Add(t.Text);
             return texts;
         }
 
-        private void setSPImgContent(StackPanel sp, ObservableCollection<string> list)
+        private void setSPImgContent(StackPanel sp, List<string> list)
         {
             sp.Children.Clear();
             foreach (string text in list)
                 sp.Children.Add(tBoxSingleLine(text));
         }
 
-        private void setSPTxtContent(StackPanel sp, ObservableCollection<string> list)
+        private void setSPTxtContent(StackPanel sp, List<string> list)
         {
             sp.Children.Clear();
             foreach (string text in list)
@@ -302,7 +302,7 @@ namespace MyNetia
 
         private void helpResearchBar()
         {
-            matchingResearch = new ObservableCollection<string>();
+            matchingResearch = new List<string>();
             tBlockDelete.Text = null;
             foreach (string txt in AppResources.dbManager.getTitles())
             {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -21,23 +22,23 @@ namespace MyNetia.Model
                 }
             }
         }
-        public ObservableCollection<string> texts;
-        public ObservableCollection<string> images;
+        public List<string> texts;
+        public List<string> images;
 
         public Chapter()
         {
             chapTitle = "New chapter";
-            texts = new ObservableCollection<string>
+            texts = new List<string>
             {
                 ""
             };
-            images = new ObservableCollection<string>
+            images = new List<string>
             {
                 ""
             };
         }
 
-        public Chapter(string chapTitle, ObservableCollection<string> texts, ObservableCollection<string> images)
+        public Chapter(string chapTitle, List<string> texts, List<string> images)
         {
             this.chapTitle = chapTitle;
             this.texts = texts;

@@ -9,8 +9,8 @@ namespace MyNetia.Model
     [Serializable]
     public class DB_Manager
     {
-        private ObservableCollection<DB_Element> _db = new ObservableCollection<DB_Element>();
-        public ObservableCollection<DB_Element> db => _db;
+        private List<DB_Element> _db = new List<DB_Element>();
+        public List<DB_Element> db => _db;
 
         #region DB modifications
         public void addElement(string title)
@@ -19,13 +19,13 @@ namespace MyNetia.Model
             sortDB();
         }
 
-        public void addElement(string title, string subtitle, ObservableCollection<Chapter> chapList)
+        public void addElement(string title, string subtitle, List<Chapter> chapList)
         {
             _db.Add(new DB_Element(title, subtitle, chapList));
             sortDB();
         }
 
-        public void updateElement(string oldTitle, string title, string subtitle, ObservableCollection<Chapter> chapList)
+        public void updateElement(string oldTitle, string title, string subtitle,List<Chapter> chapList)
         {
             int id = getElementID(oldTitle);
             _db[id] = new DB_Element(title, subtitle, chapList);

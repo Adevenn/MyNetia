@@ -1,5 +1,3 @@
-﻿- Quand on recrée un chapitre qui vient d etre supprimé (test avec le meme nom, mais a voir, peut etre index ?)
-- Bug sur les modifs de chapter, les objects ont les memes valeurs de chapitres
-(a voir avec l ObservableCollection ou bien Property change car ils viennent du meme object chapter ?)
+﻿ - Quand on recrée un chapitre qui vient d etre supprimé (test avec le meme nom, mais a voir, peut etre index ?)
 - Read Json bugged => Faire un constructeur perso
 - 

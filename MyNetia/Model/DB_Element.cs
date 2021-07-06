@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace MyNetia.Model
@@ -8,8 +9,8 @@ namespace MyNetia.Model
     {
         public string title;
         public string subtitle;
-        private readonly ObservableCollection<Chapter> _chapters = new ObservableCollection<Chapter>();
-        public ObservableCollection<Chapter> chapters => _chapters;
+        private readonly List<Chapter> _chapters = new List<Chapter>();
+        public List<Chapter> chapters => _chapters;
         public DateTime lastUpdate;
 
         public DB_Element(string title)
@@ -20,7 +21,7 @@ namespace MyNetia.Model
             lastUpdate = DateTime.Now;
         }
 
-        public DB_Element(string title, string subtitle, ObservableCollection<Chapter> listChap)
+        public DB_Element(string title, string subtitle, List<Chapter> listChap)
         {
             this.title = title;
             this.subtitle = subtitle;
