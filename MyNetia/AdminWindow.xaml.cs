@@ -15,7 +15,7 @@ namespace MyNetia
 {
     public partial class AdminWindow : Window
     {
-        private Point _dragStartPoint;
+        private Point dragOriginPoint;
         private bool isDraging = false;
         private readonly InfoBinding binding = new InfoBinding();
         private bool _isElemSelected;
@@ -40,13 +40,18 @@ namespace MyNetia
                 }
             }
         }
-        private readonly string infoContent = "- Select element :\n" +
-                                              "   Return => add or update the\n" +
-                                              "             element selected\n\n" +
-                                              "- Text part :\n" +
-                                              "   LCtrl + Return => New paragraph\n\n" +
-                                              "- Image part :\n" +
-                                              "   Enter => New Image Zone";
+        private readonly string infoContent =
+            "Select element :\n" +
+            "   - Return => add/update the element selected\n\n" +
+            "Chapter text :\n" +
+            "   - LCtrl + Return => New paragraph\n" +
+            "   - LCtrl + Back => Delete paragraph\n\n" +
+            "Chapter image :\n" +
+            "   - Enter => New image zone\n" +
+            "   - LCtrl + Back => Delete image zone\n" +
+            "   - Enter the name of your image\n" +
+            "       e.g.: Image1.png and save your file inside\n" +
+            "       MyNetia/AppRessources/Images/ElemTitle";
         ObservableCollection<string> matchingResearch = null;
 
         public AdminWindow()
@@ -58,26 +63,27 @@ namespace MyNetia
 
 
         #region EVENTS ADD/UPDATE
-        private void selectionTxtBox_KeyDown(object sender, KeyEventArgs e)
+        private void selectAddUpdate_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Return && AppResources.dbManager.isElementExist(selectionTxtBox.Text))
+            if (e.Key == Key.Return && AppResources.dbManager.isElementExist(selectAddUpdate.Text))
             {
-                setElement(selectionTxtBox.Text);
+                //Select the selected element
+                setElement(selectAddUpdate.Text);
                 listChapters.SelectedIndex = 0;
                 isElemSelected = true;
             }
             else if (e.Key == Key.Return)
             {
-                //Confirmation dialog to confirm element's creation
-                ConfirmationWindow window = new ConfirmationWindow("Do you want to add " + selectionTxtBox.Text + " ?")
+                //Confirm element's creation
+                ConfirmationWindow window = new ConfirmationWindow("Do you want to add " + selectAddUpdate.Text + " ?")
                 {
                     Owner = this
                 };
                 if (window.ShowDialog() == true)
                 {
                     //Add new Element
-                    AppResources.dbManager.addElement(selectionTxtBox.Text);
-                    setElement(selectionTxtBox.Text);
+                    AppResources.dbManager.addElement(selectAddUpdate.Text);
+                    setElement(selectAddUpdate.Text);
                     listChapters.SelectedIndex = 0;
                     isElemSelected = true;
                 }
@@ -86,42 +92,55 @@ namespace MyNetia
             }
         }
 
-        private void listBoxChapters_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void chapterContent_KeyDown(object sender, KeyEventArgs e)
+        {
+            //Delete the current text
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) && Keyboard.IsKeyDown(Key.Back))
+            {
+                
+            }
+        }
+
+        private void listChapters_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             setChapterValues((Chapter)listChapters.SelectedItem);
         }
 
         private void addChapter_Click(object sender, RoutedEventArgs e)
         {
+            //Add and select the new chapter
             binding.chapters.Add(new Chapter());
-            //Select the new chapter
+            listChapters.SelectedIndex = listChapters.Items.Count - 1;
         }
 
         private void chapTitle_TextChanged(object sender, TextChangedEventArgs e)
         {
+            //Update the list with the new chapter title
             int id = listChapters.SelectedIndex;
             binding.chapters[id].chapTitle = chapTitleTxtBox.Text;
         }
 
         private void txt_KeyDown(object sender, KeyEventArgs e)
         {
+            //Create a new text zone
             if (Keyboard.IsKeyDown(Key.LeftCtrl) && Keyboard.IsKeyDown(Key.Enter))
             {
-                spTxtBoxTxt.Children.Add(txtBoxMultiLines(""));
+                spTxtBoxTxt.Children.Add(tBoxMultiLines(""));
                 Keyboard.Focus(spTxtBoxTxt.Children[^1]);
             }
         }
 
         private void img_KeyDown(object sender, KeyEventArgs e)
         {
+            //Create a new image zone
             if (e.Key == Key.Return)
             {
-                spTxtBoxImg.Children.Add(txtBoxSingleLine(""));
+                spTxtBoxImg.Children.Add(tBoxSingleLine(""));
                 Keyboard.Focus(spTxtBoxImg.Children[^1]);
             }
         }
 
-        private void txtBox_LostFocus(object sender, RoutedEventArgs e)
+        private void chapContent_LostFocus(object sender, RoutedEventArgs e)
         {
             //Save chapter's content
             int id = listChapters.SelectedIndex;
@@ -134,8 +153,8 @@ namespace MyNetia
             //Update selected element
             AppResources.dbManager.updateElement(binding.oldElemTitle ,binding.elemTitle, binding.elemSubtitle, (ObservableCollection<Chapter>)binding.chapters);
             DirectoryManager.createDirectory(Path.GetFullPath(@".\AppResources\Images\" + binding.elemTitle));
-            imageValidation.Visibility = Visibility.Visible;
-            animValidationOpacity();
+            imageValid.Visibility = Visibility.Visible;
+            animImageOpacity(imageValid);
         }
 
         private void setElement(string title)
@@ -168,35 +187,23 @@ namespace MyNetia
         {
             sp.Children.Clear();
             foreach (string text in list)
-                sp.Children.Add(txtBoxSingleLine(text));
+                sp.Children.Add(tBoxSingleLine(text));
         }
 
         private void setSPTxtContent(StackPanel sp, ObservableCollection<string> list)
         {
             sp.Children.Clear();
             foreach (string text in list)
-                sp.Children.Add(txtBoxMultiLines(text));
+                sp.Children.Add(tBoxMultiLines(text));
         }
 
-        private void animValidationOpacity()
+        # region Drag and drop ItemListBox
+        private void listChaptersItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            DoubleAnimation da = new DoubleAnimation()
-            {
-                From = 1,
-                To = 0,
-                Duration = new Duration(TimeSpan.FromSeconds(3))
-            };
-            imageValidation.BeginAnimation(OpacityProperty, da);
+            dragOriginPoint = e.GetPosition(null);
         }
 
-        //Drag and drop ItemListBox
-        private void ListBoxItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            _dragStartPoint = e.GetPosition(null);
-        }
-
-        private T FindVisualParent<T>(DependencyObject child)
-            where T : DependencyObject
+        private T FindVisualParent<T>(DependencyObject child) where T : DependencyObject
         {
             DependencyObject parentObject = VisualTreeHelper.GetParent(child);
             if (parentObject == null)
@@ -206,26 +213,22 @@ namespace MyNetia
             return FindVisualParent<T>(parentObject);
         }
 
-        private void ListBox_PreviewMouseMove(object sender, MouseEventArgs e)
+        private void listChapters_PreviewMouseMove(object sender, MouseEventArgs e)
         {
             Point point = e.GetPosition(null);
-            Vector diff = _dragStartPoint - point;
+            Vector diff = dragOriginPoint - point;
             if (e.LeftButton == MouseButtonState.Pressed &&
                 (Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance ||
                     Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance))
             {
-                ListBox lb = sender as ListBox;
                 ListBoxItem lbi = FindVisualParent<ListBoxItem>((DependencyObject)e.OriginalSource);
                 if (lbi != null)
-                {
                     DragDrop.DoDragDrop(lbi, lbi.DataContext, DragDropEffects.Move);
-                }
             }
         }
 
-        private void ListBoxItem_Drop(object sender, DragEventArgs e)
+        private void listChaptersItem_Drop(object sender, DragEventArgs e)
         {
-
             if (sender is ListBoxItem)
             {
                 isDraging = true;
@@ -234,28 +237,30 @@ namespace MyNetia
                 int sourceIndex = listChapters.Items.IndexOf(source);
                 int targetIndex = listChapters.Items.IndexOf(target);
 
-                Move(source, sourceIndex, targetIndex);
+                moveChapter(source, sourceIndex, targetIndex);
                 isDraging = false;
             }
         }
 
-        private void Move(Chapter source, int sourceIndex, int targetIndex)
+        private void moveChapter(Chapter source, int sourceId, int targetId)
         {
-            if (sourceIndex < targetIndex)
+            if (sourceId < targetId)
             {
-                binding.chapters.Insert(targetIndex + 1, source);
-                binding.chapters.RemoveAt(sourceIndex);
+                binding.chapters.Insert(targetId + 1, source);
+                binding.chapters.RemoveAt(sourceId);
             }
             else
             {
-                int removeIndex = sourceIndex + 1;
+                int removeIndex = sourceId + 1;
                 if (binding.chapters.Count + 1 > removeIndex)
                 {
-                    binding.chapters.Insert(targetIndex, source);
+                    binding.chapters.Insert(targetId, source);
                     binding.chapters.RemoveAt(removeIndex);
                 }
             }
         }
+        #endregion
+
         #endregion
 
 
@@ -267,26 +272,26 @@ namespace MyNetia
 
         private void selectionDelete_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Return && AppResources.dbManager.isElementExist(selectionDelete.Text))
+            if (e.Key == Key.Return && AppResources.dbManager.isElementExist(selectDelete.Text))
             {
                 //Confirmation dialog to confirm element's creation
-                ConfirmationWindow window = new ConfirmationWindow("Do you want to delete " + selectionDelete.Text + " ?")
+                ConfirmationWindow window = new ConfirmationWindow("Do you want to delete " + selectDelete.Text + " ?")
                 {
                     Owner = this
                 };
                 if (window.ShowDialog() == true)
                 {
                     //Delete element
-                    DirectoryManager.deleteDirectory(Path.GetFullPath(@".\AppResources\Images\" + selectionDelete.Text));
-                    AppResources.dbManager.deleteElement(selectionDelete.Text);
+                    DirectoryManager.deleteDirectory(Path.GetFullPath(@".\AppResources\Images\" + selectDelete.Text));
+                    AppResources.dbManager.deleteElement(selectDelete.Text);
                     helpResearchBar();
                 }
             }
             else if (e.Key == Key.Tab && matchingResearch.Count > 0)
             {
-                selectionTxtBox.Text = matchingResearch[0];
+                selectDelete.Text = matchingResearch[0];
                 //Set Keyboard focus at the end
-                selectionTxtBox.CaretIndex = selectionTxtBox.Text.Length;
+                selectDelete.CaretIndex = selectDelete.Text.Length;
             }
         }
 
@@ -298,12 +303,12 @@ namespace MyNetia
         private void helpResearchBar()
         {
             matchingResearch = new ObservableCollection<string>();
-            txtBlockDelete.Text = null;
+            tBlockDelete.Text = null;
             foreach (string txt in AppResources.dbManager.getTitles())
             {
-                if (txt.Contains(selectionDelete.Text))
+                if (txt.Contains(selectDelete.Text))
                 {
-                    txtBlockDelete.Text += txt + "\n";
+                    tBlockDelete.Text += txt + "\n";
                     matchingResearch.Add(txt);
                 }
             }
@@ -312,17 +317,32 @@ namespace MyNetia
 
 
         #region UI
-        private TextBox txtBoxSingleLine(string content) => new TextBox
+        private TextBox tBoxSingleLine(string content) => new TextBox
         {
-            Style = (Style)Resources["txtBox"],
+            Style = (Style)Resources["tBoxSingleLine"],
             Text = content
         };
 
-        private TextBox txtBoxMultiLines(string content) => new TextBox
+        private TextBox tBoxMultiLines(string content) => new TextBox
         {
-            Style = (Style)Resources["txtBoxTxt"],
+            Style = (Style)Resources["tBoxMultiLines"],
             Text = content
         };
+        #endregion
+
+
+        #region OTHER METHODS
+        private void animImageOpacity(Image image)
+        {
+            //Change the image opacity from 1 to 0 in 3 seconds
+            DoubleAnimation da = new DoubleAnimation()
+            {
+                From = 1,
+                To = 0,
+                Duration = new Duration(TimeSpan.FromSeconds(3))
+            };
+            image.BeginAnimation(OpacityProperty, da);
+        }
         #endregion
 
 

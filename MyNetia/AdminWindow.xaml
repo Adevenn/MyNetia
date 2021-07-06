@@ -12,51 +12,7 @@
         MinHeight="750" MaxHeight="800"
         MinWidth="750" MaxWidth="750">
     <Window.Resources>
-        <Style x:Key="tabControl" BasedOn="{StaticResource tabControlBase}"  TargetType="TabControl">
-            <Setter Property="BorderThickness" Value="0, 1, 0, 0"/>
-            <Setter Property="Padding" Value="0, 10"/>
-        </Style>
-
-        <Style x:Key="listBoxItem" BasedOn="{StaticResource listBoxItemBase}" TargetType="ListBoxItem">
-            <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ListBoxItem_PreviewMouseLeftButtonDown"/>
-            <EventSetter Event="Drop" Handler="ListBoxItem_Drop"/>
-        </Style>
-
-        <Style x:Key="listBox" BasedOn="{StaticResource listBoxBase}" TargetType="ListBox">
-            <EventSetter Event="SelectionChanged" Handler="listBoxChapters_SelectionChanged"/>
-            <EventSetter Event="PreviewMouseMove" Handler="ListBox_PreviewMouseMove"/>
-            <Setter Property="ItemsSource" Value="{Binding chapters, UpdateSourceTrigger=PropertyChanged}"/>
-            <Setter Property="DisplayMemberPath" Value="chapTitle"/>
-            <Setter Property="ItemContainerStyle" Value="{StaticResource listBoxItem}"/>
-        </Style>
-        
-        <Style x:Key="label" BasedOn="{StaticResource labelBase}" TargetType="Label">
-            <Setter Property="FontSize" Value="20"/>
-            <Setter Property="Width" Value="160"/>
-            <Setter Property="Height" Value="40"/>
-            <Setter Property="VerticalAlignment" Value="Top"/>
-            <Setter Property="HorizontalContentAlignment" Value="Left"/>
-            <Setter Property="Margin" Value="0 10 0 10"/>
-        </Style>
-
-        <Style x:Key="txtBlock" BasedOn="{StaticResource txtBlockBase}" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="18"/>
-            <Setter Property="Padding" Value="5"/>
-        </Style>
-
-        <Style x:Key="txtBox" BasedOn="{StaticResource txtBoxBase}" TargetType="TextBox">
-            <Setter Property="FontSize" Value="20"/>
-            <Setter Property="Width" Value="300"/>
-            <Setter Property="Height" Value="40"/>
-            <Setter Property="Margin" Value="0 10 0 10"/>
-        </Style>
-
-        <Style x:Key="txtBoxTxt" BasedOn="{StaticResource txtBox}" TargetType="TextBox">
-            <Setter Property="AcceptsReturn" Value="True"/>
-            <Setter Property="Height" Value="70"/>
-        </Style>
-
-        <Style x:Key="btnChapters" BasedOn="{StaticResource btnBase}" TargetType="Button">
+        <Style x:Key="btnAddChapter" BasedOn="{StaticResource btnBase}" TargetType="Button">
             <Setter Property="FontSize" Value="15"/>
             <Setter Property="Height" Value="20"/>
             <Setter Property="Width" Value="75"/>
@@ -73,6 +29,67 @@
             <Setter Property="Visibility" Value="Hidden"/>
             <Setter Property="Height" Value="40"/>
             <Setter Property="Width" Value="70"/>
+        </Style>
+
+        <Style x:Key="label" BasedOn="{StaticResource labelBase}" TargetType="Label">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Width" Value="160"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Margin" Value="0, 10"/>
+        </Style>
+
+        <Style x:Key="listBoxItem" BasedOn="{StaticResource listBoxItemBase}" TargetType="ListBoxItem">
+            <EventSetter Event="PreviewMouseLeftButtonDown" Handler="listChaptersItem_PreviewMouseLeftButtonDown"/>
+            <EventSetter Event="Drop" Handler="listChaptersItem_Drop"/>
+            <Setter Property="AllowDrop" Value="True"/>
+        </Style>
+
+        <Style x:Key="listBox" BasedOn="{StaticResource listBoxBase}" TargetType="ListBox">
+            <EventSetter Event="SelectionChanged" Handler="listChapters_SelectionChanged"/>
+            <EventSetter Event="PreviewMouseMove" Handler="listChapters_PreviewMouseMove"/>
+            <Setter Property="ItemsSource" Value="{Binding chapters, UpdateSourceTrigger=PropertyChanged}"/>
+            <Setter Property="DisplayMemberPath" Value="chapTitle"/>
+            <Setter Property="ItemContainerStyle" Value="{StaticResource listBoxItem}"/>
+        </Style>
+
+        <Style x:Key="spElemPart" BasedOn="{StaticResource spV}" TargetType="StackPanel">
+            <Setter Property="Visibility" Value="Hidden"/>
+            <Setter Property="Margin" Value="10"/>
+        </Style>
+
+        <Style x:Key="tabControl" BasedOn="{StaticResource tabControlBase}"  TargetType="TabControl">
+            <Setter Property="BorderThickness" Value="0, 1, 0, 0"/>
+            <Setter Property="Padding" Value="0, 10"/>
+        </Style>
+
+        <Style x:Key="tBlock" BasedOn="{StaticResource tBlockBase}" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Padding" Value="5"/>
+        </Style>
+
+        <Style x:Key="tBox" BasedOn="{StaticResource tBoxBase}" TargetType="TextBox">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Width" Value="300"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Margin" Value="0, 10"/>
+        </Style>
+
+        <Style x:Key="tBoxDelete" BasedOn="{StaticResource tBox}" TargetType="TextBox">
+            <EventSetter Event="GotFocus" Handler="selectionDelete_GotFocus"/>
+            <EventSetter Event="KeyDown" Handler="selectionDelete_KeyDown"/>
+            <EventSetter Event="TextChanged" Handler="onTextChangedDelete"/>
+        </Style>
+
+        <Style x:Key="tBoxMultiLines" BasedOn="{StaticResource tBox}" TargetType="TextBox">
+            <EventSetter Event="KeyDown" Handler="chapterContent_KeyDown"/>
+            <Setter Property="AcceptsReturn" Value="True"/>
+            <Setter Property="Height" Value="70"/>
+        </Style>
+
+        <Style x:Key="tBoxSingleLine" BasedOn="{StaticResource tBox}" TargetType="TextBox">
+            <EventSetter Event="KeyDown" Handler="chapterContent_KeyDown"/>
         </Style>
     </Window.Resources>
     
@@ -145,24 +162,22 @@
                                     Style="{StaticResource label}"
                                     Content="Select element :"/>
                                 <TextBox
-                                    x:Name="selectionTxtBox"
-                                    Style="{StaticResource txtBox}"
-                                    KeyDown="selectionTxtBox_KeyDown"/>
+                                    x:Name="selectAddUpdate"
+                                    Style="{StaticResource tBox}"
+                                    KeyDown="selectAddUpdate_KeyDown"/>
                             </StackPanel>
                         </Border>
                     </StackPanel>
                     <StackPanel
                         DockPanel.Dock="Top"
                         x:Name="spElemPart"
-                        Style="{StaticResource spV}"
-                        Visibility="Hidden"
-                        Margin="10">
+                        Style="{StaticResource spElemPart}">
                         <StackPanel Style="{StaticResource spH}">
                             <Label
                                 Style="{StaticResource label}"
                                 Content="Title :"/>
                             <TextBox
-                                Style="{StaticResource txtBox}"
+                                Style="{StaticResource tBox}"
                                 Text="{Binding elemTitle, UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
                         <StackPanel Style="{StaticResource spH}">
@@ -170,7 +185,7 @@
                                 Style="{StaticResource label}"
                                 Content="Subtitle :"/>
                             <TextBox
-                                Style="{StaticResource txtBox}"
+                                Style="{StaticResource tBox}"
                                 Text="{Binding elemSubtitle, UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
                     </StackPanel>
@@ -184,14 +199,14 @@
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <StackPanel
-                                Style="{StaticResource spV}"
-                                Grid.Row="0">
+                                Grid.Row="0"
+                                Style="{StaticResource spV}">
                                 <Label
                                     Style="{StaticResource label}"
                                     HorizontalContentAlignment="Center"
                                     Content="Chapters :"/>
                                 <Button
-                                    Style="{StaticResource btnChapters}"
+                                    Style="{StaticResource btnAddChapter}"
                                     Click="addChapter_Click"
                                     Content="+"/>
                             </StackPanel>
@@ -218,7 +233,7 @@
                                         Content="Chapter title :"/>
                                     <TextBox
                                         x:Name="chapTitleTxtBox"
-                                        Style="{StaticResource txtBox}"
+                                        Style="{StaticResource tBox}"
                                         TextChanged="chapTitle_TextChanged"
                                         Text="{Binding chapTitle, UpdateSourceTrigger=PropertyChanged}"/>
                                 </StackPanel>
@@ -229,7 +244,7 @@
                                     <StackPanel
                                         x:Name="spTxtBoxTxt"
                                         KeyDown="txt_KeyDown"
-                                        LostFocus="txtBox_LostFocus"/>
+                                        LostFocus="chapContent_LostFocus"/>
                                 </StackPanel>
                                 <StackPanel Style="{StaticResource spH}">
                                     <Label
@@ -238,7 +253,7 @@
                                     <StackPanel
                                         x:Name="spTxtBoxImg"
                                         KeyDown="img_KeyDown"
-                                        LostFocus="txtBox_LostFocus"/>
+                                        LostFocus="chapContent_LostFocus"/>
                                 </StackPanel>
                             </StackPanel>
                         </ScrollViewer>
@@ -249,7 +264,7 @@
                                 Style="{StaticResource btnValid}"
                                 Content="Valid"/>
                             <Image
-                                x:Name="imageValidation"
+                                x:Name="imageValid"
                                 Style="{StaticResource image}"/>
                         </StackPanel>
                     </Grid>
@@ -265,16 +280,13 @@
                                 Style="{StaticResource label}"
                                 Content="Select element :"/>
                             <TextBox
-                                x:Name="selectionDelete"
-                                GotFocus="selectionDelete_GotFocus"
-                                KeyDown="selectionDelete_KeyDown"
-                                TextChanged="onTextChangedDelete"
-                                Style="{StaticResource txtBox}"/>
+                                x:Name="selectDelete"
+                                Style="{StaticResource tBoxDelete}"/>
                         </StackPanel>
                     </Border>
                     <TextBlock
-                        x:Name="txtBlockDelete"
-                        Style="{StaticResource txtBlock}"/>
+                        x:Name="tBlockDelete"
+                        Style="{StaticResource tBlock}"/>
                 </StackPanel>
             </TabItem>
             <TabItem
@@ -282,10 +294,10 @@
                 Header="Options">
                 <StackPanel Style="{StaticResource spV}">
                     <TextBlock
-                        Style="{StaticResource txtBlock}"
+                        Style="{StaticResource tBlock}"
                         Text="Work in progress"/>
                     <TextBlock
-                        Style="{StaticResource txtBlock}"
+                        Style="{StaticResource tBlock}"
                         Text="This'll content every external infos, like database server, etc .."/>
                 </StackPanel>
             </TabItem>

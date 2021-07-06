@@ -10,13 +10,14 @@
         Style="{StaticResource window}"
         MinHeight="500" MaxHeight="500"
         MinWidth="500" Width="700">
+    
     <Window.Resources>
         <Style x:Key="label" BasedOn="{StaticResource labelBase}" TargetType="Label">
             <Setter Property="FontSize" Value="17"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
         </Style>
         
-        <Style x:Key="txtBlock" BasedOn="{StaticResource txtBlockBase}" TargetType="TextBlock">
+        <Style x:Key="tBlock" BasedOn="{StaticResource tBlockBase}" TargetType="TextBlock">
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="15"/>
@@ -79,13 +80,13 @@
         <ScrollViewer Style="{StaticResource scrollViewer}">
             <StackPanel Style="{StaticResource spV}">
                 <TextBlock
-                    Style="{StaticResource txtBlock}"
+                    Style="{StaticResource tBlock}"
                     Text="Commands :"/>
                 <StackPanel
                     x:Name="stackCommands"
                     Style="{StaticResource spH}"/>
                 <TextBlock
-                    Style="{StaticResource txtBlock}"
+                    Style="{StaticResource tBlock}"
                     Margin="15, 45, 15, 15"
                     Text="Elements :"/>
                 <StackPanel

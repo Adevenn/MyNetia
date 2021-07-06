@@ -8,10 +8,11 @@
         Title="MyNetia-Info"
         Style="{StaticResource window}"
         WindowStartupLocation="CenterOwner"
-        MinHeight="450" MaxHeight="450"
-        MinWidth="400" MaxWidth="400">
+        MinHeight="500" MaxHeight="500"
+        MinWidth="600" MaxWidth="600">
+    
     <Window.Resources>
-        <Style x:Key="txtBlock" BasedOn="{StaticResource txtBlockBase}" TargetType="TextBlock">
+        <Style x:Key="txtBlock" BasedOn="{StaticResource tBlockBase}" TargetType="TextBlock">
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="Margin" Value="30"/>
         </Style>

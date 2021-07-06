@@ -29,11 +29,11 @@ namespace MyNetia
         private void setValues(string title)
         {
             DB_Element elem = AppResources.dbManager.getElement(title);
-            txtTitle.Text = elem.title;
-            txtSubtitle.Text = elem.subtitle;
+            elemTitle.Text = elem.title;
+            elemSubtitle.Text = elem.subtitle;
             binding.chapters = elem.chapters;
             listChapters.SelectedIndex = 0;
-            txtLastUpdate.Text = "Last update : " + elem.lastUpdate.Month.ToString() + "/" + elem.lastUpdate.Day.ToString() + "/" + elem.lastUpdate.Year.ToString();
+            elemLastUpdate.Text = "Last update : " + elem.lastUpdate.Month.ToString() + "/" + elem.lastUpdate.Day.ToString() + "/" + elem.lastUpdate.Year.ToString();
         }
 
         private void setChapterValues(Chapter ch)
@@ -66,7 +66,7 @@ namespace MyNetia
                 {
                     if (!string.IsNullOrWhiteSpace(img[idImg]))
                     {
-                        string path = Path.GetFullPath(@".\AppResources\Images\" + txtTitle.Text + @"\" + img[idImg]);
+                        string path = Path.GetFullPath(@".\AppResources\Images\" + elemTitle.Text + @"\" + img[idImg]);
                         if (File.Exists(path))
                             spHoriz.Children.Add(image(File.ReadAllBytes(path)));
                         else

@@ -10,8 +10,14 @@
         Style="{StaticResource window}"
         MinHeight="200" MaxHeight="200"
         MinWidth="300" MaxWidth="300">
+    
     <Window.Resources>
-        <Style x:Key="txtBox" BasedOn="{StaticResource txtBoxBase}" TargetType="TextBox">
+        <Style x:Key="tBlock" BasedOn="{StaticResource tBlockBase}" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Padding" Value="8"/>
+        </Style>
+
+        <Style x:Key="tBox" BasedOn="{StaticResource tBoxBase}" TargetType="TextBox">
             <EventSetter Event="KeyDown" Handler="onKeyDown"/>
             <EventSetter Event="TextChanged" Handler="onTextChanged"/>
             <Setter Property="FontSize" Value="20"/>
@@ -20,12 +26,8 @@
             <Setter Property="Width" Value="Auto"/>
             <Setter Property="Padding" Value="10, 0"/>
         </Style>
-        
-        <Style x:Key="txtBlock" BasedOn="{StaticResource txtBlockBase}" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="18"/>
-            <Setter Property="Padding" Value="8"/>
-        </Style>
     </Window.Resources>
+    
     <DockPanel>
         <!--#region TITLE BAR-->
         <Grid
@@ -83,11 +85,11 @@
             <Border Style="{StaticResource borderBot}">
                 <TextBox
                     x:Name="txtBox"
-                    Style="{StaticResource txtBox}"/>
+                    Style="{StaticResource tBox}"/>
             </Border>
             <TextBlock
                 x:Name="txtBlock"
-                Style="{StaticResource txtBlock}"/>
+                Style="{StaticResource tBlock}"/>
         </StackPanel>
     </DockPanel>
 </Window>
