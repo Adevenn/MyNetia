@@ -1,3 +1,7 @@
-﻿ - Quand on recrée un chapitre qui vient d etre supprimé (test avec le meme nom, mais a voir, peut etre index ?)
-- Read Json bugged => Faire un constructeur perso
+﻿----------------
+----- BUGS -----
+----------------
+
+
+- readJson not working anymore => custom contructor
 - 

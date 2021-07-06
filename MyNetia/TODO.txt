@@ -2,6 +2,6 @@
 - Lien hypertext
 - Avoir une preview du résultat final (autre fenetre ? Miniature ? Btn pour Show/Hide ?)
 - Fait d avoir des titres (différenciation entre simple texte et titre)
-- Suppression de chapitre dans le add/update et des texts/images
+- Suppression de chapitre dans le add/update et des contenurs texts/images
 - Personnalisation de text, via RichTextBox e.g.
 - Charger une save externe (fichier json qu on selectionne)
