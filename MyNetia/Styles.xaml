@@ -120,6 +120,7 @@
                     <Border
                         Name="Border"
                         Style="{StaticResource borderFull}"
+                        Background="Transparent"
                         Padding="5"
                         Margin="10, 5">
                         <ContentPresenter
