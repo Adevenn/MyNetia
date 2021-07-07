@@ -30,7 +30,6 @@ namespace MyNetia.Model
         public void deleteChapter(string title)
         {
             _chapters.RemoveAt(getChapterID(title));
-            GC.Collect();
         }
 
         private int getChapterID(string title)

@@ -38,7 +38,6 @@ namespace MyNetia.Model
                 if (db[i].title == title)
                 {
                     _db.RemoveAt(i);
-                    GC.Collect();
                     break;
                 }
             }

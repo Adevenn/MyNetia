@@ -15,7 +15,7 @@ namespace MyNetia
 {
     public partial class AdminWindow : Window
     {
-        private App currentApp = (App)Application.Current;
+        private readonly App currentApp = (App)Application.Current;
         private Point dragOriginPoint;
         private bool isDraging = false;
         private readonly InfoBinding binding = new InfoBinding();
@@ -230,15 +230,16 @@ namespace MyNetia
 
         private void listChaptersItem_Drop(object sender, DragEventArgs e)
         {
-            if (sender is ListBoxItem)
+            if (sender is ListBoxItem item)
             {
                 isDraging = true;
                 Chapter source = e.Data.GetData(typeof(Chapter)) as Chapter;
-                Chapter target = ((ListBoxItem)sender).DataContext as Chapter;
+                Chapter target = item.DataContext as Chapter;
                 int sourceIndex = listChapters.Items.IndexOf(source);
                 int targetIndex = listChapters.Items.IndexOf(target);
 
                 moveChapter(source, sourceIndex, targetIndex);
+                listChapters.SelectedIndex = targetIndex;
                 isDraging = false;
             }
         }

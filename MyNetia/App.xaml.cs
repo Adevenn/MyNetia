@@ -34,7 +34,6 @@ namespace MyNetia
                 if (openWindows[i].Equals(title))
                 {
                     openWindows.RemoveAt(i);
-                    GC.Collect();
                     return;
                 }
             }
