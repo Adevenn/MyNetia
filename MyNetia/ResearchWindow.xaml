@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Title="MyNetia"
         WindowStartupLocation="CenterScreen"
+        Closing="Window_Closing"
         Style="{StaticResource window}"
         MinHeight="200" MaxHeight="200"
         MinWidth="300" MaxWidth="300">

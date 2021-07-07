@@ -8,10 +8,10 @@ namespace MyNetia.Model
     {
         public string title;
         public string subtitle;
+       
         private readonly List<Chapter> _chapters = new List<Chapter>();
         public List<Chapter> chapters => _chapters;
         public DateTime lastUpdate;
-
         public DB_Element(string title)
         {
             this.title = title;
@@ -19,7 +19,6 @@ namespace MyNetia.Model
             _chapters.Add(new Chapter());
             lastUpdate = DateTime.Now;
         }
-
         public DB_Element(string title, string subtitle, List<Chapter> listChap)
         {
             this.title = title;
@@ -31,6 +30,7 @@ namespace MyNetia.Model
         public void deleteChapter(string title)
         {
             _chapters.RemoveAt(getChapterID(title));
+            GC.Collect();
         }
 
         private int getChapterID(string title)

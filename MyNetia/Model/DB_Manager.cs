@@ -38,6 +38,7 @@ namespace MyNetia.Model
                 if (db[i].title == title)
                 {
                     _db.RemoveAt(i);
+                    GC.Collect();
                     break;
                 }
             }
@@ -103,9 +104,13 @@ namespace MyNetia.Model
         #region Json Manager
         public void readJson()
         {
-            string jsonContent = AppResources.jsonFile();
-            if (!string.IsNullOrWhiteSpace(jsonContent))
-                _db = JsonConvert.DeserializeObject<DB_Manager>(jsonContent).db;
+            try
+            {
+                string jsonContent = AppResources.jsonFile();
+                if (!string.IsNullOrWhiteSpace(jsonContent))
+                    _db = JsonConvert.DeserializeObject<DB_Manager>(jsonContent).db;
+            }
+            catch (JsonSerializationException) { _db = new List<DB_Element>(); }
         }
 
         public void saveJson(string path)

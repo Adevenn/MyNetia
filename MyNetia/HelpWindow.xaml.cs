@@ -8,6 +8,7 @@ namespace MyNetia
 {
     public partial class HelpWindow : Window
     {
+        private App currentApp = (App)Application.Current;
         public HelpWindow()
         {
             InitializeComponent();
@@ -55,15 +56,22 @@ namespace MyNetia
         {
             WindowState = WindowState.Minimized;
         }
+
         private void maxBtn_Click(object sender, RoutedEventArgs e)
         {
             AdjustWindowSize();
         }
+
         private void closeBtn_Click(object sender, RoutedEventArgs e)
         {
             Close();
-            ResearchWindow.isHelpWindowOpen = false;
         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            currentApp.deleteWindow(Title);
+        }
+
         private void titleBar_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)

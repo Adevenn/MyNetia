@@ -25,7 +25,7 @@
         </Style>
 
         <Style x:Key="image" TargetType="Image">
-            <Setter Property="Source" Value="/AppResources/Images/Validate_MyNetia.png"/>
+            <Setter Property="Source" Value="/AppResources/Images/Valid_MyNetia.png"/>
             <Setter Property="Visibility" Value="Hidden"/>
             <Setter Property="Height" Value="40"/>
             <Setter Property="Width" Value="70"/>

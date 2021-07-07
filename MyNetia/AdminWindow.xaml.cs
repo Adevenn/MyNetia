@@ -15,13 +15,14 @@ namespace MyNetia
 {
     public partial class AdminWindow : Window
     {
+        private App currentApp = (App)Application.Current;
         private Point dragOriginPoint;
         private bool isDraging = false;
         private readonly InfoBinding binding = new InfoBinding();
         private bool _isElemSelected;
         private bool isElemSelected
         {
-            get { return _isElemSelected; }
+            get => _isElemSelected;
             set
             {
                 if (value == true && value != _isElemSelected)
@@ -75,7 +76,7 @@ namespace MyNetia
             else if (e.Key == Key.Return)
             {
                 //Confirm element's creation
-                ConfirmationWindow window = new ConfirmationWindow("Do you want to add " + selectAddUpdate.Text + " ?")
+                ConfirmationWindow window = new ConfirmationWindow("Do you want to add {0}" + selectAddUpdate.Text + " ?")
                 {
                     Owner = this
                 };
@@ -362,12 +363,11 @@ namespace MyNetia
         private void closeBtn_Click(object sender, RoutedEventArgs e)
         {
             Close();
-            ResearchWindow.isAdminWindowOpen = false;
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {
-            ResearchWindow.isAdminWindowOpen = false;
+            currentApp.deleteWindow(Title);
         }
 
         private void titleBar_MouseDown(object sender, MouseButtonEventArgs e)
@@ -412,7 +412,7 @@ namespace MyNetia
             private string _elemTitle;
             public string elemTitle
             {
-                get { return _elemTitle; }
+                get => _elemTitle;
                 set
                 {
                     if(_elemTitle != value)
@@ -426,7 +426,7 @@ namespace MyNetia
             private string _elemSubtitle;
             public string elemSubtitle
             {
-                get { return _elemSubtitle; }
+                get => _elemSubtitle;
                 set
                 {
                     if (_elemSubtitle != value)
@@ -440,7 +440,7 @@ namespace MyNetia
             private string _chapTitle;
             public string chapTitle
             {
-                get { return _chapTitle; }
+                get => _chapTitle;
                 set
                 {
                     if (_chapTitle != value)
@@ -454,7 +454,7 @@ namespace MyNetia
             private ObservableCollection<Chapter> _chapters;
             public ObservableCollection<Chapter> chapters
             {
-                get { return _chapters; }
+                get => _chapters;
                 set
                 {
                     if(_chapters != value)

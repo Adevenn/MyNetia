@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyNetia"
         mc:Ignorable="d"
-        Title="MyNetia"
         WindowStartupLocation="CenterScreen"
+        Closing="Window_Closing"
         Style="{StaticResource window}"
         MinWidth="1100"
         Height="800" Width="1200">

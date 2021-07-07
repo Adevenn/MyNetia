@@ -1,7 +1,6 @@
 ﻿using MyNetia.Model;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,16 +10,15 @@ namespace MyNetia
 {
     public partial class ResearchWindow : Window
     {
+        private App currentApp = (App)Application.Current;
         private List<string> matchingResearch = null;
-        //Only 1 window open at a time
-        public static bool isHelpWindowOpen = false;
-        public static bool isAdminWindowOpen = false;
 
         public ResearchWindow()
         {
             InitializeComponent();
-            //if (File.Exists(Path.GetFullPath(@".\AppResources\SaveDB.json")))
-            //    AppResources.dbManager.readJson();
+            if (File.Exists(Path.GetFullPath(@".\AppResources\SaveDB.json")))
+                AppResources.dbManager.readJson();
+
             List<string> texts = new List<string>
             {
                 "TEST",
@@ -51,6 +49,7 @@ namespace MyNetia
             AppResources.dbManager.addElement("HAAAAAAAAA", "port 123", chapList);
             AppResources.dbManager.addElement("IAAAAAAAAA", "port 123", chapList);
             AppResources.dbManager.addElement("JAAAAAAAAA", "port 123", chapList);
+
             helpResearchBar();
         }
 
@@ -68,18 +67,22 @@ namespace MyNetia
                 {
                     DB_Element elem = AppResources.dbManager.getElement(txtBox.Text);
                     DisplayWindow displayWindow = new DisplayWindow(elem.title);
-                    displayWindow.Show();
+                    if (!currentApp.isOpenWindow(displayWindow.Title))
+                    {
+                        currentApp.addWindow(displayWindow.Title);
+                        displayWindow.Show();
+                    }
                 }
                 if (txtBox.Text.StartsWith("-") || txtBox.Text.Equals("Help") || txtBox.Text.Equals("help") || string.IsNullOrWhiteSpace(txtBox.Text))
                 {
                     switch (txtBox.Text)
                     {
-                        case Commands.admin: 
-                            if (!isAdminWindowOpen)
+                        case Commands.admin:
+                            AdminWindow adminWindow = new AdminWindow();
+                            if (!currentApp.isOpenWindow(adminWindow.Title))
                             {
-                                AdminWindow adminWindow = new AdminWindow();
+                                currentApp.addWindow(adminWindow.Title);
                                 adminWindow.Show();
-                                isAdminWindowOpen = true;
                             }
                             break;
                         case Commands.saveAsJson:
@@ -87,11 +90,11 @@ namespace MyNetia
                             break;
                         case Commands.help:
                         default:
-                            if (!isHelpWindowOpen)
+                            HelpWindow helpWindow = new HelpWindow();
+                            if (!currentApp.isOpenWindow(helpWindow.Title))
                             {
-                                HelpWindow helpWindow = new HelpWindow();
+                                currentApp.addWindow(helpWindow.Title);
                                 helpWindow.Show();
-                                isHelpWindowOpen = true;
                             }
                             break;
                     }
@@ -129,14 +132,22 @@ namespace MyNetia
         {
             WindowState = WindowState.Minimized;
         }
+
         private void maxBtn_Click(object sender, RoutedEventArgs e)
         {
             AdjustWindowSize();
         }
+
         private void closeBtn_Click(object sender, RoutedEventArgs e)
         {
             Close();
         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
         private void titleBar_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
