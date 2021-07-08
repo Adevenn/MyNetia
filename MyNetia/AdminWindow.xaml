@@ -66,7 +66,6 @@
         <!--#endregion-->
 
         <!--#region ListBox Style-->
-        
         <Style x:Key="itemListBoxChapters" BasedOn="{StaticResource listBoxItemBase}" TargetType="ListBoxItem">
             <EventSetter Event="PreviewMouseLeftButtonDown" Handler="listChaptersItem_PreviewMouseLeftButtonDown"/>
             <EventSetter Event="Drop" Handler="listChaptersItem_Drop"/>

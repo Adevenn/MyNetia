@@ -13,7 +13,7 @@
     <Window.Resources>
         <Style x:Key="label" BasedOn="{StaticResource labelBase}" TargetType="Label">
             <Setter Property="FontSize" Value="20"/>
-            <Setter Property="Height" Value="40"/>
+            <Setter Property="Height" Value="60"/>
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
             <Setter Property="Margin" Value="0 10 0 10"/>

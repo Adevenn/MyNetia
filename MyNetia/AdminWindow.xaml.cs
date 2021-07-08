@@ -20,26 +20,22 @@ namespace MyNetia
         private bool isDraging = false;
         private readonly InfoBinding binding = new InfoBinding();
         private List<string> matchingResearch = null;
-        private bool _isElemSelected;
-        private bool isElemSelected
+        private bool isElemSelected;
+        private void setIsElemSelected(bool value)
         {
-            get => _isElemSelected;
-            set
+            if (value == true && value != isElemSelected)
             {
-                if (value == true && value != _isElemSelected)
-                {
-                    spElemPart.Visibility = Visibility.Visible;
-                    chaptersListPart.Visibility = Visibility.Visible;
-                    chapContentPart.Visibility = Visibility.Visible;
-                    _isElemSelected = value;
-                }
-                else if (value != _isElemSelected)
-                {
-                    spElemPart.Visibility = Visibility.Hidden;
-                    chaptersListPart.Visibility = Visibility.Hidden;
-                    chapContentPart.Visibility = Visibility.Hidden;
-                    _isElemSelected = value;
-                }
+                spElemPart.Visibility = Visibility.Visible;
+                chaptersListPart.Visibility = Visibility.Visible;
+                chapContentPart.Visibility = Visibility.Visible;
+                isElemSelected = value;
+            }
+            else if (value != isElemSelected)
+            {
+                spElemPart.Visibility = Visibility.Hidden;
+                chaptersListPart.Visibility = Visibility.Hidden;
+                chapContentPart.Visibility = Visibility.Hidden;
+                isElemSelected = value;
             }
         }
         private readonly string infoContent =
@@ -47,10 +43,10 @@ namespace MyNetia
             "   - Return => add/update the element selected\n\n" +
             "Chapter text :\n" +
             "   - LCtrl + Return => New paragraph\n" +
-            "   - LCtrl + Back => Delete paragraph\n\n" +
+            "   - LCtrl + Return => Delete paragraph\n\n" +
             "Chapter image :\n" +
             "   - Enter => New image zone\n" +
-            "   - LCtrl + Back => Delete image zone\n" +
+            "   - LCtrl + Return => Delete image zone\n" +
             "   - Enter the name of your image\n" +
             "       e.g.: Image1.png and save your file inside\n" +
             "       MyNetia/AppRessources/Images/ElemTitle";
@@ -58,7 +54,7 @@ namespace MyNetia
         public AdminWindow()
         {
             DataContext = binding;
-            isElemSelected = false;
+            setIsElemSelected(false);
             InitializeComponent();
         }
 
@@ -73,7 +69,7 @@ namespace MyNetia
                 //Apply element selection
                 setElement(selectAddUpdate.Text);
                 listChapters.SelectedIndex = 0;
-                isElemSelected = true;
+                setIsElemSelected(true);
             }
             else if (e.Key == Key.Return)
             {
@@ -87,10 +83,10 @@ namespace MyNetia
                     //Add new Element
                     AppResources.dbManager.addElement(selectAddUpdate.Text);
                     setElement(selectAddUpdate.Text);
-                    isElemSelected = true;
+                    setIsElemSelected(true);
                 }
                 else
-                    isElemSelected = false;
+                    setIsElemSelected(false);
             }
         }
 
@@ -109,6 +105,9 @@ namespace MyNetia
             //Select by default the first item
             if (listChapters.SelectedIndex == -1)
                 listChapters.SelectedIndex = 0;
+            //Set by default 1 empty chapter
+            if (binding.chapters.Count == 0)
+                binding.chapters.Add(new Chapter());
             setChapterValues((Chapter)listChapters.SelectedItem);
         }
 
@@ -134,7 +133,7 @@ namespace MyNetia
             //Delete the current chapter
             if (Keyboard.IsKeyDown(Key.LeftAlt) && Keyboard.IsKeyDown(Key.Return))
             {
-                ConfirmationWindow window = new ConfirmationWindow("Are you sure you want to delete " + chapTitle.Text + " ?")
+                ConfirmationWindow window = new ConfirmationWindow("Do you realy want to delete\n" + chapTitle.Text + " ?")
                 {
                     Owner = this
                 };
@@ -546,13 +545,13 @@ namespace MyNetia
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
             }
 
+            //Needed to correctly bind Text boxes inside ListBox (texts and images) with TwoWay mode
             public class ItemContent
             {
                 public ItemContent(string content)
                 {
                     this.content = content;
                 }
-                //Needed to correctly bind Text boxes inside ListBox with TwoWay mode
                 public string content { get; set; }
             }
         }
