@@ -100,6 +100,7 @@ namespace MyNetia
         }
         #endregion
 
+        #region ChaptersList Setup
         private void listChapters_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //Select by default the first item
@@ -127,7 +128,9 @@ namespace MyNetia
             binding.chapters.Add(new Chapter());
             listChapters.SelectedIndex = listChapters.Items.Count - 1;
         }
+        #endregion
 
+        #region ChaptersListItems Setup
         private void chapTitle_KeyDown(object sender, KeyEventArgs e)
         {
             //Delete the current chapter
@@ -153,8 +156,6 @@ namespace MyNetia
             binding.chapters[id].chapTitle = chapTitle.Text;
         }
 
-
-        #region chaptContent (ListBox)
         private void listText_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //Save list inside binding.chapters
@@ -192,7 +193,6 @@ namespace MyNetia
             binding.chapters[id].texts = new List<string>(binding.getTxtList());
             binding.chapters[id].images = new List<string>(binding.getImgList());
         }
-        #endregion
 
         private void itemListTxt_KeyDown(object sender, KeyEventArgs e)
         {
@@ -207,11 +207,12 @@ namespace MyNetia
         private void valid_Click(object sender, RoutedEventArgs e)
         {
             //Update selected element
-            AppResources.dbManager.updateElement(binding.oldElemTitle ,binding.elemTitle, binding.elemSubtitle, new List<Chapter>(binding.chapters));
+            AppResources.dbManager.updateElement(binding.oldElemTitle, binding.elemTitle, binding.elemSubtitle, new List<Chapter>(binding.chapters));
             DirectoryManager.createDirectory(Path.GetFullPath(@".\AppResources\Images\" + binding.elemTitle));
             imageValid.Visibility = Visibility.Visible;
             animImageOpacity(imageValid);
         }
+        #endregion
 
         # region Drag and drop ItemListBox
         private void listChaptersItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -330,21 +331,6 @@ namespace MyNetia
                 }
             }
         }
-        #endregion
-
-
-        #region UI
-        private TextBox tBoxSingleLine(string content) => new TextBox
-        {
-            Style = (Style)Resources["tBoxSingleLine"],
-            Text = content
-        };
-
-        private TextBox tBoxMultiLines(string content) => new TextBox
-        {
-            Style = (Style)Resources["tBoxMultiLines"],
-            Text = content
-        };
         #endregion
 
 
