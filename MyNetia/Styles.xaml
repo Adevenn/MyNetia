@@ -10,6 +10,7 @@
     <FontFamily x:Key="OrkneyRegular">pack://application:,,,/Fonts/#Orkney Regular</FontFamily>
 
     <SolidColorBrush x:Key="Background" Color="#2D142C"/>
+    <SolidColorBrush x:Key="Background2" Color="#801336"/>
     <SolidColorBrush x:Key="Border" Color="#510A32"/>
     <SolidColorBrush x:Key="Foreground" Color="#C72C41"/>
 
@@ -21,6 +22,7 @@
         <WindowChrome.CaptionHeight>0</WindowChrome.CaptionHeight>
     </WindowChrome>
     
+    <!--#region Border Style-->
     <Style x:Key="borderFull" TargetType="Border">
         <Setter Property="BorderBrush" Value="{StaticResource Border}"/>
         <Setter Property="BorderThickness" Value="1"/>
@@ -36,7 +38,9 @@
         <Setter Property="BorderThickness" Value="0, 0, 0, 1"/>
         <Setter Property="Padding" Value="0, 0, 0, 10"/>
     </Style>
+    <!--#endregion-->
 
+    <!--#region Button Style-->
     <Style x:Key="btnEssential" TargetType="Button">
         <Setter Property="Background" Value="{StaticResource Border}"/>
         <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
@@ -83,7 +87,9 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <!--#endregion-->
 
+    <!--#region Grid Style-->
     <Style x:Key="gridTitleBar" TargetType="Grid">
         <Setter Property="Panel.ZIndex" Value="1"/>
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
@@ -91,7 +97,9 @@
         <Setter Property="Opacity" Value="0"/>
         <Setter Property="Height" Value="30"/>
     </Style>
+    <!--#endregion-->
 
+    <!--#region Label Style-->
     <Style x:Key="labelBase" TargetType="Label">
         <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
         <Setter Property="FontFamily" Value="{StaticResource OrkneyLight}"/>
@@ -104,7 +112,9 @@
         <Setter Property="Height" Value="33"/>
         <Setter Property="Margin" Value="5, 0, 0, 0"/>
     </Style>
+    <!--#endregion-->
 
+    <!--#region ListBox Style-->
     <Style x:Key="listBoxBase" TargetType="ListBox">
         <Setter Property="Background" Value="{StaticResource Background}"/>
         <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
@@ -140,11 +150,15 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <!--#endregion-->
 
+    <!--#region ScrollViewer Style-->
     <Style x:Key="scrollViewer" TargetType="ScrollViewer">
         <Setter Property="VerticalScrollBarVisibility" Value="Hidden"/>
     </Style>
+    <!--#endregion-->
 
+    <!--#region StackPanel Style-->
     <Style x:Key="spV" TargetType="StackPanel">
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -155,7 +169,9 @@
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
     </Style>
+    <!--#endregion-->
 
+    <!--#region TabControl Style-->
     <Style x:Key="tabControlBase" TargetType="TabControl">
         <Setter Property="Background" Value="{StaticResource Background}"/>
         <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
@@ -191,11 +207,15 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <!--#endregion-->
 
+    <!--#region TextBlock Style-->
     <Style x:Key="tBlockBase" TargetType="TextBlock">
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
+    <!--#endregion-->
 
+    <!--#region TextBox Style-->
     <Style x:Key="tBoxBase" TargetType="TextBox">
         <Setter Property="Background" Value="{StaticResource Background}"/>
         <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
@@ -223,7 +243,9 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <!--#endregion-->
 
+    <!--#region Window Style-->
     <Style x:Key="window" TargetType="Window">
         <Setter Property="Background" Value="{StaticResource Background}"/>
         <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
@@ -231,4 +253,6 @@
         <Setter Property="FontFamily" Value="{StaticResource OrkneyLight}"/>
         <Setter Property="WindowChrome.WindowChrome" Value="{StaticResource WindowChromeKey}"/>
     </Style>
+    <!--#endregion-->
+    
 </ResourceDictionary>

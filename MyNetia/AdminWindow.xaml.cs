@@ -1,15 +1,15 @@
 ﻿using MyNetia.Model;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows.Media.Animation;
-using System;
 using System.Windows.Media;
-using System.Collections.Generic;
+using System.Windows.Media.Animation;
 
 namespace MyNetia
 {
@@ -19,6 +19,7 @@ namespace MyNetia
         private Point dragOriginPoint;
         private bool isDraging = false;
         private readonly InfoBinding binding = new InfoBinding();
+        private List<string> matchingResearch = null;
         private bool _isElemSelected;
         private bool isElemSelected
         {
@@ -53,7 +54,6 @@ namespace MyNetia
             "   - Enter the name of your image\n" +
             "       e.g.: Image1.png and save your file inside\n" +
             "       MyNetia/AppRessources/Images/ElemTitle";
-        List<string> matchingResearch = null;
 
         public AdminWindow()
         {
@@ -64,11 +64,13 @@ namespace MyNetia
 
 
         #region EVENTS ADD/UPDATE
+
+        #region Elem Selection
         private void selectAddUpdate_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Return && AppResources.dbManager.isElementExist(selectAddUpdate.Text))
             {
-                //Select the selected element
+                //Apply element selection
                 setElement(selectAddUpdate.Text);
                 listChapters.SelectedIndex = 0;
                 isElemSelected = true;
@@ -76,7 +78,7 @@ namespace MyNetia
             else if (e.Key == Key.Return)
             {
                 //Confirm element's creation
-                ConfirmationWindow window = new ConfirmationWindow("Do you want to add {0}" + selectAddUpdate.Text + " ?")
+                ConfirmationWindow window = new ConfirmationWindow("Do you want to add " + selectAddUpdate.Text + " ?")
                 {
                     Owner = this
                 };
@@ -85,77 +87,11 @@ namespace MyNetia
                     //Add new Element
                     AppResources.dbManager.addElement(selectAddUpdate.Text);
                     setElement(selectAddUpdate.Text);
-                    listChapters.SelectedIndex = 0;
                     isElemSelected = true;
                 }
                 else
                     isElemSelected = false;
             }
-        }
-
-        private void chapterContent_KeyDown(object sender, KeyEventArgs e)
-        {
-            //Delete the current text
-            if (Keyboard.IsKeyDown(Key.LeftCtrl) && Keyboard.IsKeyDown(Key.Back))
-            {
-                
-            }
-        }
-
-        private void listChapters_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            setChapterValues((Chapter)listChapters.SelectedItem);
-        }
-
-        private void addChapter_Click(object sender, RoutedEventArgs e)
-        {
-            //Add and select the new chapter
-            binding.chapters.Add(new Chapter());
-            listChapters.SelectedIndex = listChapters.Items.Count - 1;
-        }
-
-        private void chapTitle_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            //Update the list with the new chapter title
-            int id = listChapters.SelectedIndex;
-            binding.chapters[id].chapTitle = chapTitleTxtBox.Text;
-        }
-
-        private void txt_KeyDown(object sender, KeyEventArgs e)
-        {
-            //Create a new text zone
-            if (Keyboard.IsKeyDown(Key.LeftCtrl) && Keyboard.IsKeyDown(Key.Enter))
-            {
-                spTxtBoxTxt.Children.Add(tBoxMultiLines(""));
-                Keyboard.Focus(spTxtBoxTxt.Children[^1]);
-            }
-        }
-
-        private void img_KeyDown(object sender, KeyEventArgs e)
-        {
-            //Create a new image zone
-            if (e.Key == Key.Return)
-            {
-                spTxtBoxImg.Children.Add(tBoxSingleLine(""));
-                Keyboard.Focus(spTxtBoxImg.Children[^1]);
-            }
-        }
-
-        private void chapContent_LostFocus(object sender, RoutedEventArgs e)
-        {
-            //Save chapter's content
-            int id = listChapters.SelectedIndex;
-            binding.chapters[id].texts = getSPContent(spTxtBoxTxt);
-            binding.chapters[id].images = getSPContent(spTxtBoxImg);
-        }
-
-        private void validate(object sender, RoutedEventArgs e)
-        {
-            //Update selected element
-            AppResources.dbManager.updateElement(binding.oldElemTitle ,binding.elemTitle, binding.elemSubtitle, new List<Chapter>(binding.chapters));
-            DirectoryManager.createDirectory(Path.GetFullPath(@".\AppResources\Images\" + binding.elemTitle));
-            imageValid.Visibility = Visibility.Visible;
-            animImageOpacity(imageValid);
         }
 
         private void setElement(string title)
@@ -166,36 +102,116 @@ namespace MyNetia
             binding.elemSubtitle = elem.subtitle;
             binding.chapters = new ObservableCollection<Chapter>(elem.chapters);
         }
+        #endregion
+
+        private void listChapters_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //Select by default the first item
+            if (listChapters.SelectedIndex == -1)
+                listChapters.SelectedIndex = 0;
+            setChapterValues((Chapter)listChapters.SelectedItem);
+        }
+
         private void setChapterValues(Chapter ch)
         {
             if (!isDraging)
             {
                 binding.chapTitle = ch.chapTitle;
-                setSPTxtContent(spTxtBoxTxt, ch.texts);
-                setSPImgContent(spTxtBoxImg, ch.images);
+                binding.setTxtList(ch.texts);
+                binding.setImgList(ch.images);
+            }
+        } 
+
+        private void addChapter_Click(object sender, RoutedEventArgs e)
+        {
+            //Add and select the new chapter
+            binding.chapters.Add(new Chapter());
+            listChapters.SelectedIndex = listChapters.Items.Count - 1;
+        }
+
+        private void chapTitle_KeyDown(object sender, KeyEventArgs e)
+        {
+            //Delete the current chapter
+            if (Keyboard.IsKeyDown(Key.LeftAlt) && Keyboard.IsKeyDown(Key.Return))
+            {
+                ConfirmationWindow window = new ConfirmationWindow("Are you sure you want to delete " + chapTitle.Text + " ?")
+                {
+                    Owner = this
+                };
+                if (window.ShowDialog() == true)
+                {
+                    //Delete the chapter
+                    int id = listChapters.SelectedIndex;
+                    binding.chapters.RemoveAt(id);
+                }
             }
         }
 
-        private List<string> getSPContent(StackPanel sp)
+        private void chapTitle_TextChanged(object sender, TextChangedEventArgs e)
         {
-            List<string> texts = new List<string>();
-            foreach (TextBox t in sp.Children)
-                texts.Add(t.Text);
-            return texts;
+            //Update chapList with the new chapTitle
+            int id = listChapters.SelectedIndex;
+            binding.chapters[id].chapTitle = chapTitle.Text;
         }
 
-        private void setSPImgContent(StackPanel sp, List<string> list)
+
+        #region chaptContent (ListBox)
+        private void listText_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            sp.Children.Clear();
-            foreach (string text in list)
-                sp.Children.Add(tBoxSingleLine(text));
+            //Save list inside binding.chapters
         }
 
-        private void setSPTxtContent(StackPanel sp, List<string> list)
+        private void listImg_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            sp.Children.Clear();
-            foreach (string text in list)
-                sp.Children.Add(tBoxMultiLines(text));
+            //Save list inside binding.chapters
+        }
+
+        private void listTxt_KeyDown(object sender, KeyEventArgs e)
+        {
+            //Create a new text zone
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) && Keyboard.IsKeyDown(Key.Enter))
+            {
+                binding.texts.Add(new InfoBinding.ItemContent(""));
+                listTxt.SelectedIndex = listTxt.Items.Count - 1;
+            }
+        }
+
+        private void listImg_KeyDown(object sender, KeyEventArgs e)
+        {
+            //Create a new image zone
+            if (e.Key == Key.Return)
+            {
+                binding.images.Add(new InfoBinding.ItemContent(""));
+                listImg.SelectedIndex = listImg.Items.Count - 1;
+            }
+        }
+
+        private void chapContent_LostFocus(object sender, RoutedEventArgs e)
+        {
+            //Save chapter's content
+            int id = listChapters.SelectedIndex;
+            binding.chapters[id].texts = new List<string>(binding.getTxtList());
+            binding.chapters[id].images = new List<string>(binding.getImgList());
+        }
+        #endregion
+
+        private void itemListTxt_KeyDown(object sender, KeyEventArgs e)
+        {
+
+        }
+
+        private void itemListImg_KeyDown(object sender, KeyEventArgs e)
+        {
+
+        }
+
+        private void valid_Click(object sender, RoutedEventArgs e)
+        {
+            //Update selected element
+            AppResources.dbManager.updateElement(binding.oldElemTitle ,binding.elemTitle, binding.elemSubtitle, new List<Chapter>(binding.chapters));
+            DirectoryManager.createDirectory(Path.GetFullPath(@".\AppResources\Images\" + binding.elemTitle));
+            imageValid.Visibility = Visibility.Visible;
+            animImageOpacity(imageValid);
         }
 
         # region Drag and drop ItemListBox
@@ -466,10 +482,78 @@ namespace MyNetia
                 }
             }
 
+            private ObservableCollection<ItemContent> _texts;
+            public ObservableCollection<ItemContent> texts
+            {
+                get => _texts;
+                set
+                {
+                    if (_texts != value)
+                    {
+                        _texts = value;
+                        OnPropertyChanged();
+                    }
+                }
+            }
+
+            private ObservableCollection<ItemContent> _images;
+            public ObservableCollection<ItemContent> images
+            {
+                get => _images;
+                set
+                {
+                    if (_images != value)
+                    {
+                        _images = value;
+                        OnPropertyChanged();
+                    }
+                }
+            }
+
+            public List<string> getTxtList()
+            {
+                List<string> stringList = new List<string>();
+                foreach (ItemContent item in texts)
+                    stringList.Add(item.content);
+                return stringList;
+            }
+
+            public List<string> getImgList()
+            {
+                List<string> stringList = new List<string>();
+                foreach (ItemContent item in images)
+                    stringList.Add(item.content);
+                return stringList;
+            }
+
+            public void setTxtList(List<string> stringList)
+            {
+                texts = new ObservableCollection<ItemContent>();
+                foreach(string s in stringList)
+                    texts.Add(new ItemContent(s));
+            }
+
+            public void setImgList(List<string> stringList)
+            {
+                images = new ObservableCollection<ItemContent>();
+                foreach (string s in stringList)
+                    images.Add(new ItemContent(s));
+            }
+
             public event PropertyChangedEventHandler PropertyChanged;
             protected void OnPropertyChanged([CallerMemberName] string name = null)
             {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            }
+
+            public class ItemContent
+            {
+                public ItemContent(string content)
+                {
+                    this.content = content;
+                }
+                //Needed to correctly bind Text boxes inside ListBox with TwoWay mode
+                public string content { get; set; }
             }
         }
     }

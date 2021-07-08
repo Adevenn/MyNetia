@@ -11,20 +11,30 @@ namespace MyNetia.Model
         private List<DB_Element> _db = new List<DB_Element>();
         public List<DB_Element> db => _db;
 
-        #region DB modifications
+        #region DB modifs
         public void addElement(string title)
         {
-            _db.Add(new DB_Element(title));
-            sortDB();
+            if (!isElementExist(title))
+            {
+                _db.Add(new DB_Element(title));
+                sortDB();
+            }
+            else
+                throw new Exception("Impossible to add 2 times the same element title");
         }
-
+        //DELETE ON RELEASE
         public void addElement(string title, string subtitle, List<Chapter> chapList)
         {
-            _db.Add(new DB_Element(title, subtitle, chapList));
-            sortDB();
+            if (!isElementExist(title))
+            {
+                _db.Add(new DB_Element(title, subtitle, chapList));
+                sortDB();
+            }
+            else
+                throw new Exception("Impossible to add 2 times the same element title");
         }
-
-        public void updateElement(string oldTitle, string title, string subtitle,List<Chapter> chapList)
+        /////////////////////////////////
+        public void updateElement(string oldTitle, string title, string subtitle, List<Chapter> chapList)
         {
             int id = getElementID(oldTitle);
             _db[id] = new DB_Element(title, subtitle, chapList);
@@ -38,10 +48,10 @@ namespace MyNetia.Model
                 if (db[i].title == title)
                 {
                     _db.RemoveAt(i);
+                    sortDB();
                     break;
                 }
             }
-            sortDB();
         }
 
         private void sortDB()

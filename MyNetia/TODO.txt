@@ -5,3 +5,4 @@
 - Suppression de chapitre dans le add/update et des contenurs texts/images
 - Personnalisation de text, via RichTextBox e.g.
 - Charger une save externe (fichier json qu on selectionne)
+- 
