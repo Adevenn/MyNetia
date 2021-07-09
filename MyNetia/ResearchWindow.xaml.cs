@@ -21,17 +21,17 @@ namespace MyNetia
 
             List<string> texts = new List<string>
             {
-                "TEST",
-                "TEST2",
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean id gravida purus. Mauris tempor consequat neque, eu facilisis ante blandit at. Quisque faucibus et est mollis bibendum. Nullam sagittis viverra justo, ac consequat velit dapibus eget. Nullam non mauris risus. Morbi sed nisl nec elit luctus porttitor. Fusce purus lorem, dictum sit amet luctus nec, tincidunt in sem. Aenean non odio urna. Suspendisse elementum finibus tellus nec dapibus. Maecenas commodo quam eu nisi bibendum convallis eget vitae massa. Cras porta tortor eu purus volutpat ultrices. Sed eget enim vel nunc egestas mollis congue eget orci. Vivamus mollis sem a eleifend laoreet. Etiam id dictum velit. Pellentesque congue libero justo, in sodales velit mattis quis.",
+                "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Curabitur egestas leo vel lectus pulvinar, et mattis urna varius. Praesent cursus posuere mauris, id vulputate est pharetra eu. Maecenas pharetra nisl ac imperdiet rhoncus. Vestibulum magna lacus, elementum vel aliquet nec, rutrum mollis quam. Etiam lacinia tempor pellentesque. Sed ut volutpat erat. In ligula nibh, auctor ut hendrerit eget, scelerisque sed lectus. Donec erat lacus, tincidunt sit amet mi ac, convallis ornare nibh. Fusce lobortis erat massa, sit amet suscipit ligula luctus at. Suspendisse sollicitudin placerat risus ac tincidunt. Sed ut magna orci. In hac habitasse platea dictumst. Maecenas lectus nisl, porttitor et tellus sit amet, vestibulum faucibus ante.",
                 "TEST3",
                 "TEST4",
                 "TEST5"
             };
             List<string> images = new List<string>
             {
-                "TEST",
-                "TEST",
-                "TEST",
+                "image1.png",
+                "image2.jpg",
+                "image3.png",
                 "TEST"
             };
             List<Chapter> chapList = new List<Chapter>

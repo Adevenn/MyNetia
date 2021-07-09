@@ -15,5 +15,10 @@ namespace MyNetia.Model
             if (Directory.Exists(path))
                 Directory.Delete(path, true);
         }
+
+        public static void renameDirectory(string oldName, string name)
+        {
+
+        }
     }
 }

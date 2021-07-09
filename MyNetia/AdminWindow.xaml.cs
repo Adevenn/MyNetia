@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,7 +18,7 @@ namespace MyNetia
         private Point dragOriginPoint;
         private bool isDraging = false;
         private readonly InfoBinding binding = new InfoBinding();
-        private List<string> matchingResearch = null;
+        private List<string> matchingResearch = null; //TODO : ItemSource of ListBox
         private bool isElemSelected;
         private void setIsElemSelected(bool value)
         {
@@ -222,7 +221,6 @@ namespace MyNetia
         {
             //Update selected element
             AppResources.dbManager.updateElement(binding.oldElemTitle, binding.elemTitle, binding.elemSubtitle, new List<Chapter>(binding.chapters));
-            DirectoryManager.createDirectory(Path.GetFullPath(@".\AppResources\Images\" + binding.elemTitle));
             imageValid.Visibility = Visibility.Visible;
             animImageOpacity(imageValid);
         }
@@ -299,7 +297,7 @@ namespace MyNetia
         #region EVENTS DELETE
         private void selectionDelete_GotFocus(object sender, RoutedEventArgs e)
         {
-            helpResearchBar();
+            helpResearch();
         }
 
         private void selectionDelete_KeyDown(object sender, KeyEventArgs e)
@@ -314,9 +312,8 @@ namespace MyNetia
                 if (window.ShowDialog() == true)
                 {
                     //Delete element
-                    DirectoryManager.deleteDirectory(Path.GetFullPath(@".\AppResources\Images\" + selectDelete.Text));
                     AppResources.dbManager.deleteElement(selectDelete.Text);
-                    helpResearchBar();
+                    helpResearch();
                 }
             }
             else if (e.Key == Key.Tab && matchingResearch.Count > 0)
@@ -329,10 +326,10 @@ namespace MyNetia
 
         private void onTextChangedDelete(object sender, TextChangedEventArgs e)
         {
-            helpResearchBar();
+            helpResearch();
         }
 
-        private void helpResearchBar()
+        private void helpResearch()
         {
             matchingResearch = new List<string>();
             tBlockDelete.Text = null;

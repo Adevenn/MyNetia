@@ -17,25 +17,28 @@ namespace MyNetia.Model
             if (!isElementExist(title))
             {
                 _db.Add(new DB_Element(title));
+                DirectoryManager.createDirectory(Path.GetFullPath(@".\AppResources\Images\" + title));
                 sortDB();
             }
             else
                 throw new Exception("Impossible to add 2 times the same element title");
         }
-        //DELETE ON RELEASE
+
         public void addElement(string title, string subtitle, List<Chapter> chapList)
         {
             if (!isElementExist(title))
             {
                 _db.Add(new DB_Element(title, subtitle, chapList));
+                DirectoryManager.createDirectory(Path.GetFullPath(@".\AppResources\Images\" + title));
                 sortDB();
             }
             else
                 throw new Exception("Impossible to add 2 times the same element title");
         }
-        /////////////////////////////////
+
         public void updateElement(string oldTitle, string title, string subtitle, List<Chapter> chapList)
         {
+            DirectoryManager.renameDirectory(oldTitle, title);
             int id = getElementID(oldTitle);
             _db[id] = new DB_Element(title, subtitle, chapList);
             sortDB();
@@ -43,15 +46,10 @@ namespace MyNetia.Model
 
         public void deleteElement(string title)
         {
-            for (int i = 0; i < db.Count; i++)
-            {
-                if (db[i].title == title)
-                {
-                    _db.RemoveAt(i);
-                    sortDB();
-                    break;
-                }
-            }
+            int id = getElementID(title);
+            _db.RemoveAt(id);
+            DirectoryManager.deleteDirectory(Path.GetFullPath(@".\AppResources\Images\" + title));
+            sortDB();
         }
 
         private void sortDB()
@@ -71,6 +69,14 @@ namespace MyNetia.Model
         #endregion
 
         #region Access to DB
+        public List<string> getTitles()
+        {
+            List<string> titles = new List<string>();
+            foreach (DB_Element elem in db)
+                titles.Add(elem.title);
+            return titles;
+        }
+
         public DB_Element getElement(string title)
         {
             for (int i = 0; i < db.Count; i++)
@@ -99,14 +105,6 @@ namespace MyNetia.Model
                     return i;
             }
             return -1;
-        }
-
-        public List<string> getTitles()
-        {
-            List<string> titles = new List<string>();
-            foreach (DB_Element elem in db)
-                titles.Add(elem.title);
-            return titles;
         }
         #endregion
 
