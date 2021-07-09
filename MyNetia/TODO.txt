@@ -5,4 +5,4 @@
 - Personnalisation de text, via RichTextBox e.g.
 - Charger une save externe (fichier json qu on selectionne)
 - Drag and drop des texts et images
-- Refactor la list des matchingReasearch en listBox et quand on click sur la selection le text de la textBox est remplacé
+- 

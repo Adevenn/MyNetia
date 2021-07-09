@@ -28,6 +28,7 @@
         </Style>
 
         <Style x:Key="tBoxDelete" BasedOn="{StaticResource tBox}" TargetType="TextBox">
+            <Setter Property="Text" Value="{Binding selectionDel, UpdateSourceTrigger=PropertyChanged}"/>
             <EventSetter Event="GotFocus" Handler="selectionDelete_GotFocus"/>
             <EventSetter Event="KeyDown" Handler="selectionDelete_KeyDown"/>
             <EventSetter Event="TextChanged" Handler="onTextChangedDelete"/>
@@ -125,6 +126,10 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+        </Style>
+
+        <Style x:Key="listBoxDelete" TargetType="ItemsControl">
+            <Setter Property="ItemsSource" Value="{Binding matchingResearch}"/>
         </Style>
         <!--#endregion-->
 
@@ -351,9 +356,9 @@
                                 Style="{StaticResource tBoxDelete}"/>
                         </StackPanel>
                     </Border>
-                    <TextBlock
-                        x:Name="tBlockDelete"
-                        Style="{StaticResource tBlock}"/>
+                    <ItemsControl
+                        x:Name="listBoxDelete"
+                        Style="{StaticResource listBoxDelete}"/>
                 </StackPanel>
             </TabItem>
             <TabItem

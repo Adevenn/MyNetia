@@ -18,7 +18,6 @@ namespace MyNetia
         private Point dragOriginPoint;
         private bool isDraging = false;
         private readonly InfoBinding binding = new InfoBinding();
-        private List<string> matchingResearch = null; //TODO : ItemSource of ListBox
         private bool isElemSelected;
         private void setIsElemSelected(bool value)
         {
@@ -302,25 +301,25 @@ namespace MyNetia
 
         private void selectionDelete_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Return && AppResources.dbManager.isElementExist(selectDelete.Text))
+            if (e.Key == Key.Return && AppResources.dbManager.isElementExist(binding.selectionDel))
             {
                 //Confirmation dialog to confirm element's creation
-                ConfirmationWindow window = new ConfirmationWindow("Do you want to delete " + selectDelete.Text + " ?")
+                ConfirmationWindow window = new ConfirmationWindow("Do you want to delete " + binding.selectionDel + " ?")
                 {
                     Owner = this
                 };
                 if (window.ShowDialog() == true)
                 {
                     //Delete element
-                    AppResources.dbManager.deleteElement(selectDelete.Text);
+                    AppResources.dbManager.deleteElement(binding.selectionDel);
                     helpResearch();
                 }
             }
-            else if (e.Key == Key.Tab && matchingResearch.Count > 0)
+            else if (e.Key == Key.Tab && binding.matchingResearch.Count > 0)
             {
-                selectDelete.Text = matchingResearch[0];
+                binding.selectionDel = binding.matchingResearch[0];
                 //Set Keyboard focus at the end
-                selectDelete.CaretIndex = selectDelete.Text.Length;
+                selectDelete.CaretIndex = binding.selectionDel.Length;
             }
         }
 
@@ -331,14 +330,12 @@ namespace MyNetia
 
         private void helpResearch()
         {
-            matchingResearch = new List<string>();
-            tBlockDelete.Text = null;
+            binding.matchingResearch = new ObservableCollection<string>();
             foreach (string txt in AppResources.dbManager.getTitles())
             {
-                if (txt.Contains(selectDelete.Text))
+                if (txt.Contains(binding.selectionDel))
                 {
-                    tBlockDelete.Text += txt + "\n";
-                    matchingResearch.Add(txt);
+                    binding.matchingResearch.Add(txt);
                 }
             }
         }
@@ -421,6 +418,32 @@ namespace MyNetia
 
         private class InfoBinding : INotifyPropertyChanged
         {
+            private string _selectionDel = "";
+            public string selectionDel
+            {
+                get => _selectionDel;
+                set
+                {
+                    if(_selectionDel != value)
+                    {
+                        _selectionDel = value;
+                        OnPropertyChanged();
+                    }
+                }
+            }
+            private ObservableCollection<string> _matchingResearch;
+            public ObservableCollection<string> matchingResearch
+            {
+                get => _matchingResearch;
+                set
+                {
+                    if(value != _matchingResearch)
+                    {
+                        _matchingResearch = value;
+                        OnPropertyChanged();
+                    }
+                }
+            }
             public string oldElemTitle;
             private string _elemTitle;
             public string elemTitle
