@@ -23,7 +23,7 @@ namespace MyNetia
         private bool isElemSelected;
         private void setIsElemSelected(bool value)
         {
-            if (value == true && value != isElemSelected)
+            if (value && value != isElemSelected)
             {
                 spElemPart.Visibility = Visibility.Visible;
                 chaptersListPart.Visibility = Visibility.Visible;
@@ -43,10 +43,10 @@ namespace MyNetia
             "   - Return => add/update the element selected\n\n" +
             "Chapter text :\n" +
             "   - LCtrl + Return => New paragraph\n" +
-            "   - LCtrl + Return => Delete paragraph\n\n" +
+            "   - LAlt + Return => Delete paragraph\n\n" +
             "Chapter image :\n" +
             "   - Enter => New image zone\n" +
-            "   - LCtrl + Return => Delete image zone\n" +
+            "   - LAlt + Return => Delete image zone\n" +
             "   - Enter the name of your image\n" +
             "       e.g.: Image1.png and save your file inside\n" +
             "       MyNetia/AppRessources/Images/ElemTitle";
@@ -156,16 +156,6 @@ namespace MyNetia
             binding.chapters[id].chapTitle = chapTitle.Text;
         }
 
-        private void listText_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //Save list inside binding.chapters
-        }
-
-        private void listImg_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //Save list inside binding.chapters
-        }
-
         private void listTxt_KeyDown(object sender, KeyEventArgs e)
         {
             //Create a new text zone
@@ -173,6 +163,17 @@ namespace MyNetia
             {
                 binding.texts.Add(new InfoBinding.ItemContent(""));
                 listTxt.SelectedIndex = listTxt.Items.Count - 1;
+            }
+            //Remove text zone
+            if (Keyboard.IsKeyDown(Key.LeftAlt) && Keyboard.IsKeyDown(Key.Enter) && listTxt.SelectedIndex != -1)
+            {
+                int id = listTxt.SelectedIndex;
+                binding.texts.RemoveAt(id);
+                if (binding.texts.Count == 0)
+                {
+                    binding.texts.Add(new InfoBinding.ItemContent(""));
+                    listTxt.SelectedIndex = listTxt.Items.Count - 1;
+                }
             }
         }
 
@@ -184,6 +185,17 @@ namespace MyNetia
                 binding.images.Add(new InfoBinding.ItemContent(""));
                 listImg.SelectedIndex = listImg.Items.Count - 1;
             }
+            //Remove image zone
+            if (Keyboard.IsKeyDown(Key.LeftAlt) && Keyboard.IsKeyDown(Key.Enter) && listImg.SelectedIndex != -1)
+            {
+                int id = listImg.SelectedIndex;
+                binding.images.RemoveAt(id);
+                if (binding.images.Count == 0)
+                {
+                    binding.images.Add(new InfoBinding.ItemContent(""));
+                    listImg.SelectedIndex = listImg.Items.Count - 1;
+                }
+            }
         }
 
         private void chapContent_LostFocus(object sender, RoutedEventArgs e)
@@ -194,14 +206,16 @@ namespace MyNetia
             binding.chapters[id].images = new List<string>(binding.getImgList());
         }
 
-        private void itemListTxt_KeyDown(object sender, KeyEventArgs e)
+        private void itemListText_PreviewGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-
+            ListViewItem item = (ListViewItem)sender;
+            item.IsSelected = true;
         }
 
-        private void itemListImg_KeyDown(object sender, KeyEventArgs e)
+        private void itemList_PreviewGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-
+            ListBoxItem item = (ListBoxItem)sender;
+            item.IsSelected = true;
         }
 
         private void valid_Click(object sender, RoutedEventArgs e)
