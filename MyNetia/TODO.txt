@@ -5,4 +5,4 @@
 - Personnalisation de text, via RichTextBox e.g.
 - Charger une save externe (fichier json qu on selectionne)
 - Drag and drop des texts et images
-- charactère invald dans le title (creation du title)
+- 
