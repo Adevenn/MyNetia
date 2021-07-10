@@ -15,9 +15,9 @@ namespace MyNetia
     public partial class AdminWindow : Window
     {
         private readonly App currentApp = (App)Application.Current;
+        private readonly InfoBinding binding = new InfoBinding();
         private Point dragOriginPoint;
         private bool isDraging = false;
-        private readonly InfoBinding binding = new InfoBinding();
         private bool isElemSelected;
         private void setIsElemSelected(bool value)
         {
@@ -89,7 +89,7 @@ namespace MyNetia
                 }
                 else
                 {
-                    //Display something in the window like : *invalid
+                    //TODO : Display something in the window like : *invalid
                     setIsElemSelected(false);
                 }
             }
@@ -341,9 +341,7 @@ namespace MyNetia
             foreach (string txt in AppResources.dbManager.getTitles())
             {
                 if (txt.Contains(binding.selectionDel))
-                {
                     binding.matchingResearch.Add(txt);
-                }
             }
         }
         #endregion

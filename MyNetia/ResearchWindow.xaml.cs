@@ -11,8 +11,8 @@ namespace MyNetia
 {
     public partial class ResearchWindow : Window
     {
-        private App currentApp = (App)Application.Current;
-        private InfoBinding binds = new InfoBinding();
+        private readonly App currentApp = (App)Application.Current;
+        private readonly InfoBinding binds = new InfoBinding();
 
         public ResearchWindow()
         {
