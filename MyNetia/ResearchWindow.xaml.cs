@@ -16,7 +16,7 @@ namespace MyNetia
             InitializeComponent();
             AppResources.dbManager.readJson();
 
-
+            //TESTS
             List<string> texts = new List<string>
             {
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean id gravida purus. Mauris tempor consequat neque, eu facilisis ante blandit at. Quisque faucibus et est mollis bibendum. Nullam sagittis viverra justo, ac consequat velit dapibus eget. Nullam non mauris risus. Morbi sed nisl nec elit luctus porttitor. Fusce purus lorem, dictum sit amet luctus nec, tincidunt in sem. Aenean non odio urna. Suspendisse elementum finibus tellus nec dapibus. Maecenas commodo quam eu nisi bibendum convallis eget vitae massa. Cras porta tortor eu purus volutpat ultrices. Sed eget enim vel nunc egestas mollis congue eget orci. Vivamus mollis sem a eleifend laoreet. Etiam id dictum velit. Pellentesque congue libero justo, in sodales velit mattis quis.",
@@ -47,6 +47,7 @@ namespace MyNetia
             AppResources.dbManager.addElement("HAAAAAAAAA", "port 123", chapList);
             AppResources.dbManager.addElement("IAAAAAAAAA", "port 123", chapList);
             AppResources.dbManager.addElement("JAAAAAAAAA", "port 123", chapList);
+            //END TESTS
 
             helpResearchBar();
         }

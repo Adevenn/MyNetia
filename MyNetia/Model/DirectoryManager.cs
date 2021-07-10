@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace MyNetia.Model
 {
@@ -7,22 +8,23 @@ namespace MyNetia.Model
         public static void createDirectory(string name)
         {
             string path = Path.GetFullPath(@".\AppResources\Images\" + name);
-            if (!Directory.Exists(path))
-                Directory.CreateDirectory(path);
+            try { Directory.CreateDirectory(path); }
+            catch (ArgumentException e) { throw new ArgumentException("Invalid path (some characters are not allowed:\n\n" + e.Message); }
         }
 
         public static void deleteDirectory(string name)
         {
             string path = Path.GetFullPath(@".\AppResources\Images\" + name);
-            if (Directory.Exists(path))
-                Directory.Delete(path, true);
+            try { Directory.Delete(path, true); }
+            catch (DirectoryNotFoundException e) { throw new DirectoryNotFoundException("The path is not correct:\n\n" + e.Message); }
         }
 
         public static void renameDirectory(string oldName, string name)
         {
             string path = Path.GetFullPath(@".\AppResources\Images\");
-            if (Directory.Exists(path + oldName))
-                Directory.Move(path + oldName, path + name);
+            try { Directory.Move(path + oldName, path + name); }
+            catch (ArgumentException e) { throw new ArgumentException("Invalid path (some characters are not allowed:\n\n" + e.Message); }
+            catch (DirectoryNotFoundException e) { throw new DirectoryNotFoundException("The path is not correct:\n\n" + e.Message); }
         }
     }
 }

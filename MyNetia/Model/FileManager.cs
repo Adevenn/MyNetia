@@ -6,12 +6,12 @@ namespace MyNetia.Model
     {
         private static readonly string jsonPath = Path.GetFullPath(@".\AppResources\SaveDB.json");
         private static readonly string defaultImgPath = Path.GetFullPath(@".\AppResources\Images\DefaultImage.png");
+        private static readonly string imagesPath = Path.GetFullPath(@".\AppResources\Images\");
 
         private static void createTxtFile(string path, string content)
         {
             try { File.WriteAllText(path, content); }
             catch (IOException e) { throw new IOException("Text file creation failed:\n\n" + e.Message); }
-            
         }
 
         public static byte[] readByteFile(string path)
@@ -30,6 +30,11 @@ namespace MyNetia.Model
         {
             try { File.Copy(sourceFile, destFile, true); }
             catch (IOException e) { throw new IOException("File copy failed\n\n" + e.Message); }
+        }
+
+        public static bool isImageExist(string path)
+        {
+            return File.Exists(imagesPath + path);
         }
 
         public static void saveJson(string content)
