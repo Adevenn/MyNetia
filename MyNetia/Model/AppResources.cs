@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 
@@ -25,16 +24,6 @@ namespace MyNetia.Model
                                                     BindingFlags.Static |
                                                     BindingFlags.FlattenHierarchy);
             return fieldInfos.Where(fi => fi.IsLiteral && !fi.IsInitOnly).ToList();
-        }
-
-        public static byte[] defaultImage()
-        {
-            return File.ReadAllBytes(Path.GetFullPath(@".\AppResources\Images\DefaultImage.png"));
-        }
-
-        public static string jsonFile()
-        {
-            return File.ReadAllText(Path.GetFullPath(@".\AppResources\SaveDB.json"));
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace MyNetia.Model
 {
@@ -16,8 +15,8 @@ namespace MyNetia.Model
         {
             if (!isElementExist(title))
             {
+                DirectoryManager.createDirectory(title);
                 _db.Add(new DB_Element(title));
-                DirectoryManager.createDirectory(Path.GetFullPath(@".\AppResources\Images\" + title));
                 sortDB();
             }
             else
@@ -28,8 +27,8 @@ namespace MyNetia.Model
         {
             if (!isElementExist(title))
             {
+                DirectoryManager.createDirectory(title);
                 _db.Add(new DB_Element(title, subtitle, chapList));
-                DirectoryManager.createDirectory(Path.GetFullPath(@".\AppResources\Images\" + title));
                 sortDB();
             }
             else
@@ -46,9 +45,9 @@ namespace MyNetia.Model
 
         public void deleteElement(string title)
         {
+            DirectoryManager.deleteDirectory(title);
             int id = getElementID(title);
             _db.RemoveAt(id);
-            DirectoryManager.deleteDirectory(Path.GetFullPath(@".\AppResources\Images\" + title));
             sortDB();
         }
 
@@ -64,7 +63,7 @@ namespace MyNetia.Model
                     i = 1;
                 }
             }
-            saveJson(Path.GetFullPath(@".\AppResources"));
+            saveJson();
         }
         #endregion
 
@@ -113,17 +112,23 @@ namespace MyNetia.Model
         {
             try
             {
-                string jsonContent = AppResources.jsonFile();
+                string jsonContent = FileManager.loadJson();
                 if (!string.IsNullOrWhiteSpace(jsonContent))
                     _db = JsonConvert.DeserializeObject<DB_Manager>(jsonContent).db;
             }
             catch (JsonSerializationException) { _db = new List<DB_Element>(); }
         }
 
-        public void saveJson(string path)
+        public void saveJson()
         {
-            string jsonString = JsonConvert.SerializeObject(new { db }, Formatting.None);
-            File.WriteAllText(path + @"\SaveDB.json", jsonString);
+            string jsonContent = JsonConvert.SerializeObject(new { db }, Formatting.None);
+            FileManager.saveJson(jsonContent);
+        }
+
+        public void copyJsonToDesktop()
+        {
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            FileManager.copyJson(path);
         }
         #endregion
     }

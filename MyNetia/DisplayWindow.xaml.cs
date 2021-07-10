@@ -71,9 +71,9 @@ namespace MyNetia
                     {
                         string path = Path.GetFullPath(@".\AppResources\Images\" + elemTitle.Text + @"\" + img[idImg]);
                         if (File.Exists(path))
-                            spHoriz.Children.Add(image(File.ReadAllBytes(path)));
+                            spHoriz.Children.Add(image(FileManager.readByteFile(path)));
                         else
-                            spHoriz.Children.Add(image(AppResources.defaultImage()));
+                            spHoriz.Children.Add(image(FileManager.defaultImage()));
                     }
                     idImg++;
                 }

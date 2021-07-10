@@ -1,7 +1,5 @@
 ﻿using MyNetia.Model;
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -16,8 +14,8 @@ namespace MyNetia
         public ResearchWindow()
         {
             InitializeComponent();
-            if (File.Exists(Path.GetFullPath(@".\AppResources\SaveDB.json")))
-                AppResources.dbManager.readJson();
+            AppResources.dbManager.readJson();
+
 
             List<string> texts = new List<string>
             {
@@ -86,7 +84,7 @@ namespace MyNetia
                             }
                             break;
                         case Commands.saveAsJson:
-                            AppResources.dbManager.saveJson(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
+                            AppResources.dbManager.copyJsonToDesktop();
                             break;
                         case Commands.help:
                         default:
