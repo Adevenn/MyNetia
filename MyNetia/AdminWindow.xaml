@@ -238,8 +238,8 @@
                                     Style="{StaticResource label}"
                                     Content="Select element :"/>
                                 <TextBox
-                                    x:Name="selectAddUpdate"
                                     Style="{StaticResource tBox}"
+                                    Text="{Binding selectAddUpdate, UpdateSourceTrigger=PropertyChanged}"
                                     KeyDown="selectAddUpdate_KeyDown"/>
                             </StackPanel>
                         </Border>

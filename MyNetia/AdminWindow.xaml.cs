@@ -62,29 +62,36 @@ namespace MyNetia
         #region Elem Selection
         private void selectAddUpdate_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Return && AppResources.dbManager.isElementExist(selectAddUpdate.Text))
+            if (e.Key == Key.Return && AppResources.dbManager.isElementExist(binding.selectAddUpdate))
             {
                 //Apply element selection
-                setElement(selectAddUpdate.Text);
+                setElement(binding.selectAddUpdate);
                 listChapters.SelectedIndex = 0;
                 setIsElemSelected(true);
             }
             else if (e.Key == Key.Return)
             {
-                //Confirm element's creation
-                ConfirmationWindow window = new ConfirmationWindow("Do you want to add " + selectAddUpdate.Text + " ?")
+                if (DirectoryManager.isValidName(binding.selectAddUpdate) && !string.IsNullOrWhiteSpace(binding.selectAddUpdate))
                 {
-                    Owner = this
-                };
-                if (window.ShowDialog() == true)
-                {
-                    //Add new Element
-                    AppResources.dbManager.addElement(selectAddUpdate.Text);
-                    setElement(selectAddUpdate.Text);
-                    setIsElemSelected(true);
+                    //Confirm element's creation
+                    ConfirmationWindow window = new ConfirmationWindow("Do you want to add " + binding.selectAddUpdate + " ?")
+                    {
+                        Owner = this
+                    };
+                    if (window.ShowDialog() == true)
+                    {
+                        //Add new Element
+                        AppResources.dbManager.addElement(binding.selectAddUpdate);
+                        setElement(binding.selectAddUpdate);
+                        setIsElemSelected(true);
+                    }
+                        
                 }
                 else
+                {
+                    //Display something in the window like : *invalid
                     setIsElemSelected(false);
+                }
             }
         }
 
@@ -418,19 +425,20 @@ namespace MyNetia
 
         private class InfoBinding : INotifyPropertyChanged
         {
-            private string _selectionDel = "";
-            public string selectionDel
+            private string _selectAddUpdate = "";
+            public string selectAddUpdate
             {
-                get => _selectionDel;
+                get => _selectAddUpdate;
                 set
                 {
-                    if(_selectionDel != value)
+                    if(_selectAddUpdate != value)
                     {
-                        _selectionDel = value;
+                        _selectAddUpdate = value;
                         OnPropertyChanged();
                     }
                 }
             }
+            
             private ObservableCollection<string> _matchingResearch;
             public ObservableCollection<string> matchingResearch
             {
@@ -557,6 +565,20 @@ namespace MyNetia
                 images = new ObservableCollection<ItemContent>();
                 foreach (string s in stringList)
                     images.Add(new ItemContent(s));
+            }
+
+            private string _selectionDel = "";
+            public string selectionDel
+            {
+                get => _selectionDel;
+                set
+                {
+                    if (_selectionDel != value)
+                    {
+                        _selectionDel = value;
+                        OnPropertyChanged();
+                    }
+                }
             }
 
             public event PropertyChangedEventHandler PropertyChanged;
