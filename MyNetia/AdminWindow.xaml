@@ -127,10 +127,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
-        <Style x:Key="listBoxDelete" TargetType="ItemsControl">
-            <Setter Property="ItemsSource" Value="{Binding matchingResearch}"/>
-        </Style>
         <!--#endregion-->
 
         <!--#region Label Style-->
@@ -141,6 +137,12 @@
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
             <Setter Property="Margin" Value="0, 10"/>
+        </Style>
+        <!--#endregion-->
+        
+        <!--#region ItemControl Style-->
+        <Style x:Key="itemControlDelete" TargetType="ItemsControl">
+            <Setter Property="ItemsSource" Value="{Binding matchingResearch}"/>
         </Style>
         <!--#endregion-->
 
@@ -356,9 +358,7 @@
                                 Style="{StaticResource tBoxDelete}"/>
                         </StackPanel>
                     </Border>
-                    <ItemsControl
-                        x:Name="listBoxDelete"
-                        Style="{StaticResource listBoxDelete}"/>
+                    <ItemsControl Style="{StaticResource listBoxDelete}"/>
                 </StackPanel>
             </TabItem>
             <TabItem

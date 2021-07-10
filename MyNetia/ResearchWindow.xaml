@@ -27,6 +27,10 @@
             <Setter Property="Width" Value="Auto"/>
             <Setter Property="Padding" Value="10, 0"/>
         </Style>
+
+        <Style x:Key="itemControl" TargetType="ItemsControl">
+            <Setter Property="ItemsSource" Value="{Binding matchingResearch}"/>
+        </Style>
     </Window.Resources>
     
     <DockPanel>
@@ -88,9 +92,7 @@
                     x:Name="txtBox"
                     Style="{StaticResource tBox}"/>
             </Border>
-            <TextBlock
-                x:Name="txtBlock"
-                Style="{StaticResource tBlock}"/>
+            <ItemsControl Style="{StaticResource itemControl}"/>
         </StackPanel>
     </DockPanel>
 </Window>

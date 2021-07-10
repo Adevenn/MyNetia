@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -102,7 +101,7 @@ namespace MyNetia
             if (imageData == null || imageData.Length == 0)
                 return null;
             BitmapImage image = new BitmapImage();
-            using (MemoryStream mem = new MemoryStream(imageData))
+            using (System.IO.MemoryStream mem = new System.IO.MemoryStream(imageData))
             {
                 mem.Position = 0;
                 image.BeginInit();

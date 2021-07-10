@@ -1,5 +1,8 @@
 ﻿using MyNetia.Model;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -9,10 +12,11 @@ namespace MyNetia
     public partial class ResearchWindow : Window
     {
         private App currentApp = (App)Application.Current;
-        private List<string> matchingResearch = null;
+        private InfoBinding binds = new InfoBinding();
 
         public ResearchWindow()
         {
+            DataContext = binds;
             InitializeComponent();
             AppResources.dbManager.readJson();
 
@@ -99,9 +103,9 @@ namespace MyNetia
                     }
                 }
             }
-            else if (e.Key.Equals(Key.Tab) && matchingResearch.Count > 0)
+            else if (e.Key.Equals(Key.Tab) && binds.matchingResearch.Count > 0)
             {
-                txtBox.Text = matchingResearch[0];
+                txtBox.Text = binds.matchingResearch[0];
                 //Set Keyboard focus at the end
                 txtBox.CaretIndex = txtBox.Text.Length;
             }
@@ -111,15 +115,11 @@ namespace MyNetia
         #region OTHERS METHODS
         private void helpResearchBar()
         {
-            matchingResearch = new List<string>();
-            txtBlock.Text = null;
+            binds.matchingResearch = new ObservableCollection<string>();
             foreach (string txt in AppResources.dbManager.getTitles())
             {
                 if (txt.Contains(txtBox.Text))
-                {
-                    txtBlock.Text += txt + "\n";
-                    matchingResearch.Add(txt);
-                }
+                    binds.matchingResearch.Add(txt);
             }
         }
         #endregion
@@ -171,5 +171,27 @@ namespace MyNetia
 
         #endregion
 
+        private class InfoBinding : INotifyPropertyChanged
+        {
+            private ObservableCollection<string> _matchingResearch;
+            public ObservableCollection<string> matchingResearch
+            {
+                get => _matchingResearch;
+                set
+                {
+                    if (value != _matchingResearch)
+                    {
+                        _matchingResearch = value;
+                        OnPropertyChanged();
+                    }
+                }
+            }
+
+            public event PropertyChangedEventHandler PropertyChanged;
+            protected void OnPropertyChanged([CallerMemberName] string name = null)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            }
+        }
     }
 }

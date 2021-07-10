@@ -438,21 +438,9 @@ namespace MyNetia
                     }
                 }
             }
-            
-            private ObservableCollection<string> _matchingResearch;
-            public ObservableCollection<string> matchingResearch
-            {
-                get => _matchingResearch;
-                set
-                {
-                    if(value != _matchingResearch)
-                    {
-                        _matchingResearch = value;
-                        OnPropertyChanged();
-                    }
-                }
-            }
+
             public string oldElemTitle;
+
             private string _elemTitle;
             public string elemTitle
             {
@@ -576,6 +564,20 @@ namespace MyNetia
                     if (_selectionDel != value)
                     {
                         _selectionDel = value;
+                        OnPropertyChanged();
+                    }
+                }
+            }
+
+            private ObservableCollection<string> _matchingResearch;
+            public ObservableCollection<string> matchingResearch
+            {
+                get => _matchingResearch;
+                set
+                {
+                    if (value != _matchingResearch)
+                    {
+                        _matchingResearch = value;
                         OnPropertyChanged();
                     }
                 }
