@@ -9,7 +9,7 @@
         Title="MyNetia-Admin"
         WindowStartupLocation="CenterScreen"
         Closing="Window_Closing"
-        MinHeight="750" MaxHeight="800"
+        MinHeight="800" MaxHeight="800"
         MinWidth="750" MaxWidth="750">
     <Window.Resources>
 
@@ -164,6 +164,7 @@
 
         <Style x:Key="btnValid" BasedOn="{StaticResource btnBase}" TargetType="Button">
             <EventSetter Event="Click" Handler="valid_Click"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Height" Value="40"/>
             <Setter Property="Width" Value="120"/>
         </Style>
@@ -299,38 +300,40 @@
                         Visibility="Hidden">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
-                            <RowDefinition Height="60"/>
+                            <RowDefinition Height="70"/>
                         </Grid.RowDefinitions>
-                        <ScrollViewer
-                            Grid.Row="0"
-                            Style="{StaticResource scrollViewer}">
-                            <StackPanel Style="{StaticResource spV}">
-                                <StackPanel Style="{StaticResource spH}">
-                                    <Label
-                                        Style="{StaticResource label}"
-                                        Content="Chapter title :"/>
-                                    <TextBox
-                                        x:Name="chapTitle"
-                                        Style="{StaticResource tBoxChapTitle}"/>
+                        <Border Style="{StaticResource borderTopBot}">
+                            <ScrollViewer
+                                Grid.Row="0"
+                                Style="{StaticResource scrollViewer}">
+                                <StackPanel Style="{StaticResource spV}">
+                                    <StackPanel Style="{StaticResource spH}">
+                                        <Label
+                                            Style="{StaticResource label}"
+                                            Content="Chapter title :"/>
+                                        <TextBox
+                                            x:Name="chapTitle"
+                                            Style="{StaticResource tBoxChapTitle}"/>
+                                    </StackPanel>
+                                    <StackPanel Style="{StaticResource spH}">
+                                        <Label
+                                            Style="{StaticResource label}"
+                                            Content="Text :"/>
+                                        <ListBox
+                                            x:Name="listTxt"
+                                            Style="{StaticResource listBoxTxt}"/>
+                                    </StackPanel>
+                                    <StackPanel Style="{StaticResource spH}">
+                                        <Label
+                                            Style="{StaticResource label}"
+                                            Content="Image :"/>
+                                        <ListBox
+                                            x:Name="listImg"
+                                            Style="{StaticResource listBoxImg}"/>
+                                    </StackPanel>
                                 </StackPanel>
-                                <StackPanel Style="{StaticResource spH}">
-                                    <Label
-                                        Style="{StaticResource label}"
-                                        Content="Text :"/>
-                                    <ListBox
-                                        x:Name="listTxt"
-                                        Style="{StaticResource listBoxTxt}"/>
-                                </StackPanel>
-                                <StackPanel Style="{StaticResource spH}">
-                                    <Label
-                                        Style="{StaticResource label}"
-                                        Content="Image :"/>
-                                    <ListBox
-                                        x:Name="listImg"
-                                        Style="{StaticResource listBoxImg}"/>
-                                </StackPanel>
-                            </StackPanel>
-                        </ScrollViewer>
+                            </ScrollViewer>
+                        </Border>
                         <StackPanel
                             Grid.Row="1"
                             Style="{StaticResource spH}">
@@ -358,7 +361,7 @@
                                 Style="{StaticResource tBoxDelete}"/>
                         </StackPanel>
                     </Border>
-                    <ItemsControl Style="{StaticResource listBoxDelete}"/>
+                    <ItemsControl Style="{StaticResource itemControlDelete}"/>
                 </StackPanel>
             </TabItem>
             <TabItem

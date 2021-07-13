@@ -12,7 +12,7 @@ namespace MyNetia
 {
     public partial class DisplayWindow : Window
     {
-        private App currentApp = (App)Application.Current;
+        private readonly App currentApp = (App)Application.Current;
         private readonly InfoBinding binding = new InfoBinding();
         public DisplayWindow(string title)
         {
