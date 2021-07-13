@@ -85,7 +85,7 @@ namespace MyNetia
         private TextBlock setTxtBlock(string text) => new TextBlock
         {
             Text = text,
-            Style = (Style)Resources["txtBlock"]
+            Style = (Style)Resources["tBlock"]
         };
 
         private Image image(byte[] imageFile) => new Image
