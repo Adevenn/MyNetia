@@ -38,6 +38,8 @@ namespace MyNetia
         }
         private readonly string infoContent =
             "Select element :\n" +
+            "   - Can not containt this characters : \n" +
+            "       < > : \" / \\ | ? *\n" +
             "   - Return => add/update the element selected\n\n" +
             "Chapter text :\n" +
             "   - LCtrl + Return => New paragraph\n" +
