@@ -68,8 +68,10 @@
         </Style>
 
         <Style x:Key="tBlockChapTitle" BasedOn="{StaticResource tBlock}" TargetType="TextBlock">
+            <Setter Property="Text" Value="{Binding chapTitle, UpdateSourceTrigger=PropertyChanged}"/>
             <Setter Property="FontSize" Value="30"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Margin" Value="0, 60, 0, 20"/>
         </Style>
 
         <Style x:Key="tBlockElemTitle" BasedOn="{StaticResource tBlockBase}" TargetType="TextBlock">
@@ -183,10 +185,7 @@
                         </Grid.ColumnDefinitions>
                         <Viewbox Grid.Column="1">
                             <StackPanel>
-                                <TextBlock
-                                    Style="{StaticResource tBlockChapTitle}"
-                                    Margin="0, 60, 0, 20"
-                                    Text="{Binding chapTitle, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBlock Style="{StaticResource tBlockChapTitle}"/>
                                 <StackPanel x:Name="spContent"/>
                             </StackPanel>
                         </Viewbox>
