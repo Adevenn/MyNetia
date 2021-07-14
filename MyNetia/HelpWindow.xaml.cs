@@ -1,5 +1,4 @@
-﻿using MyNetia.Model;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -19,7 +18,7 @@ namespace MyNetia
         #region UI CREATOR
         private void loadProtocols()
         {
-            for (int i = 0; i < AppResources.dbManager.db.Count; i++)
+            for (int i = 0; i < currentApp.dbManager.db.Count; i++)
             {
                 StackPanel s = new StackPanel
                 {
@@ -27,8 +26,8 @@ namespace MyNetia
                 };
                 for (int j = i; j < i + 3; j++)
                 {
-                    if (j < AppResources.dbManager.db.Count)
-                        s.Children.Add(setLabel(AppResources.dbManager.db[j].title));
+                    if (j < currentApp.dbManager.db.Count)
+                        s.Children.Add(setLabel(currentApp.dbManager.db[j].title));
                     else
                         break;
                 }
@@ -38,7 +37,7 @@ namespace MyNetia
         }
         private void loadCommands()
         {
-            List<string> commands = AppResources.commandsList();
+            List<string> commands = currentApp.commandsList();
             foreach (string txt in commands)
                 stackCommands.Children.Add(setLabel(txt));
         }

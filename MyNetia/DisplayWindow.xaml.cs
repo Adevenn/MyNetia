@@ -30,7 +30,7 @@ namespace MyNetia
 
         private void setValues(string title)
         {
-            DB_Element elem = AppResources.dbManager.getElement(title);
+            DB_Element elem = currentApp.dbManager.getElement(title);
             elemTitle.Text = elem.title;
             elemSubtitle.Text = elem.subtitle;
             binding.chapters = new ObservableCollection<Chapter>(elem.chapters);

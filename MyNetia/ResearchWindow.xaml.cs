@@ -18,7 +18,7 @@ namespace MyNetia
         {
             DataContext = binds;
             InitializeComponent();
-            AppResources.dbManager.readJson();
+            currentApp.dbManager.readJson();
 
             //TESTS
             List<string> texts = new List<string>
@@ -41,16 +41,16 @@ namespace MyNetia
                 new Chapter("TEST CHAPTER", texts, images),
                 new Chapter("TEST CHAPTERS", texts, images)
             };
-            AppResources.dbManager.addElement("A", "port 123", chapList);
-            AppResources.dbManager.addElement("B", "port 123", chapList);
-            AppResources.dbManager.addElement("C", "port 123", chapList);
-            AppResources.dbManager.addElement("DAAAAAAAAA", "port 123", chapList);
-            AppResources.dbManager.addElement("EAAAAAAAAA", "port 123", chapList);
-            AppResources.dbManager.addElement("FAAAAAAAAA", "port 123", chapList);
-            AppResources.dbManager.addElement("GAAAAAAAAA", "port 123", chapList);
-            AppResources.dbManager.addElement("HAAAAAAAAA", "port 123", chapList);
-            AppResources.dbManager.addElement("IAAAAAAAAA", "port 123", chapList);
-            AppResources.dbManager.addElement("JAAAAAAAAA", "port 123", chapList);
+            currentApp.dbManager.addElement("A", "port 123", chapList);
+            currentApp.dbManager.addElement("B", "port 123", chapList);
+            currentApp.dbManager.addElement("C", "port 123", chapList);
+            currentApp.dbManager.addElement("DAAAAAAAAA", "port 123", chapList);
+            currentApp.dbManager.addElement("EAAAAAAAAA", "port 123", chapList);
+            currentApp.dbManager.addElement("FAAAAAAAAA", "port 123", chapList);
+            currentApp.dbManager.addElement("GAAAAAAAAA", "port 123", chapList);
+            currentApp.dbManager.addElement("HAAAAAAAAA", "port 123", chapList);
+            currentApp.dbManager.addElement("IAAAAAAAAA", "port 123", chapList);
+            currentApp.dbManager.addElement("JAAAAAAAAA", "port 123", chapList);
             //END TESTS
 
             helpResearchBar();
@@ -66,9 +66,9 @@ namespace MyNetia
         {
             if (e.Key == Key.Return)
             {
-                if (AppResources.dbManager.isElementExist(txtBox.Text))
+                if (currentApp.dbManager.isElementExist(txtBox.Text))
                 {
-                    DB_Element elem = AppResources.dbManager.getElement(txtBox.Text);
+                    DB_Element elem = currentApp.dbManager.getElement(txtBox.Text);
                     DisplayWindow displayWindow = new DisplayWindow(elem.title);
                     if (!currentApp.isOpenWindow(displayWindow.Title))
                     {
@@ -89,7 +89,7 @@ namespace MyNetia
                             }
                             break;
                         case Commands.saveAsJson:
-                            AppResources.dbManager.copyJsonToDesktop();
+                            currentApp.dbManager.copyJsonToDesktop();
                             break;
                         case Commands.help:
                         default:
@@ -116,7 +116,7 @@ namespace MyNetia
         private void helpResearchBar()
         {
             binds.matchingResearch = new ObservableCollection<string>();
-            foreach (string txt in AppResources.dbManager.getTitles())
+            foreach (string txt in currentApp.dbManager.getTitles())
             {
                 if (txt.Contains(txtBox.Text))
                     binds.matchingResearch.Add(txt);

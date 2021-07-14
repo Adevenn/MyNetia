@@ -64,7 +64,7 @@ namespace MyNetia
         #region Elem Selection
         private void selectAddUpdate_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Return && AppResources.dbManager.isElementExist(binding.selectAddUpdate))
+            if (e.Key == Key.Return && currentApp.dbManager.isElementExist(binding.selectAddUpdate))
             {
                 //Apply element selection
                 setElement(binding.selectAddUpdate);
@@ -83,7 +83,7 @@ namespace MyNetia
                     if (window.ShowDialog() == true)
                     {
                         //Add new Element
-                        AppResources.dbManager.addElement(binding.selectAddUpdate);
+                        currentApp.dbManager.addElement(binding.selectAddUpdate);
                         setElement(binding.selectAddUpdate);
                         setIsElemSelected(true);
                     }
@@ -99,7 +99,7 @@ namespace MyNetia
 
         private void setElement(string title)
         {
-            DB_Element elem = AppResources.dbManager.getElement(title);
+            DB_Element elem = currentApp.dbManager.getElement(title);
             binding.oldElemTitle = elem.title;
             binding.elemTitle = elem.title;
             binding.elemSubtitle = elem.subtitle;
@@ -228,7 +228,7 @@ namespace MyNetia
         private void valid_Click(object sender, RoutedEventArgs e)
         {
             //Update selected element
-            AppResources.dbManager.updateElement(binding.oldElemTitle, binding.elemTitle, binding.elemSubtitle, new List<Chapter>(binding.chapters));
+            currentApp.dbManager.updateElement(binding.oldElemTitle, binding.elemTitle, binding.elemSubtitle, new List<Chapter>(binding.chapters));
             imageValid.Visibility = Visibility.Visible;
             animImageOpacity(imageValid);
         }
@@ -310,7 +310,7 @@ namespace MyNetia
 
         private void selectionDelete_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Return && AppResources.dbManager.isElementExist(binding.selectionDel))
+            if (e.Key == Key.Return && currentApp.dbManager.isElementExist(binding.selectionDel))
             {
                 //Confirmation dialog to confirm element's creation
                 ConfirmationWindow window = new ConfirmationWindow("Do you want to delete " + binding.selectionDel + " ?")
@@ -320,7 +320,7 @@ namespace MyNetia
                 if (window.ShowDialog() == true)
                 {
                     //Delete element
-                    AppResources.dbManager.deleteElement(binding.selectionDel);
+                    currentApp.dbManager.deleteElement(binding.selectionDel);
                     helpResearch();
                 }
             }
@@ -340,7 +340,7 @@ namespace MyNetia
         private void helpResearch()
         {
             binding.matchingResearch = new ObservableCollection<string>();
-            foreach (string txt in AppResources.dbManager.getTitles())
+            foreach (string txt in currentApp.dbManager.getTitles())
             {
                 if (txt.Contains(binding.selectionDel))
                     binding.matchingResearch.Add(txt);
