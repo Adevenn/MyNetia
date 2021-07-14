@@ -108,6 +108,7 @@
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Opacity" Value="0"/>
         <Setter Property="Height" Value="30"/>
+        <Setter Property="Margin" Value="0, 5, 0, 5"/>
     </Style>
     <!--#endregion-->
 
@@ -132,6 +133,7 @@
         <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
         <Setter Property="SelectionMode" Value="Single"/>
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Hidden"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
         <Setter Property="BorderThickness" Value="0"/>
     </Style>
 

@@ -8,8 +8,8 @@
         WindowStartupLocation="CenterScreen"
         Closing="Window_Closing"
         Style="{StaticResource window}"
-        MinWidth="1100"
-        Height="800" Width="1200">
+        MinWidth="800" Width="1200"
+        MinHeight="400" Height="800">
 
     <Window.Resources>
         
@@ -21,6 +21,7 @@
 
         <Style x:Key="borderTopCustom" BasedOn="{StaticResource borderTop}" TargetType="Border">
             <Setter Property="Margin" Value="15, 0"/>
+            <Setter Property="Padding" Value="0"/>
         </Style>
         <!--#endregion-->
         
@@ -32,16 +33,6 @@
             <Setter Property="MaxHeight" Value="512"/>
             <Setter Property="MinWidth" Value="256"/>
             <Setter Property="MaxWidth" Value="512"/>
-            <Setter Property="Margin" Value="15"/>
-        </Style>
-        <!--#endregion-->
-        
-        <!--#region Label Style-->
-        <Style x:Key="label" BasedOn="{StaticResource labelBase}" TargetType="Label">
-            <Setter Property="FontSize" Value="30"/>
-            <Setter Property="Height" Value="NaN"/>
-            <Setter Property="Width" Value="NaN"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="Margin" Value="15"/>
         </Style>
         <!--#endregion-->
@@ -62,7 +53,7 @@
             <Setter Property="Margin" Value="10, 30, 20, 30"/>
         </Style>
         <!--#endregion-->
-        
+         
         <!--#region TextBlock Style-->
         <Style x:Key="tBlock" BasedOn="{StaticResource tBlockBase}" TargetType="TextBlock">
             <Setter Property="FontSize" Value="20"/>
@@ -76,12 +67,17 @@
 
         </Style>
 
+        <Style x:Key="tBlockChapTitle" BasedOn="{StaticResource tBlock}" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="30"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+
         <Style x:Key="tBlockElemTitle" BasedOn="{StaticResource tBlockBase}" TargetType="TextBlock">
             <Setter Property="FontSize" Value="50"/>
         </Style>
 
         <Style x:Key="tBlockLastUpdate" BasedOn="{StaticResource tBlock}" TargetType="TextBlock">
-            <Setter Property="Margin" Value="5, 0"/>
+            <Setter Property="Margin" Value="0, 10"/>
         </Style>
         <!--#endregion-->
         
@@ -187,10 +183,10 @@
                         </Grid.ColumnDefinitions>
                         <Viewbox Grid.Column="1">
                             <StackPanel>
-                                <Label
-                                    Style="{StaticResource label}"
+                                <TextBlock
+                                    Style="{StaticResource tBlockChapTitle}"
                                     Margin="0, 60, 0, 20"
-                                    Content="{Binding chapTitle, UpdateSourceTrigger=PropertyChanged}"/>
+                                    Text="{Binding chapTitle, UpdateSourceTrigger=PropertyChanged}"/>
                                 <StackPanel x:Name="spContent"/>
                             </StackPanel>
                         </Viewbox>
@@ -199,7 +195,7 @@
             </Grid>
             <Border
                 Grid.Row="2"
-                Style="{StaticResource borderTop}">
+                Style="{StaticResource borderTopCustom}">
                 <TextBlock
                     x:Name="elemLastUpdate"
                     Style="{StaticResource tBlockLastUpdate}"/>
