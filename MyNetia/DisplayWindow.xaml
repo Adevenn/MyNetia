@@ -40,7 +40,8 @@
         <!--#region ListBox Style-->
         <Style x:Key="listBox" BasedOn="{StaticResource listBoxBase}" TargetType="ListBox">
             <EventSetter Event="SelectionChanged" Handler="listChapters_SelectionChanged"/>
-            <Setter Property="MaxWidth" Value="300"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="MaxWidth" Value="350"/>
             <Setter Property="ItemsSource" Value="{Binding chapters, UpdateSourceTrigger=PropertyChanged}"/>
             <Setter Property="DisplayMemberPath" Value="chapTitle"/>
             <Setter Property="ItemContainerStyle" Value="{StaticResource listBoxItemBase}"/>
@@ -84,7 +85,7 @@
         <!--#endregion-->
         
     </Window.Resources>
-    
+
     <DockPanel>
         <!--#region TITLE BAR-->
         <Grid
