@@ -7,7 +7,7 @@ namespace MyNetia
 {
     public partial class HelpWindow : Window
     {
-        private App currentApp = (App)Application.Current;
+        private readonly App currentApp = (App)Application.Current;
         public HelpWindow()
         {
             InitializeComponent();

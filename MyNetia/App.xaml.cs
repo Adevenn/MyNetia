@@ -11,7 +11,7 @@ namespace MyNetia
     {
         public DB_Manager dbManager = new DB_Manager();
         //Only 1 window open at a time
-        private List<string> openWindows = new List<string>();
+        private readonly List<string> openWindows = new List<string>();
 
         public bool isOpenWindow(string title)
         {
