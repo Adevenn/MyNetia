@@ -49,6 +49,7 @@
         <!--#region ListBox Style-->
         <Style x:Key="listBox" BasedOn="{StaticResource listBoxBase}" TargetType="ListBox">
             <EventSetter Event="SelectionChanged" Handler="listChapters_SelectionChanged"/>
+            <Setter Property="MaxWidth" Value="300"/>
             <Setter Property="ItemsSource" Value="{Binding chapters, UpdateSourceTrigger=PropertyChanged}"/>
             <Setter Property="DisplayMemberPath" Value="chapTitle"/>
             <Setter Property="ItemContainerStyle" Value="{StaticResource listBoxItemBase}"/>
@@ -80,7 +81,7 @@
         </Style>
 
         <Style x:Key="tBlockLastUpdate" BasedOn="{StaticResource tBlock}" TargetType="TextBlock">
-            <Setter Property="Margin" Value="80"/>
+            <Setter Property="Margin" Value="5, 0"/>
         </Style>
         <!--#endregion-->
         
@@ -136,9 +137,14 @@
             </StackPanel>
         </Grid>
         <!--#endregion-->
-        <DockPanel>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="80"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
             <Border
-                DockPanel.Dock="Top"
+                Grid.Row="0"
                 Style="{StaticResource borderBotCustom}">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -157,14 +163,7 @@
                         Style="{StaticResource tBlock}"/>
                 </Grid>
             </Border>
-            <Border
-                DockPanel.Dock="Bottom"
-                Style="{StaticResource borderTopCustom}">
-                <TextBlock
-                    x:Name="elemLastUpdate"
-                    Style="{StaticResource tBlockLastUpdate}"/>
-            </Border>
-            <Grid>
+            <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="5*"/>
@@ -198,6 +197,13 @@
                     </Grid>
                 </ScrollViewer>
             </Grid>
-        </DockPanel>
+            <Border
+                Grid.Row="2"
+                Style="{StaticResource borderTop}">
+                <TextBlock
+                    x:Name="elemLastUpdate"
+                    Style="{StaticResource tBlockLastUpdate}"/>
+            </Border>
+        </Grid>
     </DockPanel>
 </Window>

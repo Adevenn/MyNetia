@@ -37,7 +37,8 @@ namespace MyNetia.Model
 
         public void updateElement(string oldTitle, string title, string subtitle, List<Chapter> chapList)
         {
-            DirectoryManager.renameDirectory(oldTitle, title);
+            if(oldTitle != title)
+                DirectoryManager.renameDirectory(oldTitle, title);
             int id = getElementID(oldTitle);
             _db[id] = new DB_Element(title, subtitle, chapList);
             sortDB();
