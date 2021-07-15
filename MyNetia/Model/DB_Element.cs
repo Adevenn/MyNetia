@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace MyNetia.Model
@@ -9,8 +10,16 @@ namespace MyNetia.Model
         public string title;
         public string subtitle;
        
-        private readonly List<Chapter> _chapters = new List<Chapter>();
-        public List<Chapter> chapters => _chapters;
+        private List<Chapter> _chapters = new List<Chapter>();
+        public List<Chapter> chapters
+        {
+            get => _chapters;
+            set
+            {
+                if (_chapters != value)
+                    _chapters = value;
+            }
+        }
         public DateTime lastUpdate;
         public DB_Element(string title)
         {
@@ -19,6 +28,8 @@ namespace MyNetia.Model
             _chapters.Add(new Chapter());
             lastUpdate = DateTime.Now;
         }
+
+        [JsonConstructor]
         public DB_Element(string title, string subtitle, List<Chapter> listChap)
         {
             this.title = title;

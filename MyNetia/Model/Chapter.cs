@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -37,6 +38,7 @@ namespace MyNetia.Model
             };
         }
 
+        [JsonConstructor]
         public Chapter(string chapTitle, List<string> texts, List<string> images)
         {
             this.chapTitle = chapTitle;

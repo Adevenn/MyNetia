@@ -23,18 +23,6 @@ namespace MyNetia.Model
                 throw new Exception("Impossible to add 2 times the same element title");
         }
 
-        public void addElement(string title, string subtitle, List<Chapter> chapList)
-        {
-            if (!isElementExist(title))
-            {
-                DirectoryManager.createDirectory(title);
-                _db.Add(new DB_Element(title, subtitle, chapList));
-                sortDB();
-            }
-            else
-                throw new Exception("Impossible to add 2 times the same element title");
-        }
-
         public void updateElement(string oldTitle, string title, string subtitle, List<Chapter> chapList)
         {
             if(oldTitle != title)
