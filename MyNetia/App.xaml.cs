@@ -17,7 +17,7 @@ namespace MyNetia
         {
             for (int i = 0; i < openWindows.Count; i++)
             {
-                if (openWindows[i].Equals(title))
+                if (openWindows[i].Equals("MyNetia-" + title))
                     return true;
             }
             return false;
@@ -28,7 +28,7 @@ namespace MyNetia
             if (!isOpenWindow(title))
                 openWindows.Add(title);
             else
-                throw new Exception("Impossible to add 2 times the same window inside openWindows");
+                throw new Exception("Impossible to open 2 times the same window");
         }
 
         public void deleteWindow(string title)
