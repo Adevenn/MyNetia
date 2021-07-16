@@ -9,7 +9,6 @@ namespace MyNetia.Model
     {
         public string title;
         public string subtitle;
-       
         private List<Chapter> _chapters = new List<Chapter>();
         public List<Chapter> chapters
         {
@@ -21,6 +20,7 @@ namespace MyNetia.Model
             }
         }
         public DateTime lastUpdate;
+
         public DB_Element(string title)
         {
             this.title = title;
@@ -36,21 +36,6 @@ namespace MyNetia.Model
             this.subtitle = subtitle;
             _chapters = listChap;
             lastUpdate = DateTime.Now;
-        }
-
-        public void deleteChapter(string title)
-        {
-            _chapters.RemoveAt(getChapterID(title));
-        }
-
-        private int getChapterID(string title)
-        {
-            for (int i = 0; i < chapters.Count; i++)
-            {
-                if (chapters[i].chapTitle.Equals(title))
-                    return i;
-            }
-            return -1;
         }
     }
 }

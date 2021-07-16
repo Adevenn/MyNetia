@@ -69,7 +69,7 @@ namespace MyNetia.Model
         {
             for (int i = 0; i < db.Count; i++)
             {
-                if (title == db[i].title)
+                if (db[i].title.Equals(title))
                     return db[i];
             }
             return new DB_Element(title);

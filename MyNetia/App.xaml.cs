@@ -10,9 +10,10 @@ namespace MyNetia
     public partial class App : Application
     {
         public DB_Manager dbManager = new DB_Manager();
-        //Only 1 window open at a time
+        //1 window type open at a time
         private readonly List<string> openWindows = new List<string>();
 
+        #region OpenWindow Manager
         public bool isOpenWindow(string title)
         {
             for (int i = 0; i < openWindows.Count; i++)
@@ -43,7 +44,9 @@ namespace MyNetia
             }
             throw new Exception("Tried to delete an item that doesn't exist");
         }
+        #endregion
 
+        #region Commands
         public List<string> commandsList()
         {
             Commands commands = new Commands();
@@ -60,5 +63,7 @@ namespace MyNetia
                                                     BindingFlags.FlattenHierarchy);
             return fieldInfos.Where(fi => fi.IsLiteral && !fi.IsInitOnly).ToList();
         }
+        #endregion
+
     }
 }
