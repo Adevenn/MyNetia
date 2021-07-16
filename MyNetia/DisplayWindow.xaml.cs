@@ -18,7 +18,7 @@ namespace MyNetia
         {
             DataContext = binding;
             InitializeComponent();
-            Title = "MyNetia-" + title;
+            Title = title;
             setValues(title);
         }
 

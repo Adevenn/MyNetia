@@ -17,7 +17,7 @@ namespace MyNetia
         {
             for (int i = 0; i < openWindows.Count; i++)
             {
-                if (openWindows[i].Equals("MyNetia-" + title))
+                if (openWindows[i].Equals(title))
                     return true;
             }
             return false;
