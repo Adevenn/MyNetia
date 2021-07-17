@@ -7,4 +7,3 @@
 - Drag and drop des texts et images
 - Selection du theme
 - Selection dans reasearch via le subtitle aussi (utile pour la recherche via le port e.g.)
-- Set le tab correctement a la fin de la ligne

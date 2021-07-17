@@ -72,6 +72,7 @@ namespace MyNetia
             {
                 txtBox.Text = binds.matchingResearch[0];
                 //Set Keyboard focus at the end
+                txtBox.Focus();
                 txtBox.CaretIndex = txtBox.Text.Length;
             }
         }

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MyNetia"
         mc:Ignorable="d"
         Style="{StaticResource window}"
-        Title="MyNetia-Confirmation"
+        Title="Confirmation"
         WindowStartupLocation="CenterOwner"
         MinHeight="250" MaxHeight="250"
         MinWidth="400" MaxWidth="400">

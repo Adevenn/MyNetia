@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyNetia"
         mc:Ignorable="d"
-        Title="MyNetia-Info"
+        Title="Info"
         Style="{StaticResource window}"
         WindowStartupLocation="CenterOwner"
-        MinHeight="500" MaxHeight="500"
+        MinHeight="550" MaxHeight="550"
         MinWidth="600" MaxWidth="600">
     
     <Window.Resources>

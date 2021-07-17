@@ -37,19 +37,21 @@ namespace MyNetia
             }
         }
         private readonly string infoContent =
+            "Add/Update :\n\n" +
             "Select element :\n" +
             "   - Can not containt this characters : \n" +
             "       < > : \" / \\ | ? *\n" +
             "   - Return => add/update the element selected\n\n" +
-            "Chapter text :\n" +
-            "   - LCtrl + Return => New paragraph\n" +
-            "   - LAlt + Return => Delete paragraph\n\n" +
-            "Chapter image :\n" +
+            "Chapter text :\n" + "   - LCtrl + Return => New paragraph\n" +
+            "   - LAlt + Return => Delete paragraph\n\n" + "Chapter image :\n" +
             "   - Enter => New image zone\n" +
             "   - LAlt + Return => Delete image zone\n" +
             "   - Enter the name of your image\n" +
             "       e.g.: Image1.png and save your file inside\n" +
-            "       MyNetia/AppRessources/Images/ElemTitle";
+            "       MyNetia/AppRessources/Images/ElemTitle\n\n\n" +
+            "Delete :\n\n" +
+            "Select element :\n" +
+            "   - Tab : Auto complete the with the first matching result";
 
         public AdminWindow()
         {
