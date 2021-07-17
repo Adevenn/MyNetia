@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <None Remove="AppResources\Images\DefaultImage.png" />
-    <None Remove="AppResources\Images\Validate_MyNetia.png" />
+    <None Remove="AppResources\Images\Valid_MyNetia.png" />
     <None Remove="AppResources\SaveDB.json" />
     <None Remove="ReadMe.txt" />
     <Content Include="Licence.txt">
@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="AppResources\Images\Validate_MyNetia.png" />
+    <Resource Include="AppResources\Images\Valid_MyNetia.png" />
   </ItemGroup>
 
   <ItemGroup>

@@ -6,30 +6,30 @@
         xmlns:local="clr-namespace:MyNetia"
         mc:Ignorable="d"
         Title="MyNetia"
+        WindowStartupLocation="CenterScreen"
+        Closing="Window_Closing"
         Style="{StaticResource window}"
-        WindowStartupLocation="Manual"
         MinHeight="200" MaxHeight="200"
         MinWidth="300" MaxWidth="300">
+    
     <Window.Resources>
-        <Style x:Key="labelTitleBar" BasedOn="{StaticResource labelBase}" TargetType="Label">
-            <Setter Property="FontSize" Value="20"/>
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="Margin" Value="5, 0, 0, 0"/>
-        </Style>
-        
-        <Style x:Key="txtBox" BasedOn="{StaticResource txtBoxBase}" TargetType="TextBox">
+        <Style x:Key="tBox" BasedOn="{StaticResource tBoxBase}" TargetType="TextBox">
+            <EventSetter Event="KeyDown" Handler="onKeyDown"/>
+            <EventSetter Event="TextChanged" Handler="onTextChanged"/>
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Height" Value="30"/>
             <Setter Property="Width" Value="Auto"/>
-            <Setter Property="Margin" Value="5, 3, 5, 3"/>
+            <Setter Property="Padding" Value="10, 0"/>
         </Style>
-        
-        <Style x:Key="txtBlock" BasedOn="{StaticResource txtBlockBase}" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="18"/>
+
+        <Style x:Key="itemControl" TargetType="ItemsControl">
+            <Setter Property="FontSize" Value="16"/>
             <Setter Property="Padding" Value="8"/>
+            <Setter Property="ItemsSource" Value="{Binding matchingResearch}"/>
         </Style>
     </Window.Resources>
+    
     <DockPanel>
         <!--#region TITLE BAR-->
         <Grid
@@ -38,8 +38,7 @@
             Style="{StaticResource gridTitleBar}"
             MouseDown="titleBar_MouseDown">
             <Grid.Triggers>
-                <EventTrigger
-                    RoutedEvent="Grid.MouseEnter">
+                <EventTrigger RoutedEvent="Grid.MouseEnter">
                     <BeginStoryboard>
                         <Storyboard>
                             <DoubleAnimation
@@ -49,8 +48,7 @@
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger>
-                <EventTrigger
-                    RoutedEvent="Grid.MouseLeave">
+                <EventTrigger RoutedEvent="Grid.MouseLeave">
                     <BeginStoryboard>
                         <Storyboard>
                             <DoubleAnimation
@@ -63,9 +61,7 @@
             </Grid.Triggers>
             <Label
                 Style="{StaticResource labelTitleBar}"
-                Height="33">
-                MyNetia
-            </Label>
+                Content="MyNetia"/>
             <StackPanel
                 Orientation="Horizontal"
                 HorizontalAlignment="Right">
@@ -73,23 +69,17 @@
                     x:Name="minBtn"
                     Click="minBtn_Click"
                     Style="{StaticResource btnTitleBar}"
-                    IsTabStop="False">
-                    -
-                </Button>
+                    Content="-"/>
                 <Button
                     x:Name="maxBtn"
                     Click="maxBtn_Click"
                     Style="{StaticResource btnTitleBar}"
-                    IsTabStop="False">
-                    o
-                </Button>
+                    Content="o"/>
                 <Button
                     x:Name="closeBtn"
                     Click="closeBtn_Click"
                     Style="{StaticResource btnTitleBar}"
-                    IsTabStop="False">
-                    x
-                </Button>
+                    Content="x"/>
             </StackPanel>
         </Grid>
         <!--#endregion-->
@@ -97,13 +87,9 @@
             <Border Style="{StaticResource borderBot}">
                 <TextBox
                     x:Name="txtBox"
-                    KeyDown="onKeyDown"
-                    TextChanged="onTextChanged"
-                    Style="{StaticResource txtBox}"/>
+                    Style="{StaticResource tBox}"/>
             </Border>
-            <TextBlock
-                x:Name="txtBlock"
-                Style="{StaticResource txtBlock}"/>
+            <ItemsControl Style="{StaticResource itemControl}"/>
         </StackPanel>
     </DockPanel>
 </Window>
