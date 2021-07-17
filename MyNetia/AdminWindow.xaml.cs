@@ -68,8 +68,6 @@ namespace MyNetia
             {
                 //Apply element selection
                 setElement(binding.selectAddUpdate);
-                setIsElemSelected(true);
-                listChapters.SelectedIndex = 0;
             }
             else if (e.Key == Key.Return)
             {
@@ -85,8 +83,6 @@ namespace MyNetia
                         //Add new Element
                         currentApp.dbManager.addElement(binding.selectAddUpdate);
                         setElement(binding.selectAddUpdate);
-                        setIsElemSelected(true);
-                        listChapters.SelectedIndex = 0;
                     }
                 }
                 else
@@ -104,13 +100,15 @@ namespace MyNetia
             binding.elemTitle = elem.title;
             binding.elemSubtitle = elem.subtitle;
             binding.chapters = new ObservableCollection<Chapter>(elem.chapters);
+            listChapters.SelectedIndex = 0;
+            setIsElemSelected(true);
         }
         #endregion
 
         #region ChaptersList Setup
         private void listChapters_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //Select by default the first item
+            //Select by default the first item when element selection changed
             if (listChapters.SelectedIndex == -1)
                 listChapters.SelectedIndex = 0;
             //Set by default 1 empty chapter
