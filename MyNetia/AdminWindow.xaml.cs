@@ -68,8 +68,8 @@ namespace MyNetia
             {
                 //Apply element selection
                 setElement(binding.selectAddUpdate);
-                listChapters.SelectedIndex = 0;
                 setIsElemSelected(true);
+                listChapters.SelectedIndex = 0;
             }
             else if (e.Key == Key.Return)
             {
@@ -86,8 +86,8 @@ namespace MyNetia
                         currentApp.dbManager.addElement(binding.selectAddUpdate);
                         setElement(binding.selectAddUpdate);
                         setIsElemSelected(true);
+                        listChapters.SelectedIndex = 0;
                     }
-                        
                 }
                 else
                 {
