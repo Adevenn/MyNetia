@@ -46,7 +46,7 @@ namespace MyNetia.Model
         {
             if (!File.Exists(path))
                 createTxtFile(path, "");
-            copyFile(path, jsonPath);
+            copyFile(jsonPath, path);
         }
 
         public static string loadJson()
