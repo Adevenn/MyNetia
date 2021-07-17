@@ -6,3 +6,4 @@
 - Charger une save externe (fichier json qu on selectionne)
 - Drag and drop des texts et images
 - Selection du theme
+- Selection dans reasearch via le subtitle aussi (utile pour la recherche via le port e.g.)

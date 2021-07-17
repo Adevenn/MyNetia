@@ -143,6 +143,7 @@
         <!--#region ItemControl Style-->
         <Style x:Key="itemControlDelete" TargetType="ItemsControl">
             <Setter Property="ItemsSource" Value="{Binding matchingResearch}"/>
+            <Setter Property="Margin" Value="10"/>
         </Style>
         <!--#endregion-->
 
@@ -373,7 +374,7 @@
                         Text="Work in progress"/>
                     <TextBlock
                         Style="{StaticResource tBlock}"
-                        Text="This'll content every external infos, like database server, etc .."/>
+                        Text="This'll content every others infos, like database server, themes, etc .."/>
                 </StackPanel>
             </TabItem>
         </TabControl>
