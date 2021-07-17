@@ -1,6 +1,8 @@
 ﻿using MyNetia.Model;
 using System.Collections.Generic;
-using System.IO;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -10,17 +12,44 @@ namespace MyNetia
 {
     public partial class DisplayWindow : Window
     {
-        private readonly DB_Element element;
-        public DisplayWindow(string name)
+        private readonly App currentApp = (App)Application.Current;
+        private readonly InfoBinding binding = new InfoBinding();
+        public DisplayWindow(string title)
         {
-            element = AppResources.dbManager.getElement(name);
+            DataContext = binding;
             InitializeComponent();
-            setValues();
+            Title = title;
+            setValues(title);
         }
+
+        #region EVENTS
+        private void listChapters_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            setChapterValues((Chapter)listChapters.SelectedItem);
+        }
+
+        private void setValues(string title)
+        {
+            DB_Element elem = currentApp.dbManager.getElement(title);
+            elemTitle.Text = elem.title;
+            elemSubtitle.Text = elem.subtitle;
+            binding.chapters = new ObservableCollection<Chapter>(elem.chapters);
+            listChapters.SelectedIndex = 0;
+            elemLastUpdate.Text = "Last update : " + elem.lastUpdate.Month.ToString() + "/" + elem.lastUpdate.Day.ToString() + "/" + elem.lastUpdate.Year.ToString();
+        }
+
+        private void setChapterValues(Chapter ch)
+        {
+            scrollViewer.ScrollToTop();
+            binding.chapTitle = ch.chapTitle;
+            setUI(ch.texts, ch.images, spContent);
+        }
+        #endregion
 
         #region UI CREATOR
         private void setUI(List<string> txt, List<string> img, StackPanel sp)
         {
+            sp.Children.Clear();
             int idTxt = 0;
             int idImg = 0;
             while (true)
@@ -39,11 +68,11 @@ namespace MyNetia
                 {
                     if (!string.IsNullOrWhiteSpace(img[idImg]))
                     {
-                        string path = Path.GetFullPath(@".\AppResources\Images\" + element.name + @"\" + img[idImg]);
-                        if (File.Exists(path))
-                            spHoriz.Children.Add(image(File.ReadAllBytes(path)));
+                        string path = elemTitle.Text + @"\" + img[idImg];
+                        if (FileManager.isImageExist(path))
+                            spHoriz.Children.Add(image(FileManager.readByteFile(path)));
                         else
-                            spHoriz.Children.Add(image(AppResources.defaultImage()));
+                            spHoriz.Children.Add(image(FileManager.defaultImage()));
                     }
                     idImg++;
                 }
@@ -52,11 +81,13 @@ namespace MyNetia
                     break;
             }
         }
+
         private TextBlock setTxtBlock(string text) => new TextBlock
         {
             Text = text,
-            Style = (Style)Resources["txtBlock"]
+            Style = (Style)Resources["tBlock"]
         };
+
         private Image image(byte[] imageFile) => new Image
         {
             Source = loadImage(imageFile),
@@ -65,20 +96,12 @@ namespace MyNetia
         #endregion
 
         #region OTHERS METHODS
-        private void setValues()
+        private BitmapImage loadImage(byte[] imageData)
         {
-            txtTitle.Text = element.name;
-            if (!string.IsNullOrWhiteSpace(element.port))
-                txtPort.Text = "PORT : " + element.port;
-            setUI(element.theoryTxt, element.theoryImg, spContentTheory);
-            setUI(element.hackingTxt, element.hackingImg, spContentHacking);
-            txtLastUpdate.Text = "Last update : " + element.lastUpdate.Month.ToString() + "/" + element.lastUpdate.Day.ToString() + "/" + element.lastUpdate.Year.ToString();
-        }
-        private static BitmapImage loadImage(byte[] imageData)
-        {
-            if (imageData == null || imageData.Length == 0) return null;
-            var image = new BitmapImage();
-            using (var mem = new MemoryStream(imageData))
+            if (imageData == null || imageData.Length == 0)
+                return null;
+            BitmapImage image = new BitmapImage();
+            using (System.IO.MemoryStream mem = new System.IO.MemoryStream(imageData))
             {
                 mem.Position = 0;
                 image.BeginInit();
@@ -100,14 +123,22 @@ namespace MyNetia
         {
             WindowState = WindowState.Minimized;
         }
+
         private void maxBtn_Click(object sender, RoutedEventArgs e)
         {
             AdjustWindowSize();
         }
+
         private void closeBtn_Click(object sender, RoutedEventArgs e)
         {
             Close();
         }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            currentApp.deleteWindow(Title);
+        }
+
         private void titleBar_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
@@ -131,5 +162,42 @@ namespace MyNetia
         #endregion
 
         #endregion
+
+        private class InfoBinding : INotifyPropertyChanged
+        {
+            private string _chapTitle;
+            public string chapTitle
+            {
+                get { return _chapTitle; }
+                set
+                {
+                    if (_chapTitle != value)
+                    {
+                        _chapTitle = value;
+                        OnPropertyChanged();
+                    }
+                }
+            }
+
+            private ObservableCollection<Chapter> _chapters;
+            public ObservableCollection<Chapter> chapters
+            {
+                get { return _chapters; }
+                set
+                {
+                    if (_chapters != value)
+                    {
+                        _chapters = value;
+                        OnPropertyChanged();
+                    }
+                }
+            }
+
+            public event PropertyChangedEventHandler PropertyChanged;
+            protected void OnPropertyChanged([CallerMemberName] string name = null)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            }
+        }
     }
 }

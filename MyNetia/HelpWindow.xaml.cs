@@ -1,5 +1,4 @@
-﻿using MyNetia.Model;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -8,6 +7,7 @@ namespace MyNetia
 {
     public partial class HelpWindow : Window
     {
+        private readonly App currentApp = (App)Application.Current;
         public HelpWindow()
         {
             InitializeComponent();
@@ -18,31 +18,26 @@ namespace MyNetia
         #region UI CREATOR
         private void loadProtocols()
         {
-            for (int i = 0; i < AppResources.dbManager.db.Count; i++)
+            for (int i = 0; i < currentApp.dbManager.db.Count; i++)
             {
                 StackPanel s = new StackPanel
                 {
-                    Orientation = Orientation.Horizontal
+                    Style = (Style)Application.Current.TryFindResource("spH")
                 };
-                for (int j = i; j < i + 4; j++)
+                for (int j = i; j < i + 3; j++)
                 {
-                    if (j < AppResources.dbManager.db.Count)
-                        s.Children.Add(setLabel(AppResources.dbManager.db[j].name));
+                    if (j < currentApp.dbManager.db.Count)
+                        s.Children.Add(setLabel(currentApp.dbManager.db[j].title));
                     else
                         break;
                 }
                 stackProtocols.Children.Add(s);
-                i += 3;
+                i += 2;
             }
         }
         private void loadCommands()
         {
-            List<string> commands = AppResources.commandsList();
-            StackPanel sp = new StackPanel
-            {
-                Orientation = Orientation.Horizontal,
-                Style = (Style)Application.Current.TryFindResource("sp")
-            };
+            List<string> commands = currentApp.commandsList();
             foreach (string txt in commands)
                 stackCommands.Children.Add(setLabel(txt));
         }
@@ -60,15 +55,22 @@ namespace MyNetia
         {
             WindowState = WindowState.Minimized;
         }
+
         private void maxBtn_Click(object sender, RoutedEventArgs e)
         {
             AdjustWindowSize();
         }
+
         private void closeBtn_Click(object sender, RoutedEventArgs e)
         {
             Close();
-            ResearchWindow.isHelpWindowOpen = false;
         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            currentApp.deleteWindow(Title);
+        }
+
         private void titleBar_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)

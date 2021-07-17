@@ -1,7 +1,7 @@
 ﻿using MyNetia.Model;
-using System;
-using System.Collections.Generic;
-using System.IO;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -10,17 +10,14 @@ namespace MyNetia
 {
     public partial class ResearchWindow : Window
     {
-        private List<string> matchingResearch = null;
-        //Only 1 window open at a time
-        public static bool isUpdateWindowOpen = false;
-        public static bool isHelpWindowOpen = false;
-        public static bool isAddWindowOpen = false;
-        public static bool isRemoveWindowOpen = false;
+        private readonly App currentApp = (App)Application.Current;
+        private readonly InfoBinding binds = new InfoBinding();
+
         public ResearchWindow()
         {
+            DataContext = binds;
+            currentApp.dbManager.readJson();
             InitializeComponent();
-            if (File.Exists(Path.GetFullPath(@".\AppResources\SaveDB.json")))
-                AppResources.dbManager.readJson();
             helpResearchBar();
         }
 
@@ -29,62 +26,51 @@ namespace MyNetia
         {
             helpResearchBar();
         }
+
         private void onKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Return)
             {
-                if (AppResources.dbManager.isExist(txtBox.Text))
+                if (currentApp.dbManager.isElementExist(txtBox.Text))
                 {
-                    DB_Element element = AppResources.dbManager.getElement(txtBox.Text);
-                    DisplayWindow displayWindow = new DisplayWindow(element.name);
-                    displayWindow.Show();
+                    DB_Element elem = currentApp.dbManager.getElement(txtBox.Text);
+                    if (!currentApp.isOpenWindow(elem.title))
+                    {
+                        DisplayWindow displayWindow = new DisplayWindow(elem.title);
+                        currentApp.addWindow(displayWindow.Title);
+                        displayWindow.Show();
+                    }
                 }
                 if (txtBox.Text.StartsWith("-") || txtBox.Text.Equals("Help") || txtBox.Text.Equals("help") || string.IsNullOrWhiteSpace(txtBox.Text))
                 {
                     switch (txtBox.Text)
                     {
-                        case Commands.add:
-                            if (!isAddWindowOpen)
+                        case Commands.admin:
+                            AdminWindow adminWindow = new AdminWindow();
+                            if (!currentApp.isOpenWindow(adminWindow.Title))
                             {
-                                AddWindow addWindow = new AddWindow();
-                                addWindow.Show();
-                                isAddWindowOpen = true;
-                            }
-                            break;
-                        case Commands.remove:
-                            if (!isRemoveWindowOpen)
-                            {
-                                RemoveWindow removeWindow = new RemoveWindow();
-                                removeWindow.Show();
-                                isRemoveWindowOpen = true;
+                                currentApp.addWindow(adminWindow.Title);
+                                adminWindow.Show();
                             }
                             break;
                         case Commands.saveAsJson:
-                            AppResources.dbManager.saveAsJson(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
-                            break;
-                        case Commands.update:
-                            if (!isUpdateWindowOpen)
-                            {
-                                UpdateWindow updateWindow = new UpdateWindow();
-                                updateWindow.Show();
-                                isUpdateWindowOpen = true;
-                            }
+                            currentApp.dbManager.copyJsonToDesktop();
                             break;
                         case Commands.help:
                         default:
-                            if (!isHelpWindowOpen)
+                            HelpWindow helpWindow = new HelpWindow();
+                            if (!currentApp.isOpenWindow(helpWindow.Title))
                             {
-                                HelpWindow helpWindow = new HelpWindow();
+                                currentApp.addWindow(helpWindow.Title);
                                 helpWindow.Show();
-                                isHelpWindowOpen = true;
                             }
                             break;
                     }
                 }
             }
-            else if (e.Key.Equals(Key.Tab) && matchingResearch.Count > 0)
+            else if (e.Key.Equals(Key.Tab) && binds.matchingResearch.Count > 0)
             {
-                txtBox.Text = matchingResearch[0];
+                txtBox.Text = binds.matchingResearch[0];
                 //Set Keyboard focus at the end
                 txtBox.CaretIndex = txtBox.Text.Length;
             }
@@ -94,15 +80,11 @@ namespace MyNetia
         #region OTHERS METHODS
         private void helpResearchBar()
         {
-            matchingResearch = new List<string>();
-            txtBlock.Text = null;
-            foreach (string txt in AppResources.dbManager.getNames())
+            binds.matchingResearch = new ObservableCollection<string>();
+            foreach (string txt in currentApp.dbManager.getTitles())
             {
                 if (txt.Contains(txtBox.Text))
-                {
-                    txtBlock.Text += txt + "\n";
-                    matchingResearch.Add(txt);
-                }
+                    binds.matchingResearch.Add(txt);
             }
         }
         #endregion
@@ -114,22 +96,22 @@ namespace MyNetia
         {
             WindowState = WindowState.Minimized;
         }
+
         private void maxBtn_Click(object sender, RoutedEventArgs e)
         {
             AdjustWindowSize();
         }
+
         private void closeBtn_Click(object sender, RoutedEventArgs e)
         {
             Close();
         }
-        private void titleBar_MouseEnter(object sender, MouseEventArgs e)
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            titleBar.Opacity = 1;
+            Application.Current.Shutdown();
         }
-        private void titleBar_MouseLeave(object sender, MouseEventArgs e)
-        {
-            titleBar.Opacity = 0;
-        }
+
         private void titleBar_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
@@ -154,5 +136,27 @@ namespace MyNetia
 
         #endregion
 
+        private class InfoBinding : INotifyPropertyChanged
+        {
+            private ObservableCollection<string> _matchingResearch;
+            public ObservableCollection<string> matchingResearch
+            {
+                get => _matchingResearch;
+                set
+                {
+                    if (value != _matchingResearch)
+                    {
+                        _matchingResearch = value;
+                        OnPropertyChanged();
+                    }
+                }
+            }
+
+            public event PropertyChangedEventHandler PropertyChanged;
+            protected void OnPropertyChanged([CallerMemberName] string name = null)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            }
+        }
     }
 }

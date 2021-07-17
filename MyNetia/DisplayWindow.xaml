@@ -5,27 +5,27 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyNetia"
         mc:Ignorable="d"
-        Title="MyNetia"
+        WindowStartupLocation="CenterScreen"
+        Closing="Window_Closing"
         Style="{StaticResource window}"
-        MinWidth="1100"
-        Height="800" Width="1200">
+        MinWidth="800" Width="1200"
+        MinHeight="400" Height="800">
+
     <Window.Resources>
-        <Style x:Key="txtBlock" BasedOn="{StaticResource txtBlockBase}" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="20"/>
-            <Setter Property="MaxWidth" Value="500"/>
-            <Setter Property="TextWrapping" Value="Wrap"/>
-            <Setter Property="Height" Value="Auto"/>
-            <Setter Property="HorizontalAlignment" Value="Right"/>
-        </Style>
         
-        <Style x:Key="label" BasedOn="{StaticResource labelBase}" TargetType="Label">
-            <Setter Property="FontSize" Value="20"/>
-            <Setter Property="Height" Value="NaN"/>
-            <Setter Property="Width" Value="NaN"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="15"/>
+        <!--#region Border Style-->
+        <Style x:Key="borderBotCustom" BasedOn="{StaticResource borderBot}" TargetType="Border">
+            <Setter Property="Margin" Value="15, 0"/>
+            <Setter Property="Padding" Value="0, 0, 0, 30"/>
         </Style>
+
+        <Style x:Key="borderTopCustom" BasedOn="{StaticResource borderTop}" TargetType="Border">
+            <Setter Property="Margin" Value="15, 0"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>
+        <!--#endregion-->
         
+        <!--#region Image Style-->
         <Style x:Key="image" TargetType="Image">
             <Setter Property="Stretch" Value="Uniform"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
@@ -35,47 +35,55 @@
             <Setter Property="MaxWidth" Value="512"/>
             <Setter Property="Margin" Value="15"/>
         </Style>
+        <!--#endregion-->
         
+        <!--#region ListBox Style-->
+        <Style x:Key="listBox" BasedOn="{StaticResource listBoxBase}" TargetType="ListBox">
+            <EventSetter Event="SelectionChanged" Handler="listChapters_SelectionChanged"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="MaxWidth" Value="350"/>
+            <Setter Property="ItemsSource" Value="{Binding chapters, UpdateSourceTrigger=PropertyChanged}"/>
+            <Setter Property="DisplayMemberPath" Value="chapTitle"/>
+            <Setter Property="ItemContainerStyle" Value="{StaticResource listBoxItemBase}"/>
+            <Setter Property="Margin" Value="10"/>
+        </Style>
+        <!--#endregion-->
+        
+        <!--#region StackPanel Style-->
         <Style x:Key="spHCustom" BasedOn="{StaticResource spH}" TargetType="StackPanel">
             <Setter Property="Margin" Value="10, 30, 20, 30"/>
         </Style>
-        
-        <Style x:Key="tabControl" TargetType="TabControl">
-            <Setter Property="TabStripPlacement" Value="Left"/>
-            <Setter Property="Background" Value="#2D142C"/>
-            <Setter Property="Foreground" Value="#C72C41"/>
-            <Setter Property="BorderThickness" Value="0"/>
+        <!--#endregion-->
+         
+        <!--#region TextBlock Style-->
+        <Style x:Key="tBlock" BasedOn="{StaticResource tBlockBase}" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="MaxWidth" Value="500"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Height" Value="Auto"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
         </Style>
         
-        <Style x:Key="tabItem" TargetType="TabItem">
-            <Setter Property="Foreground" Value="#C72C41"/>
-            <Setter Property="FontSize" Value="15"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate
-                        TargetType="TabItem">
-                        <Border Name="Border"
-                                BorderThickness="1"
-                                BorderBrush="#510A32"
-                                Margin="10">
-                            <ContentPresenter
-                                x:Name="ContentSite"
-                                Height="20"
-                                ContentSource="Header"
-                                Margin="10,2"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="#510A32" />
-                            </Trigger>
-                            <Trigger Property="IsSelected" Value="False">
-                                <Setter TargetName="Border" Property="Background" Value="#2D142C" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
+        <Style x:Key="tBlockChapSubtitle" BasedOn="{StaticResource tBlock}" TargetType="TextBlock">
+
         </Style>
+
+        <Style x:Key="tBlockChapTitle" BasedOn="{StaticResource tBlock}" TargetType="TextBlock">
+            <Setter Property="Text" Value="{Binding chapTitle, UpdateSourceTrigger=PropertyChanged}"/>
+            <Setter Property="FontSize" Value="30"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Margin" Value="0, 60, 0, 20"/>
+        </Style>
+
+        <Style x:Key="tBlockElemTitle" BasedOn="{StaticResource tBlockBase}" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="50"/>
+        </Style>
+
+        <Style x:Key="tBlockLastUpdate" BasedOn="{StaticResource tBlock}" TargetType="TextBlock">
+            <Setter Property="Margin" Value="0, 10"/>
+        </Style>
+        <!--#endregion-->
+        
     </Window.Resources>
 
     <DockPanel>
@@ -86,8 +94,7 @@
             Style="{StaticResource gridTitleBar}"
             MouseDown="titleBar_MouseDown">
             <Grid.Triggers>
-                <EventTrigger
-                    RoutedEvent="Grid.MouseEnter">
+                <EventTrigger RoutedEvent="Grid.MouseEnter">
                     <BeginStoryboard>
                         <Storyboard>
                             <DoubleAnimation
@@ -97,8 +104,7 @@
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger>
-                <EventTrigger
-                    RoutedEvent="Grid.MouseLeave">
+                <EventTrigger RoutedEvent="Grid.MouseLeave">
                     <BeginStoryboard>
                         <Storyboard>
                             <DoubleAnimation
@@ -111,70 +117,89 @@
             </Grid.Triggers>
             <StackPanel
                 Orientation="Horizontal"
-                HorizontalAlignment="Right"
-                Margin="0, 5, 5, 0">
+                HorizontalAlignment="Right">
                 <Button
                     x:Name="minBtn"
                     Click="minBtn_Click"
-                    Style="{StaticResource btnTitleBar}">
-                    -
-                </Button>
+                    Style="{StaticResource btnTitleBar}"
+                    Content="-"/>
                 <Button
                     x:Name="maxBtn"
                     Click="maxBtn_Click"
-                    Style="{StaticResource btnTitleBar}">
-                    o
-                </Button>
+                    Style="{StaticResource btnTitleBar}"
+                    Content="o"/>
                 <Button
                     x:Name="closeBtn"
                     Click="closeBtn_Click"
-                    Style="{StaticResource btnTitleBar}">
-                    x
-                </Button>
+                    Style="{StaticResource btnTitleBar}"
+                    Content="x"/>
             </StackPanel>
         </Grid>
         <!--#endregion-->
-        <DockPanel>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="80"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
             <Border
-                DockPanel.Dock="Top"
-                Style="{StaticResource borderBot}"
-                Margin="15, 0, 15, 0"
-                Padding="0, 0, 0, 30">
+                Grid.Row="0"
+                Style="{StaticResource borderBotCustom}">
                 <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
                     <TextBlock
-                        x:Name="txtTitle"
-                        FontSize="40"/>
+                        Grid.Column="1"
+                        x:Name="elemTitle"
+                        Style="{StaticResource tBlockElemTitle}"/>
                     <TextBlock
-                        x:Name="txtPort"
-                        Style="{StaticResource txtBlock}"
-                        VerticalAlignment="Bottom"/>
+                        Grid.Column="2"
+                        x:Name="elemSubtitle"
+                        Style="{StaticResource tBlock}"/>
                 </Grid>
             </Border>
-            <TextBlock
-                x:Name="txtLastUpdate"
-                DockPanel.Dock="Bottom"
-                Style="{StaticResource txtBlock}"
-                Margin="5"/>
-            <TabControl Style="{StaticResource tabControl}">
-                <TabItem
-                    Header="Theory"
-                    Style="{StaticResource tabItem}">
-                    <ScrollViewer Style="{StaticResource scrollViewer}">
-                        <StackPanel
-                            x:Name="spContentTheory"
-                            Style="{StaticResource spV}"/>
-                    </ScrollViewer>
-                </TabItem>
-                <TabItem
-                    Header="Hacking"
-                    Style="{StaticResource tabItem}">
-                    <ScrollViewer Style="{StaticResource scrollViewer}">
-                        <StackPanel
-                            x:Name="spContentHacking"
-                            Style="{StaticResource spV}"/>
-                    </ScrollViewer>
-                </TabItem>
-            </TabControl>
-        </DockPanel>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="5*"/>
+                </Grid.ColumnDefinitions>
+                <Border
+                    Grid.Column="0"
+                    Style="{StaticResource borderRight}">
+                    <ListBox
+                        x:Name="listChapters"
+                        Style="{StaticResource listBox}"/>
+                </Border>
+                <ScrollViewer
+                    Grid.Column="1"
+                    x:Name="scrollViewer"
+                    Style="{StaticResource scrollViewer}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="18*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Viewbox Grid.Column="1">
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource tBlockChapTitle}"/>
+                                <StackPanel x:Name="spContent"/>
+                            </StackPanel>
+                        </Viewbox>
+                    </Grid>
+                </ScrollViewer>
+            </Grid>
+            <Border
+                Grid.Row="2"
+                Style="{StaticResource borderTopCustom}">
+                <TextBlock
+                    x:Name="elemLastUpdate"
+                    Style="{StaticResource tBlockLastUpdate}"/>
+            </Border>
+        </Grid>
     </DockPanel>
 </Window>

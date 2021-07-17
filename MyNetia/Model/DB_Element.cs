@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace MyNetia.Model
@@ -6,23 +7,35 @@ namespace MyNetia.Model
     [Serializable]
     public class DB_Element
     {
-        public string name;
-        public string port;
-        public List<string> theoryTxt = new List<string>();
-        public List<string> hackingTxt = new List<string>();
-        public List<string> theoryImg = new List<string>();
-        public List<string> hackingImg = new List<string>();
-        public DateTime lastUpdate = new DateTime();
-
-        public DB_Element(string name, string port, List<string> theoryTxt, List<string> hackingTxt, List<string> theoryImg, List<string> hackingImg, DateTime date)
+        public string title;
+        public string subtitle;
+        private List<Chapter> _chapters = new List<Chapter>();
+        public List<Chapter> chapters
         {
-            this.name = name;
-            this.port = port;
-            this.theoryTxt = theoryTxt;
-            this.hackingTxt = hackingTxt;
-            this.theoryImg = theoryImg;
-            this.hackingImg = hackingImg;
-            lastUpdate = date;
+            get => _chapters;
+            set
+            {
+                if (_chapters != value)
+                    _chapters = value;
+            }
+        }
+        public DateTime lastUpdate;
+
+        public DB_Element(string title)
+        {
+            this.title = title;
+            subtitle = "";
+            _chapters.Add(new Chapter());
+            lastUpdate = DateTime.Now;
+        }
+
+        [JsonConstructor]
+        public DB_Element(string title, string subtitle, List<Chapter> listChap)
+        {
+            this.title = title;
+            this.subtitle = subtitle;
+            _chapters = listChap;
+            lastUpdate = DateTime.Now;
         }
     }
 }

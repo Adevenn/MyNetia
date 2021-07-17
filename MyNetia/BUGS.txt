@@ -1,0 +1,7 @@
+﻿----------------
+----- BUGS -----
+----------------
+
+
+- readJson not working anymore => custom contructor
+- 
