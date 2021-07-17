@@ -114,10 +114,10 @@ namespace MyNetia.Model
             FileManager.saveJson(jsonContent);
         }
 
-        public void copyJsonToDesktop()
+        public void saveJsonToDesktop()
         {
-            string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            FileManager.copyJson(path);
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\SaveDB.json";
+            FileManager.saveJsonToDesktop(path);
         }
         #endregion
     }

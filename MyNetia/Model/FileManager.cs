@@ -42,8 +42,10 @@ namespace MyNetia.Model
             createTxtFile(jsonPath, content);
         }
 
-        public static void copyJson(string path)
+        public static void saveJsonToDesktop(string path)
         {
+            if (!File.Exists(path))
+                createTxtFile(path, "");
             copyFile(path, jsonPath);
         }
 

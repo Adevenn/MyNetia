@@ -54,7 +54,7 @@ namespace MyNetia
                             }
                             break;
                         case Commands.saveAsJson:
-                            currentApp.dbManager.copyJsonToDesktop();
+                            currentApp.dbManager.saveJsonToDesktop();
                             break;
                         case Commands.help:
                         default:
