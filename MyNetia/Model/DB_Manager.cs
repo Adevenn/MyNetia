@@ -114,7 +114,7 @@ namespace MyNetia.Model
             FileManager.saveJson(jsonContent);
         }
 
-        public void copyJsonToDesktop()
+        public void saveJsonToDesktop()
         {
             string path = DirectoryManager.DESKTOP;
             FileManager.copyJson(path);

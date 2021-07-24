@@ -55,7 +55,7 @@ namespace MyNetia
                             }
                             break;
                         case Commands.saveAsJson:
-                            currentApp.dbManager.copyJsonToDesktop();
+                            currentApp.dbManager.saveJsonToDesktop();
                             break;
                         case Commands.loadJsonSave:
                             Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog
@@ -90,6 +90,7 @@ namespace MyNetia
             {
                 txtBox.Text = binds.matchingResearch[0];
                 //Set Keyboard focus at the end
+                txtBox.Focus();
                 txtBox.CaretIndex = txtBox.Text.Length;
             }
         }

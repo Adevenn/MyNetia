@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MyNetia"
         mc:Ignorable="d"
         Style="{StaticResource window}"
-        Title="MyNetia-Admin"
+        Title="Admin"
         WindowStartupLocation="CenterScreen"
         Closing="Window_Closing"
         MinHeight="800" MaxHeight="800"
@@ -141,9 +141,8 @@
         <!--#endregion-->
         
         <!--#region ItemControl Style-->
-        <Style x:Key="itemControlDelete" TargetType="ItemsControl">
+        <Style x:Key="itemControlDelete" BasedOn="{StaticResource itemControlBase}" TargetType="ItemsControl">
             <Setter Property="ItemsSource" Value="{Binding matchingResearch}"/>
-            <Setter Property="Margin" Value="10"/>
         </Style>
         <!--#endregion-->
 
