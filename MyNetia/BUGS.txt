@@ -3,5 +3,4 @@
 ----------------
 
 
-- readJson not working anymore => custom contructor
 - 

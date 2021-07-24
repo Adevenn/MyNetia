@@ -6,6 +6,7 @@ namespace MyNetia.Model
 {
     public static class DirectoryManager
     {
+        public static string DESKTOP = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         public static void createDirectory(string name)
         {
             string path = Path.GetFullPath(@".\AppResources\Images\" + name);

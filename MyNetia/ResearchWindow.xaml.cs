@@ -12,6 +12,7 @@ namespace MyNetia
     {
         private readonly App currentApp = (App)Application.Current;
         private readonly InfoBinding binds = new InfoBinding();
+        private string confirmLoad = "Confirm load ?\nThis will erase your actual save.";
 
         public ResearchWindow()
         {
@@ -55,6 +56,23 @@ namespace MyNetia
                             break;
                         case Commands.saveAsJson:
                             currentApp.dbManager.saveJsonToDesktop();
+                            break;
+                        case Commands.loadJsonSave:
+                            Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog
+                            {
+                                Filter = "Json files(*.json)| *.json",
+                                InitialDirectory = DirectoryManager.DESKTOP
+                            };
+                            bool? result = openFileDialog.ShowDialog();
+                            if (result == true)
+                            {
+                                ConfirmationWindow confirm = new ConfirmationWindow(confirmLoad)
+                                {
+                                    Owner = this
+                                };
+                                if (confirm.ShowDialog() == true)
+                                    currentApp.dbManager.loadJson(openFileDialog.FileName);
+                            }
                             break;
                         case Commands.help:
                         default:

@@ -20,7 +20,7 @@ namespace MyNetia.Model
             catch (IOException e) { throw new IOException("Read byte file failed:\n\n" + e.Message); }
         }
 
-        private static string readTxtFile(string path)
+        public static string readTxtFile(string path)
         {
             try { return File.ReadAllText(path); }
             catch (IOException e) { throw new IOException("Read text file failed:\n\n" + e.Message); }

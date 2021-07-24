@@ -3,7 +3,10 @@
 - Avoir une preview du résultat final (autre fenetre ? Miniature ? Btn pour Show/Hide ?)
 - Fait d avoir des titres (différenciation entre simple texte et titre)
 - Personnalisation de text, via RichTextBox e.g.
-- Charger une save externe (fichier json qu on selectionne)
 - Drag and drop des texts et images
 - Selection du theme
 - Selection dans reasearch via le subtitle aussi (utile pour la recherche via le port e.g.)
+- Copier les images directement dans les bons dossiers
+(remplacer les textBox par des bouttons qui vont chercher le chemin du fichier
+et a la save copier toutes les images (=> Mettre la save en async ?)
+- 
