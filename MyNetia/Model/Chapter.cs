@@ -23,7 +23,7 @@ namespace MyNetia.Model
             }
         }
         public List<string> texts;
-        public List<string> images;
+        public List<byte[]> images;
 
         public Chapter()
         {
@@ -32,14 +32,14 @@ namespace MyNetia.Model
             {
                 ""
             };
-            images = new List<string>
+            images = new List<byte[]>
             {
-                ""
+                new byte[0]
             };
         }
 
         [JsonConstructor]
-        public Chapter(string chapTitle, List<string> texts, List<string> images)
+        public Chapter(string chapTitle, List<string> texts, List<byte[]> images)
         {
             this.chapTitle = chapTitle;
             this.texts = texts;

@@ -81,7 +81,7 @@ namespace MyNetia
                     if (window.ShowDialog() == true)
                     {
                         //Add new Element
-                        currentApp.dbManager.addElement(binding.selectAddUpdate);
+                        currentApp.dbManager.addElementOffline(binding.selectAddUpdate);
                         setElement(binding.selectAddUpdate);
                     }
                 }
@@ -95,7 +95,7 @@ namespace MyNetia
 
         private void setElement(string title)
         {
-            DB_Element elem = currentApp.dbManager.getElement(title);
+            Element elem = currentApp.dbManager.getElement(title);
             binding.oldElemTitle = elem.title;
             binding.elemTitle = elem.title;
             binding.elemSubtitle = elem.subtitle;
@@ -208,7 +208,7 @@ namespace MyNetia
             //Save chapter's content
             int id = listChapters.SelectedIndex;
             binding.chapters[id].texts = new List<string>(binding.getTxtList());
-            binding.chapters[id].images = new List<string>(binding.getImgList());
+            binding.chapters[id].images = new List<byte[]>(binding.getImgList());
         }
 
         private void itemListText_PreviewGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
@@ -226,7 +226,7 @@ namespace MyNetia
         private void valid_Click(object sender, RoutedEventArgs e)
         {
             //Update selected element
-            currentApp.dbManager.updateElement(binding.oldElemTitle, binding.elemTitle, binding.elemSubtitle, new List<Chapter>(binding.chapters));
+            currentApp.dbManager.updateElementOffline(binding.oldElemTitle, binding.elemTitle, binding.elemSubtitle, new List<Chapter>(binding.chapters));
             imageValid.Visibility = Visibility.Visible;
             animImageOpacity(imageValid);
         }
@@ -310,7 +310,7 @@ namespace MyNetia
         {
             if (e.Key == Key.Return && currentApp.dbManager.isElementExist(binding.selectionDel))
             {
-                //Confirmation dialog to confirm element's creation
+                //Confirm element creation
                 ConfirmationWindow window = new ConfirmationWindow("Do you want to delete " + binding.selectionDel + " ?")
                 {
                     Owner = this
@@ -319,6 +319,7 @@ namespace MyNetia
                 {
                     //Delete element
                     currentApp.dbManager.deleteElement(binding.selectionDel);
+                    currentApp.dbManager.getTitles();
                     helpResearch();
                 }
             }
@@ -337,12 +338,7 @@ namespace MyNetia
 
         private void helpResearch()
         {
-            binding.matchingResearch = new ObservableCollection<string>();
-            foreach (string txt in currentApp.dbManager.getTitles())
-            {
-                if (txt.Contains(binding.selectionDel))
-                    binding.matchingResearch.Add(txt);
-            }
+            binding.matchingResearch = new ObservableCollection<string>(currentApp.dbManager.matchingResearch(binding.selectionDel));
         }
         #endregion
 
@@ -531,11 +527,11 @@ namespace MyNetia
                 return stringList;
             }
 
-            public List<string> getImgList()
+            public List<byte[]> getImgList()
             {
-                List<string> stringList = new List<string>();
-                foreach (ItemContent item in images)
-                    stringList.Add(item.content);
+                List<byte[]> stringList = new List<byte[]>();
+                foreach (ItemContent item in images) ;
+                    //stringList.Add(item.content);
                 return stringList;
             }
 
@@ -546,11 +542,14 @@ namespace MyNetia
                     texts.Add(new ItemContent(s));
             }
 
-            public void setImgList(List<string> stringList)
+            public void setImgList(List<byte[]> stringList)
             {
                 images = new ObservableCollection<ItemContent>();
-                foreach (string s in stringList)
-                    images.Add(new ItemContent(s));
+                foreach (byte[] b in stringList)
+                {
+                    //images.Add(new ItemContent(b));
+                }
+
             }
 
             private string _selectionDel = "";

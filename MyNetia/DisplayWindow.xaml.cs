@@ -30,7 +30,7 @@ namespace MyNetia
 
         private void setValues(string title)
         {
-            DB_Element elem = currentApp.dbManager.getElement(title);
+            Element elem = currentApp.dbManager.getElement(title);
             elemTitle.Text = elem.title;
             elemSubtitle.Text = elem.subtitle;
             binding.chapters = new ObservableCollection<Chapter>(elem.chapters);
@@ -47,7 +47,7 @@ namespace MyNetia
         #endregion
 
         #region UI CREATOR
-        private void setUI(List<string> txt, List<string> img, StackPanel sp)
+        private void setUI(List<string> txt, List<byte[]> img, StackPanel sp)
         {
             sp.Children.Clear();
             int idTxt = 0;
@@ -66,7 +66,7 @@ namespace MyNetia
                 }
                 if (idImg < img.Count)
                 {
-                    if (!string.IsNullOrWhiteSpace(img[idImg]))
+                    if (!string.IsNullOrWhiteSpace(img[idImg].ToString()))
                     {
                         string path = elemTitle.Text + @"\" + img[idImg];
                         if (FileManager.isImageExist(path))

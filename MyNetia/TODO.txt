@@ -1,12 +1,13 @@
 ﻿- DB externe
-- Lien hypertext
 - Avoir une preview du résultat final (autre fenetre ? Miniature ? Btn pour Show/Hide ?)
-- Fait d avoir des titres (différenciation entre simple texte et titre)
 - Personnalisation de text, via RichTextBox e.g.
+	- Lien hypertext
+	- Fait d avoir des titres (différenciation entre simple texte et titre)
 - Drag and drop des texts et images
 - Selection du theme
-- Selection dans reasearch via le subtitle aussi (utile pour la recherche via le port e.g.)
+- Selection dans reasearch via le subtitle aussi (utile pour la recherche via le port e.g.) (Probleme, plusieurs fois le meme nom)
 - Copier les images directement dans les bons dossiers
 (remplacer les textBox par des bouttons qui vont chercher le chemin du fichier
-et a la save copier toutes les images (=> Mettre la save en async ?)
-- 
+et a la save copier toutes les images
+- Mettre la save d'elements en async (Dans add/update)
+- Crypter les save + UI (password)

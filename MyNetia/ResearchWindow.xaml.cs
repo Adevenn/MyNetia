@@ -1,6 +1,9 @@
 ﻿using MyNetia.Model;
+using Npgsql;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,7 +20,8 @@ namespace MyNetia
         public ResearchWindow()
         {
             DataContext = binds;
-            currentApp.dbManager.readJson();
+            currentApp.dbManager.setup();
+            //currentApp.dbManager.readJson();
             InitializeComponent();
             helpResearchBar();
         }
@@ -34,7 +38,7 @@ namespace MyNetia
             {
                 if (currentApp.dbManager.isElementExist(txtBox.Text))
                 {
-                    DB_Element elem = currentApp.dbManager.getElement(txtBox.Text);
+                    Element elem = currentApp.dbManager.getElement(txtBox.Text);
                     if (!currentApp.isOpenWindow(elem.title))
                     {
                         DisplayWindow displayWindow = new DisplayWindow(elem.title);
@@ -98,12 +102,7 @@ namespace MyNetia
         #region OTHERS METHODS
         private void helpResearchBar()
         {
-            binds.matchingResearch = new ObservableCollection<string>();
-            foreach (string txt in currentApp.dbManager.getTitles())
-            {
-                if (txt.Contains(txtBox.Text))
-                    binds.matchingResearch.Add(txt);
-            }
+            binds.matchingResearch = new ObservableCollection<string>(currentApp.dbManager.matchingResearch(txtBox.Text));
         }
         #endregion
 

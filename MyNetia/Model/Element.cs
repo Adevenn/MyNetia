@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace MyNetia.Model
 {
     [Serializable]
-    public class DB_Element
+    public class Element
     {
         public string title;
         public string subtitle;
@@ -21,7 +21,7 @@ namespace MyNetia.Model
         }
         public DateTime lastUpdate;
 
-        public DB_Element(string title)
+        public Element(string title)
         {
             this.title = title;
             subtitle = "";
@@ -30,7 +30,7 @@ namespace MyNetia.Model
         }
 
         [JsonConstructor]
-        public DB_Element(string title, string subtitle, List<Chapter> listChap)
+        public Element(string title, string subtitle, List<Chapter> listChap)
         {
             this.title = title;
             this.subtitle = subtitle;
