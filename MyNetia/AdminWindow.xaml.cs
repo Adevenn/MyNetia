@@ -16,6 +16,7 @@ namespace MyNetia
     {
         private readonly App currentApp = (App)Application.Current;
         private readonly InfoBinding binding = new InfoBinding();
+        private Element currentElem;
         private Point dragOriginPoint;
         private bool isDraging = false;
         private bool isElemSelected;
@@ -72,19 +73,7 @@ namespace MyNetia
             else if (e.Key == Key.Return)
             {
                 if (DirectoryManager.isValidName(binding.selectAddUpdate) && !string.IsNullOrWhiteSpace(binding.selectAddUpdate))
-                {
-                    //Confirm element's creation
-                    ConfirmationWindow window = new ConfirmationWindow("Do you want to add " + binding.selectAddUpdate + " ?")
-                    {
-                        Owner = this
-                    };
-                    if (window.ShowDialog() == true)
-                    {
-                        //Add new Element
-                        //DB_Manager.addElement(binding.selectAddUpdate);
-                        //setElement(binding.selectAddUpdate);
-                    }
-                }
+                    setElement(binding.selectAddUpdate);
                 else
                 {
                     //TODO : Display something in the window like : *invalid
@@ -95,12 +84,11 @@ namespace MyNetia
 
         private void setElement(string title)
         {
-            //Select the element if it exists, else return a new element
-            Element elem = DB_Manager.getElement(title);
-            binding.oldElemTitle = elem.title;
-            binding.elemTitle = elem.title;
-            binding.elemSubtitle = elem.subtitle;
-            binding.chapters = new ObservableCollection<Chapter>(elem.chapters);
+            currentElem = DB_Manager.getElement(title);
+            binding.oldElemTitle = currentElem.title;
+            binding.elemTitle = currentElem.title;
+            binding.elemSubtitle = currentElem.subtitle;
+            binding.chapters = new ObservableCollection<Chapter>(currentElem.chapters);
             listChapters.SelectedIndex = 0;
             setIsElemSelected(true);
         }
@@ -114,7 +102,7 @@ namespace MyNetia
                 listChapters.SelectedIndex = 0;
             //Set by default 1 empty chapter
             if (binding.chapters.Count == 0)
-                binding.chapters.Add(new Chapter());
+                binding.chapters.Add(new Chapter(listChapters.Items.Count.ToString()));
             setChapterValues((Chapter)listChapters.SelectedItem);
         }
 
@@ -122,16 +110,21 @@ namespace MyNetia
         {
             if (!isDraging)
             {
-                binding.chapTitle = ch.chapTitle;
+                binding.chapTitle = ch.title;
                 binding.setTxtList(ch.texts);
                 binding.setImgList(ch.images);
             }
         } 
 
+        /// <summary>
+        /// Add a new chapter on clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void addChapter_Click(object sender, RoutedEventArgs e)
         {
             //Add and select the new chapter
-            binding.chapters.Add(new Chapter());
+            binding.chapters.Add(new Chapter(listChapters.Items.Count.ToString()));
             listChapters.SelectedIndex = listChapters.Items.Count - 1;
         }
         #endregion
@@ -159,7 +152,7 @@ namespace MyNetia
         {
             //Update chapList with the new chapTitle
             int id = listChapters.SelectedIndex;
-            binding.chapters[id].chapTitle = chapTitle.Text;
+            binding.chapters[id].title = chapTitle.Text;
         }
 
         private void listTxt_KeyDown(object sender, KeyEventArgs e)
@@ -528,7 +521,7 @@ namespace MyNetia
             {
                 List<string> titles = new List<string>();
                 foreach(Chapter ch in chapters)
-                    titles.Add(ch.chapTitle);
+                    titles.Add(ch.title);
                 return titles;
             }
 

@@ -11,6 +11,7 @@
         Closing="Window_Closing"
         MinHeight="800" MaxHeight="800"
         MinWidth="750" MaxWidth="750">
+    
     <Window.Resources>
 
         <!--#region TextBox Style-->
@@ -94,7 +95,7 @@
             <EventSetter Event="SelectionChanged" Handler="listChapters_SelectionChanged"/>
             <EventSetter Event="PreviewMouseMove" Handler="listChapters_PreviewMouseMove"/>
             <Setter Property="ItemsSource" Value="{Binding chapters, UpdateSourceTrigger=PropertyChanged}"/>
-            <Setter Property="DisplayMemberPath" Value="chapTitle"/>
+            <Setter Property="DisplayMemberPath" Value="title"/>
             <Setter Property="ItemContainerStyle" Value="{StaticResource itemListBoxChapters}"/>
         </Style>
 

@@ -29,6 +29,11 @@ namespace MyNetia.Model
             catch (DirectoryNotFoundException e) { throw new DirectoryNotFoundException("Path is incorrect:\n\n" + e.Message); }
         }
 
+        /// <summary>
+        /// Return true if the name is valid, return false if the name is not valid
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public static bool isValidName(string name)
         {
             Regex containsABadCharacter = new Regex("[" + Regex.Escape(new string(Path.GetInvalidPathChars())) + "]");

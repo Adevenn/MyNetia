@@ -33,10 +33,9 @@ namespace MyNetia
             {
                 if (DB_Manager.isElementExist(txtBox.Text))
                 {
-                    Element elem = DB_Manager.getElement(txtBox.Text);
-                    if (!currentApp.isOpenWindow(elem.title))
+                    if (!currentApp.isOpenWindow(txtBox.Text))
                     {
-                        DisplayWindow displayWindow = new DisplayWindow(elem.title);
+                        DisplayWindow displayWindow = new DisplayWindow(txtBox.Text);
                         currentApp.addWindow(displayWindow.Title);
                         displayWindow.Show();
                     }

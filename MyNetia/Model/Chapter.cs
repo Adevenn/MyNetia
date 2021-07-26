@@ -7,7 +7,7 @@ namespace MyNetia.Model
     public class Chapter : INotifyPropertyChanged
     {
         private string _chapTitle;
-        public string chapTitle
+        public string title
         {
             get => _chapTitle;
             set
@@ -22,18 +22,18 @@ namespace MyNetia.Model
         public List<string> texts;
         public List<byte[]> images;
 
-        public Chapter()
+        public Chapter(string title)
         {
-            chapTitle = "New chapter";
-            texts = new List<string>();
-            texts.Add("");
-            images = new List<byte[]>();
-            images.Add(new byte[0]);
+            this.title = "Chapter " + title;
+            this.texts = new List<string>();
+            this.texts.Add("");
+            this.images = new List<byte[]>();
+            this.images.Add(new byte[0]);
         }
 
         public Chapter(string title, List<string> texts, List<byte[]> images)
         {
-            this.chapTitle = title;
+            this.title = title;
             this.texts = texts;
             this.images = images;
         }

@@ -1,15 +1,17 @@
 ﻿using Npgsql;
 using System;
 using System.Collections.Generic;
-using System.Data;
 
 namespace MyNetia.Model
 {
     public static class DB_Manager
     {
-        public static List<string> elemTitles;
+        public static List<string> elemTitles { get; private set; }
         private static NpgsqlConnection connection;
 
+        /// <summary>
+        /// Setup connection and app datas
+        /// </summary>
         public static void setup()
         {
             string connString = "Server = localhost; Port = 5432; Database = MyNetia; Username = Adeven; Password = 1963258740";
@@ -17,7 +19,14 @@ namespace MyNetia.Model
             getTitles();
         }
 
-        #region Data Modifs
+        /// <summary>
+        /// Add a new element in the database
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="subtitle"></param>
+        /// <param name="chapTitles"></param>
+        /// <param name="texts"></param>
+        /// <param name="images"></param>
         public static async void addElement(string title, string subtitle, List<string> chapTitles, List<List<string>> texts, List<List<byte[]>> images)
         {
             /* Integrity constraint
@@ -69,21 +78,32 @@ namespace MyNetia.Model
                 cmd.Dispose();
                 connection.Close();
             }
-            catch (Exception e) { throw new Exception(e.Message); }
-            getTitles();
+            catch (NpgsqlException e) { throw new NpgsqlException(e.Message); }
         }
 
+        /// <summary>
+        /// Update an element in the database
+        /// </summary>
+        /// <param name="oldTitle"></param>
+        /// <param name="title"></param>
+        /// <param name="subtitle"></param>
+        /// <param name="chapTitles"></param>
+        /// <param name="texts"></param>
+        /// <param name="images"></param>
         public static void updateElement(string oldTitle, string title, string subtitle, List<string> chapTitles, List<List<string>> texts, List<List<byte[]>> images)
         {
             deleteElement(oldTitle);
             addElement(title, subtitle, chapTitles, texts ,images);
         }
 
+        /// <summary>
+        /// Delete an element in the database
+        /// </summary>
+        /// <param name="title"></param>
         public static async void deleteElement(string title)
         {
             try
             {
-                //Connect to DB
                 connection.Open();
 
                 //DELETE ELEMENT
@@ -91,16 +111,15 @@ namespace MyNetia.Model
                 cmd.Parameters.AddWithValue("p", title);
                 await cmd.ExecuteNonQueryAsync();
 
-                //DISCONNECT FROM DB
                 cmd.Dispose();
                 connection.Close();
             }
-            catch (Exception e) { throw new Exception(e.Message); }
-            getTitles();
+            catch (NpgsqlException e) { throw new NpgsqlException(e.Message); }
         }
-        #endregion
 
-        #region Data Access
+        /// <summary>
+        /// Select every element title in the database and store them in elemTitles
+        /// </summary>
         public static void getTitles()
         {
             //Connect to DB
@@ -113,10 +132,7 @@ namespace MyNetia.Model
             //STORE TITLES
             elemTitles = new List<string>();
             while (reader.Read())
-            {
-                //Store the value of the first column
                 elemTitles.Add(reader.GetString(0));
-            }
 
             //DISCONNECT FROM DB
             cmd.Dispose();
@@ -124,7 +140,7 @@ namespace MyNetia.Model
         }
 
         /// <summary>
-        /// Return the selected element or return a new element if the title doesn't exist
+        /// Select the element if it exists, else return a new element
         /// </summary>
         /// <param name="title"></param>
         /// <returns></returns>
@@ -196,6 +212,11 @@ namespace MyNetia.Model
             return new Element(title);
         }
 
+        /// <summary>
+        /// Return true if the element exits, else return false
+        /// </summary>
+        /// <param name="title"></param>
+        /// <returns></returns>
         public static bool isElementExist(string title)
         {
             for (int i = 0; i < elemTitles.Count; i++)
@@ -206,6 +227,11 @@ namespace MyNetia.Model
             return false;
         }
 
+        /// <summary>
+        /// Return a list of string matching with the parameter
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <returns></returns>
         public static List<string> matchingResearch(string txt)
         {
             List<string> matchList = new List<string>();
@@ -216,6 +242,5 @@ namespace MyNetia.Model
             }
             return matchList;
         }
-        #endregion
     }
 }

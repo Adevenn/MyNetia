@@ -41,7 +41,7 @@ namespace MyNetia
         private void setChapterValues(Chapter ch)
         {
             scrollViewer.ScrollToTop();
-            binding.chapTitle = ch.chapTitle;
+            binding.chapTitle = ch.title;
             setUI(ch.texts, ch.images, spContent);
         }
         #endregion

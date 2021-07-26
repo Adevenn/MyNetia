@@ -14,7 +14,7 @@ namespace MyNetia.Model
         {
             this.title = title;
             this.subtitle = "";
-            this.chapters.Add(new Chapter());
+            this.chapters.Add(new Chapter("0"));
             this.lastUpdate = DateTime.Now;
         }
 

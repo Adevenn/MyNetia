@@ -19,7 +19,8 @@ namespace MyNetia
         #region UI CREATOR
         private void loadProtocols()
         {
-            for (int i = 0; i < DB_Manager.elemTitles.Count; i++)
+            List<string> list = DB_Manager.elemTitles;
+            for (int i = 0; i < list.Count; i++)
             {
                 StackPanel s = new StackPanel
                 {
@@ -27,8 +28,8 @@ namespace MyNetia
                 };
                 for (int j = i; j < i + 3; j++)
                 {
-                    if (j < DB_Manager.elemTitles.Count)
-                        s.Children.Add(setLabel(DB_Manager.elemTitles[j]));
+                    if (j < list.Count)
+                        s.Children.Add(setLabel(list[j]));
                     else
                         break;
                 }
