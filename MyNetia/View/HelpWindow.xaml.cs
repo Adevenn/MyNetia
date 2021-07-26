@@ -22,10 +22,7 @@ namespace MyNetia
             List<string> list = DB_Manager.elemTitles;
             for (int i = 0; i < list.Count; i++)
             {
-                StackPanel s = new StackPanel
-                {
-                    Style = (Style)Application.Current.TryFindResource("spH")
-                };
+                StackPanel s = setSP();
                 for (int j = i; j < i + 3; j++)
                 {
                     if (j < list.Count)
@@ -45,10 +42,24 @@ namespace MyNetia
                 stackCommands.Children.Add(setLabel(txt));
         }
 
+        /// <summary>
+        /// Create a custom Label
+        /// </summary>
+        /// <param name="content"></param>
+        /// <returns></returns>
         private Label setLabel(string content) => new Label
         {
             Content = content,
             Style = (Style)Resources["label"]
+        };
+
+        /// <summary>
+        /// Create a custom StackPanel
+        /// </summary>
+        /// <returns></returns>
+        private StackPanel setSP() => new StackPanel
+        {
+            Style = (Style)Application.Current.TryFindResource("spH")
         };
         #endregion
 
