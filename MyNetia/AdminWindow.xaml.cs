@@ -64,7 +64,7 @@ namespace MyNetia
         #region Elem Selection
         private void selectAddUpdate_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Return && currentApp.dbManager.isElementExist(binding.selectAddUpdate))
+            if (e.Key == Key.Return && DB_Manager.isElementExist(binding.selectAddUpdate))
             {
                 //Apply element selection
                 setElement(binding.selectAddUpdate);
@@ -81,8 +81,8 @@ namespace MyNetia
                     if (window.ShowDialog() == true)
                     {
                         //Add new Element
-                        currentApp.dbManager.addElementOffline(binding.selectAddUpdate);
-                        setElement(binding.selectAddUpdate);
+                        //DB_Manager.addElement(binding.selectAddUpdate);
+                        //setElement(binding.selectAddUpdate);
                     }
                 }
                 else
@@ -95,7 +95,8 @@ namespace MyNetia
 
         private void setElement(string title)
         {
-            Element elem = currentApp.dbManager.getElement(title);
+            //Select the element if it exists, else return a new element
+            Element elem = DB_Manager.getElement(title);
             binding.oldElemTitle = elem.title;
             binding.elemTitle = elem.title;
             binding.elemSubtitle = elem.subtitle;
@@ -226,7 +227,11 @@ namespace MyNetia
         private void valid_Click(object sender, RoutedEventArgs e)
         {
             //Update selected element
-            currentApp.dbManager.updateElementOffline(binding.oldElemTitle, binding.elemTitle, binding.elemSubtitle, new List<Chapter>(binding.chapters));
+            if (DB_Manager.isElementExist(binding.oldElemTitle))
+                DB_Manager.updateElement(binding.oldElemTitle, binding.elemTitle, binding.elemSubtitle, binding.getChapTitles(), binding.getAllTexts(), binding.getAllImg());
+            else
+                DB_Manager.addElement(binding.elemTitle, binding.elemSubtitle, binding.getChapTitles(), binding.getAllTexts(), binding.getAllImg());
+
             imageValid.Visibility = Visibility.Visible;
             animImageOpacity(imageValid);
         }
@@ -308,7 +313,7 @@ namespace MyNetia
 
         private void selectionDelete_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Return && currentApp.dbManager.isElementExist(binding.selectionDel))
+            if (e.Key == Key.Return && DB_Manager.isElementExist(binding.selectionDel))
             {
                 //Confirm element creation
                 ConfirmationWindow window = new ConfirmationWindow("Do you want to delete " + binding.selectionDel + " ?")
@@ -318,8 +323,8 @@ namespace MyNetia
                 if (window.ShowDialog() == true)
                 {
                     //Delete element
-                    currentApp.dbManager.deleteElement(binding.selectionDel);
-                    currentApp.dbManager.getTitles();
+                    DB_Manager.deleteElement(binding.selectionDel);
+                    DB_Manager.getTitles();
                     helpResearch();
                 }
             }
@@ -338,7 +343,7 @@ namespace MyNetia
 
         private void helpResearch()
         {
-            binding.matchingResearch = new ObservableCollection<string>(currentApp.dbManager.matchingResearch(binding.selectionDel));
+            binding.matchingResearch = new ObservableCollection<string>(DB_Manager.matchingResearch(binding.selectionDel));
         }
         #endregion
 
@@ -519,6 +524,30 @@ namespace MyNetia
                 }
             }
 
+            public List<string> getChapTitles()
+            {
+                List<string> titles = new List<string>();
+                foreach(Chapter ch in chapters)
+                    titles.Add(ch.chapTitle);
+                return titles;
+            }
+
+            public List<List<string>> getAllTexts()
+            {
+                List<List<string>> masterList = new List<List<string>>();
+                foreach (Chapter ch in chapters)
+                    masterList.Add(ch.texts);
+                return masterList;
+            }
+
+            public List<List<byte[]>> getAllImg()
+            {
+                List<List<byte[]>> masterlist = new List<List<byte[]>>();
+                foreach (Chapter ch in chapters)
+                    masterlist.Add(ch.images);
+                return masterlist;
+            }
+
             public List<string> getTxtList()
             {
                 List<string> stringList = new List<string>();
@@ -549,7 +578,6 @@ namespace MyNetia
                 {
                     //images.Add(new ItemContent(b));
                 }
-
             }
 
             private string _selectionDel = "";

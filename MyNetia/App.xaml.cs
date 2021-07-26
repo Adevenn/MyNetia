@@ -9,7 +9,6 @@ namespace MyNetia
 {
     public partial class App : Application
     {
-        public readonly DB_Manager dbManager = new DB_Manager();
         //1 window type open at a time
         private readonly List<string> openWindows = new List<string>();
 

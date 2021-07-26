@@ -1,12 +1,9 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace MyNetia.Model
 {
-    [Serializable]
     public class Chapter : INotifyPropertyChanged
     {
         private string _chapTitle;
@@ -28,20 +25,15 @@ namespace MyNetia.Model
         public Chapter()
         {
             chapTitle = "New chapter";
-            texts = new List<string>
-            {
-                ""
-            };
-            images = new List<byte[]>
-            {
-                new byte[0]
-            };
+            texts = new List<string>();
+            texts.Add("");
+            images = new List<byte[]>();
+            images.Add(new byte[0]);
         }
 
-        [JsonConstructor]
-        public Chapter(string chapTitle, List<string> texts, List<byte[]> images)
+        public Chapter(string title, List<string> texts, List<byte[]> images)
         {
-            this.chapTitle = chapTitle;
+            this.chapTitle = title;
             this.texts = texts;
             this.images = images;
         }

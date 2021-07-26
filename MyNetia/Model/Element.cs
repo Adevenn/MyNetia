@@ -1,41 +1,37 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace MyNetia.Model
 {
-    [Serializable]
     public class Element
     {
         public string title;
         public string subtitle;
-        private List<Chapter> _chapters = new List<Chapter>();
-        public List<Chapter> chapters
-        {
-            get => _chapters;
-            set
-            {
-                if (_chapters != value)
-                    _chapters = value;
-            }
-        }
+        public List<Chapter> chapters = new List<Chapter>();
         public DateTime lastUpdate;
 
         public Element(string title)
         {
             this.title = title;
-            subtitle = "";
-            _chapters.Add(new Chapter());
-            lastUpdate = DateTime.Now;
+            this.subtitle = "";
+            this.chapters.Add(new Chapter());
+            this.lastUpdate = DateTime.Now;
         }
 
-        [JsonConstructor]
-        public Element(string title, string subtitle, List<Chapter> listChap)
+        public Element(string title, string subtitle, List<Chapter> chapters)
         {
             this.title = title;
             this.subtitle = subtitle;
-            _chapters = listChap;
-            lastUpdate = DateTime.Now;
+            this.chapters = chapters;
+            this.lastUpdate = DateTime.Now;
+        }
+
+        public Element(string title, string subtitle, List<Chapter> chapters, DateTime lastUpdate)
+        {
+            this.title = title;
+            this.subtitle = subtitle;
+            this.chapters = chapters;
+            this.lastUpdate = lastUpdate;
         }
     }
 }

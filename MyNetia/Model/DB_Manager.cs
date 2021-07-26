@@ -1,83 +1,24 @@
-﻿using Newtonsoft.Json;
-using Npgsql;
+﻿using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Data;
 
 namespace MyNetia.Model
 {
-    [Serializable]
-    public class DB_Manager
+    public static class DB_Manager
     {
-        private List<Element> _db = new List<Element>();
-        public List<Element> db => _db;
+        public static List<string> elemTitles;
+        private static NpgsqlConnection connection;
 
-        private List<string> _elemTitles;
-        public List<string> elemTitles => _elemTitles;
-
-        private readonly string server = "localhost";
-        private readonly string port = "5432";
-        private readonly string database = "MyNetia";
-        private readonly string userID = "Adeven";
-        private readonly string password = "1963258740";
-        private NpgsqlConnection connection;
-
-        public void setup()
+        public static void setup()
         {
             string connString = "Server = localhost; Port = 5432; Database = MyNetia; Username = Adeven; Password = 1963258740";
             connection = new NpgsqlConnection(connString);
             getTitles();
         }
 
-        #region DB modifs OFFLINE
-        public void addElementOffline(string title)
-        {
-            if (!isElementExist(title))
-            {
-                DirectoryManager.createDirectory(title);
-                _db.Add(new Element(title));
-                sortDBOffline();
-            }
-            else
-                throw new Exception("Impossible to add 2 times the same element title");
-        }
-
-        public void updateElementOffline(string oldTitle, string title, string subtitle, List<Chapter> chapList)
-        {
-            if(oldTitle != title)
-                DirectoryManager.renameDirectory(oldTitle, title);
-            int id = getElementID(oldTitle);
-            _db[id] = new Element(title, subtitle, chapList);
-            sortDBOffline();
-        }
-
-        public void deleteElementOffline(string title)
-        {
-            DirectoryManager.deleteDirectory(title);
-            int id = getElementID(title);
-            _db.RemoveAt(id);
-            sortDBOffline();
-        }
-
-        private void sortDBOffline()
-        {
-            for (int i = 1; i < db.Count; i++)
-            {
-                if (_db[i].title.CompareTo(_db[i - 1].title) == -1)
-                {
-                    Element elem = _db[i];
-                    _db[i] = _db[i - 1];
-                    _db[i - 1] = elem;
-                    i = 1;
-                }
-            }
-            saveJson();
-        }
-        #endregion
-
-
-        #region DB modifs
-        public async void addElement(string title, string subtitle, List<string> chapTitles, List<List<string>> texts, List<List<byte[]>> images)
+        #region Data Modifs
+        public static async void addElement(string title, string subtitle, List<string> chapTitles, List<List<string>> texts, List<List<byte[]>> images)
         {
             /* Integrity constraint
              * Element title MUST be unique
@@ -132,12 +73,13 @@ namespace MyNetia.Model
             getTitles();
         }
 
-        public async void updateElement()
+        public static void updateElement(string oldTitle, string title, string subtitle, List<string> chapTitles, List<List<string>> texts, List<List<byte[]>> images)
         {
-            throw new NotImplementedException();
+            deleteElement(oldTitle);
+            addElement(title, subtitle, chapTitles, texts ,images);
         }
 
-        public async void deleteElement(string title)
+        public static async void deleteElement(string title)
         {
             try
             {
@@ -158,22 +100,22 @@ namespace MyNetia.Model
         }
         #endregion
 
-        #region Access to DB
-        public void getTitles()
+        #region Data Access
+        public static void getTitles()
         {
             //Connect to DB
             connection.Open();
 
             //SELECT TITLES
-            NpgsqlCommand cmd = new NpgsqlCommand("SELECT DISTINCT title FROM elements", connection);
+            NpgsqlCommand cmd = new NpgsqlCommand("SELECT title FROM elements ORDER BY title", connection);
             var reader = cmd.ExecuteReader();
 
             //STORE TITLES
-            _elemTitles = new List<string>();
+            elemTitles = new List<string>();
             while (reader.Read())
             {
                 //Store the value of the first column
-                _elemTitles.Add(reader.GetString(0));
+                elemTitles.Add(reader.GetString(0));
             }
 
             //DISCONNECT FROM DB
@@ -181,40 +123,90 @@ namespace MyNetia.Model
             connection.Close();
         }
 
-        public List<string> getTitlesOffline()
+        /// <summary>
+        /// Return the selected element or return a new element if the title doesn't exist
+        /// </summary>
+        /// <param name="title"></param>
+        /// <returns></returns>
+        public static Element getElement(string title)
         {
-            _elemTitles = new List<string>();
-            foreach (Element elem in db)
-                _elemTitles.Add(elem.title);
-            return _elemTitles;
-        }
-
-        public Element getElement(string title)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Element getElementOffline(string title)
-        {
-            for (int i = 0; i < db.Count; i++)
+            if (isElementExist(title))
             {
-                if (_elemTitles[i] == title)
-                    return db[i];
+                NpgsqlCommand cmd;
+                NpgsqlDataReader reader;
+                string subtitle;
+                DateTime lastUpdate;
+                List<Chapter> chapters = new List<Chapter>();
+                List<string> chapTitles = new List<string>();
+                List<string> txtList;
+                List<byte[]> imgList;
+
+                try
+                {
+                    //SELECT ELEMENT
+                    connection.Open();
+                    cmd = new NpgsqlCommand("SELECT subtitle, lastupdate FROM elements WHERE title = @p;", connection);
+                    cmd.Parameters.AddWithValue("p", title);
+                    reader = cmd.ExecuteReader();
+                    reader.Read();
+                    subtitle = reader.GetString(0);
+                    lastUpdate = reader.GetDateTime(1);
+                    connection.Close();
+                
+                    //SELECT CHAPTERS
+                    connection.Open();
+                    cmd = new NpgsqlCommand("SELECT title FROM chapters WHERE idelem = @p", connection);
+                    cmd.Parameters.AddWithValue("p", title);
+                    reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                        chapTitles.Add(reader.GetString(0));
+                    connection.Close();
+
+                    //STORE CHAPTERS DATA
+                    foreach (string ch in chapTitles)
+                    {
+                        //SELECT TEXTS
+                        connection.Open();
+                        txtList = new List<string>();
+                        cmd = new NpgsqlCommand("SELECT string FROM texts WHERE idelem = @p AND idchap = @p2", connection);
+                        cmd.Parameters.AddWithValue("p", title);
+                        cmd.Parameters.AddWithValue("p2", ch);
+                        reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                            txtList.Add(reader.GetString(1));
+                        connection.Close();
+
+                        //SELECT IMAGES
+                        connection.Open();
+                        imgList = new List<byte[]>();
+                        cmd = new NpgsqlCommand("SELECT image FROM images WHERE idelem = @p AND idchap = @p2", connection);
+                        cmd.Parameters.AddWithValue("p", title);
+                        cmd.Parameters.AddWithValue("p2", ch);
+                        reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                            imgList.Add(System.Text.Encoding.ASCII.GetBytes(reader.GetString(1)));
+                        connection.Close();
+
+                        chapters.Add(new Chapter(ch, txtList, imgList));
+                    }
+                    return new Element(title, subtitle, chapters, lastUpdate);
+                }
+                catch(NpgsqlException e) { throw new NpgsqlException(e.Message); }
             }
             return new Element(title);
         }
 
-        public bool isElementExist(string title)
+        public static bool isElementExist(string title)
         {
             for (int i = 0; i < elemTitles.Count; i++)
             {
-                if (_elemTitles[i] == title)
+                if (elemTitles[i] == title)
                     return true;
             }
             return false;
         }
 
-        public List<string> matchingResearch(string txt)
+        public static List<string> matchingResearch(string txt)
         {
             List<string> matchList = new List<string>();
             foreach (string s in elemTitles)
@@ -223,48 +215,6 @@ namespace MyNetia.Model
                     matchList.Add(s);
             }
             return matchList;
-        }
-
-        private int getElementID(string title)
-        {
-            for (int i = 0; i < db.Count; i++)
-            {
-                if (_elemTitles[i] == title)
-                    return i;
-            }
-            return -1;
-        }
-        #endregion
-
-        #region Json Manager
-        public void readJson()
-        {
-            try
-            {
-                string jsonContent = FileManager.loadJson();
-                if (!string.IsNullOrWhiteSpace(jsonContent))
-                    _db = JsonConvert.DeserializeObject<DB_Manager>(jsonContent).db;
-            }
-            catch (JsonSerializationException) { _db = new List<Element>(); }
-        }
-
-        public void saveJson()
-        {
-            string jsonContent = JsonConvert.SerializeObject(new { db }, Formatting.None);
-            FileManager.saveJson(jsonContent);
-        }
-
-        public void copyJsonToDesktop()
-        {
-            string path = DirectoryManager.DESKTOP;
-            FileManager.copyJson(path);
-        }
-
-        public void loadJson(string path)
-        {
-            string jsonContent = FileManager.readTxtFile(path);
-            FileManager.saveJson(jsonContent);
-            readJson();
         }
         #endregion
     }

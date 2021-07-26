@@ -1,9 +1,6 @@
 ﻿using MyNetia.Model;
-using Npgsql;
-using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Data;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,13 +12,11 @@ namespace MyNetia
     {
         private readonly App currentApp = (App)Application.Current;
         private readonly InfoBinding binds = new InfoBinding();
-        private string confirmLoad = "Confirm load ?\nThis will erase your actual save.";
 
         public ResearchWindow()
         {
             DataContext = binds;
-            currentApp.dbManager.setup();
-            //currentApp.dbManager.readJson();
+            DB_Manager.setup();
             InitializeComponent();
             helpResearchBar();
         }
@@ -36,9 +31,9 @@ namespace MyNetia
         {
             if (e.Key == Key.Return)
             {
-                if (currentApp.dbManager.isElementExist(txtBox.Text))
+                if (DB_Manager.isElementExist(txtBox.Text))
                 {
-                    Element elem = currentApp.dbManager.getElement(txtBox.Text);
+                    Element elem = DB_Manager.getElement(txtBox.Text);
                     if (!currentApp.isOpenWindow(elem.title))
                     {
                         DisplayWindow displayWindow = new DisplayWindow(elem.title);
@@ -58,26 +53,14 @@ namespace MyNetia
                                 adminWindow.Show();
                             }
                             break;
-                        case Commands.saveAsJson:
-                            currentApp.dbManager.copyJsonToDesktop();
-                            break;
-                        case Commands.loadJsonSave:
+                        /*case Commands.loadJsonSave:
                             Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog
                             {
                                 Filter = "Json files(*.json)| *.json",
                                 InitialDirectory = DirectoryManager.DESKTOP
                             };
                             bool? result = openFileDialog.ShowDialog();
-                            if (result == true)
-                            {
-                                ConfirmationWindow confirm = new ConfirmationWindow(confirmLoad)
-                                {
-                                    Owner = this
-                                };
-                                if (confirm.ShowDialog() == true)
-                                    currentApp.dbManager.loadJson(openFileDialog.FileName);
-                            }
-                            break;
+                            break;*/
                         case Commands.help:
                         default:
                             HelpWindow helpWindow = new HelpWindow();
@@ -102,7 +85,7 @@ namespace MyNetia
         #region OTHERS METHODS
         private void helpResearchBar()
         {
-            binds.matchingResearch = new ObservableCollection<string>(currentApp.dbManager.matchingResearch(txtBox.Text));
+            binds.matchingResearch = new ObservableCollection<string>(DB_Manager.matchingResearch(txtBox.Text));
         }
         #endregion
 
