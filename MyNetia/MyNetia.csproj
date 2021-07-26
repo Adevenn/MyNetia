@@ -21,7 +21,6 @@
   <ItemGroup>
     <None Remove="AppResources\Images\DefaultImage.png" />
     <None Remove="AppResources\Images\Valid_MyNetia.png" />
-    <None Remove="AppResources\SaveDB.json" />
     <None Remove="ReadMe.txt" />
     <Content Include="Licence.txt">
       <Pack>True</Pack>
@@ -47,15 +46,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="AppResources\Images\DefaultImage.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="AppResources\SaveDB.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Resource Include="AppResources\Images\DefaultImage.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Content Include="ReadMe.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="App.xaml" />
   </ItemGroup>
 
   <ItemGroup>

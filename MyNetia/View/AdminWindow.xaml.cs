@@ -54,7 +54,7 @@ namespace MyNetia
 
         public AdminWindow()
         {
-            DataContext = binding;
+            this.DataContext = binding;
             setIsElemSelected(false);
             InitializeComponent();
         }
@@ -62,18 +62,25 @@ namespace MyNetia
 
         #region EVENTS ADD/UPDATE
 
-        #region Elem Selection
+        /// <summary>
+        /// When Return is pressed and if the text value is valid, set element values
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void selectAddUpdate_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Return && DB_Manager.isElementExist(binding.selectAddUpdate))
+            if (e.Key == Key.Return)
             {
-                //Apply element selection
-                setElement(binding.selectAddUpdate);
-            }
-            else if (e.Key == Key.Return)
-            {
-                if (DirectoryManager.isValidName(binding.selectAddUpdate) && !string.IsNullOrWhiteSpace(binding.selectAddUpdate))
-                    setElement(binding.selectAddUpdate);
+                if (DirectoryManager.isValidName(binding.selectAddUpdate))
+                {
+                    currentElem = DB_Manager.getElement(binding.selectAddUpdate);
+                    binding.oldElemTitle = currentElem.title;
+                    binding.elemTitle = currentElem.title;
+                    binding.elemSubtitle = currentElem.subtitle;
+                    binding.chapters = new ObservableCollection<Chapter>(currentElem.chapters);
+                    listChapters.SelectedIndex = 0;
+                    setIsElemSelected(true);
+                }
                 else
                 {
                     //TODO : Display something in the window like : *invalid
@@ -82,19 +89,11 @@ namespace MyNetia
             }
         }
 
-        private void setElement(string title)
-        {
-            currentElem = DB_Manager.getElement(title);
-            binding.oldElemTitle = currentElem.title;
-            binding.elemTitle = currentElem.title;
-            binding.elemSubtitle = currentElem.subtitle;
-            binding.chapters = new ObservableCollection<Chapter>(currentElem.chapters);
-            listChapters.SelectedIndex = 0;
-            setIsElemSelected(true);
-        }
-        #endregion
-
-        #region ChaptersList Setup
+        /// <summary>
+        /// Set the new chapter values on listChapters selection has changed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void listChapters_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //Select by default the first item when element selection changed
@@ -106,6 +105,10 @@ namespace MyNetia
             setChapterValues((Chapter)listChapters.SelectedItem);
         }
 
+        /// <summary>
+        /// Set chapter values
+        /// </summary>
+        /// <param name="ch"></param>
         private void setChapterValues(Chapter ch)
         {
             if (!isDraging)
@@ -127,7 +130,6 @@ namespace MyNetia
             binding.chapters.Add(new Chapter(listChapters.Items.Count.ToString()));
             listChapters.SelectedIndex = listChapters.Items.Count - 1;
         }
-        #endregion
 
         #region ChaptersListItems Setup
         private void chapTitle_KeyDown(object sender, KeyEventArgs e)

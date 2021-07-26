@@ -10,7 +10,10 @@
         WindowStartupLocation="CenterOwner"
         MinHeight="250" MaxHeight="250"
         MinWidth="400" MaxWidth="400">
+    
     <Window.Resources>
+        
+        <!--#region Label Style-->
         <Style x:Key="label" BasedOn="{StaticResource labelBase}" TargetType="Label">
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="Height" Value="60"/>
@@ -18,12 +21,16 @@
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
             <Setter Property="Margin" Value="0, 10"/>
         </Style>
+        <!--#endregion-->
 
+        <!--#region Button Style-->
         <Style x:Key="btnConfirm" BasedOn="{StaticResource btnBase}" TargetType="Button">
             <Setter Property="Height" Value="40"/>
             <Setter Property="Width" Value="120"/>
             <Setter Property="Margin" Value="10"/>
         </Style>
+        <!--#endregion-->
+        
     </Window.Resources>
     
     <DockPanel>

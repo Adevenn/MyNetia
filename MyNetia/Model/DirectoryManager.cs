@@ -37,7 +37,7 @@ namespace MyNetia.Model
         public static bool isValidName(string name)
         {
             Regex containsABadCharacter = new Regex("[" + Regex.Escape(new string(Path.GetInvalidPathChars())) + "]");
-            if (containsABadCharacter.IsMatch(name)) { return false; };
+            if (containsABadCharacter.IsMatch(name) || string.IsNullOrWhiteSpace(name)) { return false; };
             return true;
         }
     }
