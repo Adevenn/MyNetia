@@ -16,18 +16,18 @@ namespace MyNetia
         private readonly InfoBinding binding = new InfoBinding();
         public DisplayWindow(string title)
         {
-            DataContext = binding;
+            this.DataContext = binding;
             InitializeComponent();
-            Title = title;
+            this.Title = title;
             setValues(title);
         }
 
         #region EVENTS
-        private void listChapters_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            setChapterValues((Chapter)listChapters.SelectedItem);
-        }
 
+        /// <summary>
+        /// Set the element values and select the first chapter
+        /// </summary>
+        /// <param name="title"></param>
         private void setValues(string title)
         {
             Element elem = DB_Manager.getElement(title);
@@ -38,8 +38,14 @@ namespace MyNetia
             elemLastUpdate.Text = "Last update : " + elem.lastUpdate.Month.ToString() + "/" + elem.lastUpdate.Day.ToString() + "/" + elem.lastUpdate.Year.ToString();
         }
 
-        private void setChapterValues(Chapter ch)
+        /// <summary>
+        /// Set the chapters values on chapter selection changed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void listChapters_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            Chapter ch = (Chapter)listChapters.SelectedItem;
             scrollViewer.ScrollToTop();
             binding.chapTitle = ch.title;
             setUI(ch.texts, ch.images, spContent);
@@ -47,6 +53,13 @@ namespace MyNetia
         #endregion
 
         #region UI CREATOR
+
+        /// <summary>
+        /// Create text and image zones
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <param name="img"></param>
+        /// <param name="sp"></param>
         private void setUI(List<string> txt, List<byte[]> img, StackPanel sp)
         {
             sp.Children.Clear();
@@ -67,13 +80,7 @@ namespace MyNetia
                 if (idImg < img.Count)
                 {
                     if (!string.IsNullOrWhiteSpace(img[idImg].ToString()))
-                    {
-                        string path = elemTitle.Text + @"\" + img[idImg];
-                        if (FileManager.isImageExist(path))
-                            spHoriz.Children.Add(image(FileManager.readByteFile(path)));
-                        else
-                            spHoriz.Children.Add(image(FileManager.defaultImage()));
-                    }
+                        spHoriz.Children.Add(image(img[idImg]));
                     idImg++;
                 }
                 sp.Children.Add(spHoriz);
@@ -82,12 +89,22 @@ namespace MyNetia
             }
         }
 
+        /// <summary>
+        /// Create a custom TextBox
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         private TextBlock setTxtBlock(string text) => new TextBlock
         {
             Text = text,
             Style = (Style)Resources["tBlock"]
         };
 
+        /// <summary>
+        /// Create a custom image
+        /// </summary>
+        /// <param name="imageFile"></param>
+        /// <returns></returns>
         private Image image(byte[] imageFile) => new Image
         {
             Source = loadImage(imageFile),
@@ -96,6 +113,12 @@ namespace MyNetia
         #endregion
 
         #region OTHERS METHODS
+
+        /// <summary>
+        /// Create WPF BitmapImage from byte[] values
+        /// </summary>
+        /// <param name="imageData"></param>
+        /// <returns></returns>
         private BitmapImage loadImage(byte[] imageData)
         {
             if (imageData == null || imageData.Length == 0)

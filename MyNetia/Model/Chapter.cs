@@ -6,15 +6,15 @@ namespace MyNetia.Model
 {
     public class Chapter : INotifyPropertyChanged
     {
-        private string _chapTitle;
+        private string _title;
         public string title
         {
-            get => _chapTitle;
+            get => _title;
             set
             {
-                if(_chapTitle != value)
+                if(_title != value)
                 {
-                    _chapTitle = value;
+                    _title = value;
                     OnPropertyChanged();
                 }
             }

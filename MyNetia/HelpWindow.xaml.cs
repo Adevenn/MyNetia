@@ -37,12 +37,14 @@ namespace MyNetia
                 i += 2;
             }
         }
+
         private void loadCommands()
         {
             List<string> commands = currentApp.commandsList();
             foreach (string txt in commands)
                 stackCommands.Children.Add(setLabel(txt));
         }
+
         private Label setLabel(string content) => new Label
         {
             Content = content,
