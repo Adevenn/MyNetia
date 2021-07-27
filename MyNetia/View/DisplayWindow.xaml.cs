@@ -1,5 +1,4 @@
 ﻿using MyNetia.Model;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -10,13 +9,26 @@ using System.Windows.Media.Imaging;
 
 namespace MyNetia
 {
-    public partial class DisplayWindow : Window
+    public partial class DisplayWindow : Window, INotifyPropertyChanged
     {
         private readonly App currentApp = (App)Application.Current;
-        private readonly InfoBinding binding = new InfoBinding();
+        private Element _elem;
+        public Element elem
+        {
+            get => _elem;
+            set
+            {
+                if(_elem != value)
+                {
+                    _elem = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public DisplayWindow(string title)
         {
-            this.DataContext = binding;
+            this.DataContext = this;
             InitializeComponent();
             this.Title = title;
             setValues(title);
@@ -30,58 +42,57 @@ namespace MyNetia
         /// <param name="title"></param>
         private void setValues(string title)
         {
-            Element elem = DB_Manager.getElement(title);
-            elemTitle.Text = elem.title;
-            elemSubtitle.Text = elem.subtitle;
-            binding.chapters = new ObservableCollection<Chapter>(elem.chapters);
+            elem = DB_Manager.getElement(title);
             listChapters.SelectedIndex = 0;
             elemLastUpdate.Text = "Last update : " + elem.lastUpdate.Month.ToString() + "/" + elem.lastUpdate.Day.ToString() + "/" + elem.lastUpdate.Year.ToString();
         }
 
         /// <summary>
-        /// Set the chapters values on chapter selection changed
+        /// Set the chapters values on chapter selection changed and scroll to top
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void listChapters_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Chapter ch = (Chapter)listChapters.SelectedItem;
+            setUI(ch, spContent);
             scrollViewer.ScrollToTop();
-            binding.chapTitle = ch.title;
-            setUI(ch.texts, ch.images, spContent);
         }
         #endregion
 
         #region UI CREATOR
 
         /// <summary>
-        /// Create text and image zones
+        /// Create text and image zones and set title
         /// </summary>
         /// <param name="txt"></param>
         /// <param name="img"></param>
         /// <param name="sp"></param>
-        private void setUI(ObservableCollection<string> txt, ObservableCollection<byte[]> img, StackPanel sp)
+        private void setUI(Chapter ch, StackPanel sp)
         {
+            chapTitle.Text = ch.title;
+            ObservableCollection<string> texts = ch.texts;
+            ObservableCollection<byte[]> images = ch.images;
             sp.Children.Clear();
             int idTxt = 0;
             int idImg = 0;
             while (true)
             {
                 StackPanel spHoriz = setStackPanel();
-                if (idTxt < txt.Count)
+                if (idTxt < texts.Count)
                 {
-                    if (!string.IsNullOrWhiteSpace(txt[idTxt]))
-                        spHoriz.Children.Add(setTxtBlock(txt[idTxt]));
+                    if (!string.IsNullOrWhiteSpace(texts[idTxt]))
+                        spHoriz.Children.Add(setTxtBlock(texts[idTxt]));
                     idTxt++;
                 }
-                if (idImg < img.Count)
+                if (idImg < images.Count)
                 {
-                    if (!string.IsNullOrWhiteSpace(img[idImg].ToString()))
-                        spHoriz.Children.Add(setImage(img[idImg]));
+                    if (!string.IsNullOrWhiteSpace(images[idImg].ToString()))
+                        spHoriz.Children.Add(setImage(images[idImg]));
                     idImg++;
                 }
                 sp.Children.Add(spHoriz);
-                if (idTxt >= txt.Count && idImg >= img.Count)
+                if (idTxt >= texts.Count && idImg >= images.Count)
                     break;
             }
         }
@@ -192,41 +203,10 @@ namespace MyNetia
 
         #endregion
 
-        private class InfoBinding : INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
-            private string _chapTitle;
-            public string chapTitle
-            {
-                get { return _chapTitle; }
-                set
-                {
-                    if (_chapTitle != value)
-                    {
-                        _chapTitle = value;
-                        OnPropertyChanged();
-                    }
-                }
-            }
-
-            private ObservableCollection<Chapter> _chapters;
-            public ObservableCollection<Chapter> chapters
-            {
-                get { return _chapters; }
-                set
-                {
-                    if (_chapters != value)
-                    {
-                        _chapters = value;
-                        OnPropertyChanged();
-                    }
-                }
-            }
-
-            public event PropertyChangedEventHandler PropertyChanged;
-            protected void OnPropertyChanged([CallerMemberName] string name = null)
-            {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }

@@ -229,8 +229,6 @@ namespace MyNetia
             currentElem.chapters.Add(new Chapter(listChapters.Items.Count.ToString()));
             listChapters.SelectedIndex = listChapters.Items.Count - 1;
         }
-
-        #region ChaptersItems Setup
         
         /// <summary>
         /// Update item inside ListBox when title text has changed
@@ -344,9 +342,10 @@ namespace MyNetia
             imageValid.Visibility = Visibility.Visible;
             animImageOpacity(imageValid);
         }
+
         #endregion
 
-        # region Drag and drop ItemListBox
+        #region Drag and drop ItemListBox
         private void listChaptersItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             dragOriginPoint = e.GetPosition(null);
@@ -409,8 +408,6 @@ namespace MyNetia
                 }
             }
         }
-        #endregion
-
         #endregion
 
 
