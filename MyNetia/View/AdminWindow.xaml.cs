@@ -28,6 +28,7 @@ namespace MyNetia
                 }
             }
         }
+        private int idSelectedChap = -1;
         private string _selectAddUpdate = "";
         public string selectAddUpdate
         {
@@ -143,7 +144,6 @@ namespace MyNetia
         {
             this.DataContext = this;
             InitializeComponent();
-            setIsElemSelected(false);
             matchingResearchUpdate();
         }
 
@@ -163,8 +163,6 @@ namespace MyNetia
                 {
                     currentElem = DB_Manager.getElement(selectAddUpdate);
                     oldElemTitle = currentElem.title;
-                    texts = new ObservableCollection<string>(currentElem.chapters[0].texts);
-                    images = new ObservableCollection<byte[]>(currentElem.chapters[0].images);
                     listChapters.SelectedIndex = 0;
                     setIsElemSelected(true);
                 }
@@ -185,26 +183,15 @@ namespace MyNetia
         {
             if (!isDraging)
             {
-                if (listChapters.SelectedIndex != -1)
-                {
-                    //saveCurrentChapter();
-                }
+                //Set by default 1 empty chapter
+                if (currentElem.chapters.Count == 0)
+                    currentElem.chapters.Add(new Chapter("1"));
                 //Select by default the first item if nothing is selected
                 if (listChapters.SelectedIndex == -1)
                     listChapters.SelectedIndex = 0;
-                //Set by default 1 empty chapter
-                if (currentElem.chapters.Count == 0)
-                    currentElem.chapters.Add(new Chapter(listChapters.Items.Count.ToString()));
                 setChapterValues((Chapter)listChapters.SelectedItem);
+                idSelectedChap = listChapters.SelectedIndex;
             }
-        }
-
-        private void saveCurrentChapter()
-        {
-            //Save chapter's content
-            int id = listChapters.SelectedIndex;
-            currentElem.chapters[id].texts = texts;
-            currentElem.chapters[id].images = images;
         }
 
         /// <summary>
@@ -226,7 +213,7 @@ namespace MyNetia
         private void addChapter_Click(object sender, RoutedEventArgs e)
         {
             //Add and select the new chapter
-            currentElem.chapters.Add(new Chapter(listChapters.Items.Count.ToString()));
+            currentElem.chapters.Add(new Chapter((listChapters.Items.Count + 1).ToString()));
             listChapters.SelectedIndex = listChapters.Items.Count - 1;
         }
         
@@ -327,13 +314,23 @@ namespace MyNetia
         }
 
         /// <summary>
+        /// Save content when lost focus
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void listBoxItem_LostFocus(object sender, RoutedEventArgs e)
+        {
+            currentElem.chapters[idSelectedChap].texts = texts;
+            currentElem.chapters[idSelectedChap].images = images;
+        }
+
+        /// <summary>
         /// Valid element content and save it in the database
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void valid_Click(object sender, RoutedEventArgs e)
         {
-            saveCurrentChapter();
             if (DB_Manager.isElementExist(oldElemTitle))
                 DB_Manager.updateElement(oldElemTitle, currentElem);
             else
@@ -342,7 +339,6 @@ namespace MyNetia
             imageValid.Visibility = Visibility.Visible;
             animImageOpacity(imageValid);
         }
-
         #endregion
 
         #region Drag and drop ItemListBox

@@ -19,8 +19,32 @@ namespace MyNetia.Model
                 }
             }
         }
-        public ObservableCollection<string> texts;
-        public ObservableCollection<byte[]> images;
+        private ObservableCollection<string> _texts;
+        public ObservableCollection<string> texts
+        {
+            get => _texts;
+            set
+            {
+                if(_texts != value)
+                {
+                    _texts = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private ObservableCollection<byte[]> _images;
+        public ObservableCollection<byte[]> images
+        {
+            get => _images;
+            set
+            {
+                if(_images != value)
+                {
+                    _images = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public Chapter(string title)
         {

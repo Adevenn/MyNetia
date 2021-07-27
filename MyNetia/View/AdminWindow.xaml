@@ -93,10 +93,15 @@
                 <Setter.Value>
                     <Style TargetType="ListBoxItem">
                         <EventSetter Event="PreviewGotKeyboardFocus" Handler="itemList_PreviewGotKeyboardFocus"/>
+                        <EventSetter Event="LostFocus" Handler="listBoxItem_LostFocus"/>
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                    <TextBox Style="{StaticResource tBox}" Text="{Binding Content.images, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                    <!--Make the TextBox.Text have the same value as ListBoxItem.Contentvia RelativeSource (Change the DataContext to Parent)-->
+                                    <TextBox
+                                        Style="{StaticResource tBox}"
+                                        Text="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}"
+                                        LostFocus="listBoxItem_LostFocus"/>
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
@@ -123,7 +128,11 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                    <TextBox Style="{StaticResource tBoxMultiLines}" Text="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                    <!--Make the TextBox.Text have the same value as ListBoxItem.Contentvia RelativeSource (Change the DataContext to Parent)-->
+                                    <TextBox
+                                        Style="{StaticResource tBoxMultiLines}"
+                                        Text="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}"
+                                        LostFocus="listBoxItem_LostFocus"/>
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
@@ -162,9 +171,11 @@
 
         <!--#region Button Style-->
         <Style x:Key="btnAddChapter" BasedOn="{StaticResource btnBase}" TargetType="Button">
+            <EventSetter Event="Click" Handler="addChapter_Click"/>
             <Setter Property="FontSize" Value="15"/>
             <Setter Property="Height" Value="20"/>
             <Setter Property="Width" Value="75"/>
+            <Setter Property="Content" Value="+"/>
         </Style>
 
         <Style x:Key="btnValid" BasedOn="{StaticResource btnBase}" TargetType="Button">
@@ -289,10 +300,7 @@
                                     Style="{StaticResource label}"
                                     HorizontalContentAlignment="Center"
                                     Content="Chapters :"/>
-                                <Button
-                                    Style="{StaticResource btnAddChapter}"
-                                    Click="addChapter_Click"
-                                    Content="+"/>
+                                <Button Style="{StaticResource btnAddChapter}"/>
                             </StackPanel>
                             <ListBox
                                 Grid.Row="1"
