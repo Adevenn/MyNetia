@@ -96,11 +96,11 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                    <!--Make the TextBox.Text have the same value as ListBoxItem.Content via RelativeSource (Change the DataContext to Parent)-->
-                                    <TextBox
-                                        Style="{StaticResource tBox}"
-                                        Text="{Binding Content, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource TemplatedParent}}"
-                                        PreviewLostKeyboardFocus="itemListImg_PreviewLostKeyboardFocus"/>
+                                    <!--Make the Button.Content have the same value as ListBoxItem.Content via RelativeSource (Change the DataContext to Parent)-->
+                                    <Button
+                                        Style="{StaticResource btnBase}"
+                                        Content="{Binding Content, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource TemplatedParent}}"
+                                        Click="imgBtn_Click"/>
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
@@ -337,6 +337,11 @@
                                         <Label
                                             Style="{StaticResource label}"
                                             Content="Image :"/>
+                                        <Button
+                                            Style="{StaticResource btnBase}"
+                                            VerticalAlignment="Top"
+                                            Content="+"
+                                            Click="addImg_Click"/>
                                         <ListBox
                                             x:Name="listImg"
                                             Style="{StaticResource listBoxImg}"/>

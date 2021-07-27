@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 
 namespace MyNetia.Model
 {
@@ -64,17 +65,17 @@ namespace MyNetia.Model
                         cmd.Parameters.AddWithValue("p", s);
                         cmd.Parameters.AddWithValue("p2", chapTitles[i]);
                         cmd.Parameters.AddWithValue("p3", elem.title);
-                        await cmd.ExecuteNonQueryAsync();
+                        await cmd .ExecuteNonQueryAsync();
                     }
 
                     //INSERT IMAGES
                     foreach (byte[] img in images[i])
                     {
-                        cmd = new NpgsqlCommand("INSERT INTO texts (string, idchap, idelem) VALUES (@p, @p2, @p3)", connection);
+                        cmd = new NpgsqlCommand("INSERT INTO images (image, idchap, idelem) VALUES (@p, @p2, @p3)", connection);
                         cmd.Parameters.AddWithValue("p", img);
                         cmd.Parameters.AddWithValue("p2", chapTitles[i]);
                         cmd.Parameters.AddWithValue("p3", elem.title);
-                        await cmd.ExecuteNonQueryAsync();
+                        await cmd .ExecuteNonQueryAsync();
                     }
                 }
 
@@ -104,17 +105,19 @@ namespace MyNetia.Model
         /// Delete an element in the database
         /// </summary>
         /// <param name="title"></param>
-        public static async void deleteElement(string title)
+        public static void deleteElement(string title)
         {
             try
             {
+                //CONNECT TO DB
                 connection.Open();
 
                 //DELETE ELEMENT
                 NpgsqlCommand cmd = new NpgsqlCommand("DELETE FROM elements WHERE title=(@p)", connection);
                 cmd.Parameters.AddWithValue("p", title);
-                await cmd.ExecuteNonQueryAsync();
+                cmd.ExecuteNonQueryAsync();
 
+                //DISCONNECT FROM DB
                 cmd.Dispose();
                 connection.Close();
             }
@@ -202,16 +205,18 @@ namespace MyNetia.Model
                         cmd = new NpgsqlCommand("SELECT image FROM images WHERE idelem = @p AND idchap = @p2", connection);
                         cmd.Parameters.AddWithValue("p", title);
                         cmd.Parameters.AddWithValue("p2", ch);
-                        reader = cmd.ExecuteReader();
-                        while (reader.Read())
-                            imgList.Add(System.Text.Encoding.ASCII.GetBytes(reader.GetString(0)));
+                        DataTable dt = new DataTable();
+                        NpgsqlDataAdapter nda = new NpgsqlDataAdapter(cmd);
+                        nda.Fill(dt);
                         connection.Close();
+                        foreach (DataRow row in dt.Rows)
+                            imgList.Add((byte[])row["image"]);
 
                         chapters.Add(new Chapter(ch, txtList, imgList));
                     }
                     return new Element(title, subtitle, chapters, lastUpdate);
                 }
-                catch(NpgsqlException e) { throw new NpgsqlException(e.Message); }
+                catch (NpgsqlException e) { throw new NpgsqlException(e.Message); }
             }
             return new Element(title);
         }

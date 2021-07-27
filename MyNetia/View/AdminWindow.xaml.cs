@@ -1,9 +1,10 @@
 ﻿using MyNetia.Model;
+using MyNetia.View;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -316,17 +317,40 @@ namespace MyNetia
         }
 
         /// <summary>
-        /// Save image content when lose keayboard focus
+        /// Add an image in the list
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void itemListImg_PreviewLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        private void addImg_Click(object sender, RoutedEventArgs e)
         {
-            //No access to TextBox by another way than events (Cause ListBoxItem template changed)
-            //This code is really bullshit
-            TextBox t = (TextBox)sender;
-            images[listTxt.SelectedIndex] = Encoding.ASCII.GetBytes(t.Text);
-            currentElem.chapters[listChapters.SelectedIndex].images = images;
+            images.Add(new byte[0]);
+        }
+
+        private void imgBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button)sender;
+            ImageEditorWindow window = new ImageEditorWindow(btn.Content.ToString())
+            {
+                Owner = this
+            };
+            if (window.ShowDialog() == true)
+            {
+                string path = window.path;
+                if (path == "delete"){
+                    //Remove item from list
+                }
+                else if (path == "")
+                {
+                    string fileName = "";
+                    byte[] image = new byte[0];
+                }
+                else
+                {
+                    string fileName = FileManager.getFileName(window.path);
+                    byte[] image = FileManager.readByteFile(window.path);
+                    //Change item from list
+                }
+            }
         }
 
         /// <summary>
@@ -337,9 +361,9 @@ namespace MyNetia
         private void valid_Click(object sender, RoutedEventArgs e)
         {
             if (DB_Manager.isElementExist(oldElemTitle))
-                DB_Manager.updateElement(oldElemTitle, currentElem);
+                new Thread(() => DB_Manager.updateElement(oldElemTitle, currentElem)).Start();
             else
-                DB_Manager.addElement(currentElem);
+                new Thread(() => DB_Manager.addElement(currentElem)).Start();
             //Show Validation image
             imageValid.Visibility = Visibility.Visible;
             animImageOpacity(imageValid);

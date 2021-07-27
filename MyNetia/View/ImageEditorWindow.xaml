@@ -1,38 +1,28 @@
-﻿<Window x:Class="MyNetia.ConfirmationWindow"
+﻿<Window x:Class="MyNetia.View.ImageEditorWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MyNetia"
+        xmlns:local="clr-namespace:MyNetia.View"
         mc:Ignorable="d"
         Style="{StaticResource window}"
-        Title="Confirmation"
+        Title="Image Editor"
         WindowStartupLocation="CenterOwner"
-        MinHeight="250" MaxHeight="250"
+        MinHeight="300" MaxHeight="300"
         MinWidth="400" MaxWidth="400">
     
     <Window.Resources>
         
-        <!--#region Label Style-->
-        <Style x:Key="label" BasedOn="{StaticResource labelBase}" TargetType="Label">
-            <Setter Property="FontSize" Value="20"/>
-            <Setter Property="Height" Value="60"/>
-            <Setter Property="VerticalAlignment" Value="Top"/>
-            <Setter Property="HorizontalContentAlignment" Value="Left"/>
-            <Setter Property="Margin" Value="0, 10"/>
+        <Style x:Key="tBlock" TargetType="TextBlock" BasedOn="{StaticResource tBlockBase}">
+            <Setter Property="Text" Value="{Binding Path=content, UpdateSourceTrigger=PropertyChanged}"/>
+            <Setter Property="Width" Value="150"/>
         </Style>
-        <!--#endregion-->
 
-        <!--#region Button Style-->
-        <Style x:Key="btnConfirm" BasedOn="{StaticResource btnBase}" TargetType="Button">
-            <Setter Property="Height" Value="40"/>
-            <Setter Property="Width" Value="120"/>
-            <Setter Property="Margin" Value="10"/>
+        <Style x:Key="btn" TargetType="Button" BasedOn="{StaticResource btnBase}">
+            
         </Style>
-        <!--#endregion-->
-        
     </Window.Resources>
-    
+
     <DockPanel>
         <!--#region TITLE BAR-->
         <Grid
@@ -84,19 +74,21 @@
         </Grid>
         <!--#endregion-->
         <StackPanel Style="{StaticResource spV}">
-            <Label
-                x:Name="label"
-                Style="{StaticResource label}"/>
             <StackPanel Style="{StaticResource spH}">
+                <TextBlock Style="{StaticResource tBlock}"/>
                 <Button
-                    Style="{StaticResource btnConfirm}"
-                    Click="btnYes_Click"
-                    Content="Yes"/>
-                <Button
-                    Style="{StaticResource btnConfirm}"
-                    Click="btnNo_Click"
-                    Content="No"/>
+                    Style="{StaticResource btn}"
+                    Content="_>"
+                    Click="reasearch_Click"/>
             </StackPanel>
+            <Button
+                Style="{StaticResource btn}"
+                Content="Delete"
+                Click="delete_Click"/>
+            <Button
+                Style="{StaticResource btn}"
+                Content="Make null"
+                Click="null_Click"/>
         </StackPanel>
     </DockPanel>
 </Window>

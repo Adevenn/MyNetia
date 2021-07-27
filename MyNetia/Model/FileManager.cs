@@ -4,7 +4,6 @@ namespace MyNetia.Model
 {
     public static class FileManager
     {
-        private static readonly string jsonPath = Path.GetFullPath(@".\AppResources\SaveDB.json");
         private static readonly string defaultImgPath = Path.GetFullPath(@".\AppResources\Images\DefaultImage.png");
         private static readonly string imagesPath = Path.GetFullPath(@".\AppResources\Images\");
 
@@ -32,24 +31,9 @@ namespace MyNetia.Model
             catch (IOException e) { throw new IOException("File copy failed\n\n" + e.Message); }
         }
 
-        public static bool isImageExist(string path)
+        public static string getFileName(string path)
         {
-            return File.Exists(imagesPath + path);
-        }
-
-        public static void saveJson(string content)
-        {
-            createTxtFile(jsonPath, content);
-        }
-
-        public static void copyJson(string path)
-        {
-            copyFile(path, jsonPath);
-        }
-
-        public static string loadJson()
-        {
-            return readTxtFile(jsonPath);
+            return Path.GetFileName(path);
         }
 
         public static byte[] defaultImage()

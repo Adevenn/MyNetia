@@ -88,14 +88,6 @@ namespace MyNetia
                                 adminWindow.Show();
                             }
                             break;
-                        /*case Commands.loadJsonSave:
-                            Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog
-                            {
-                                Filter = "Json files(*.json)| *.json",
-                                InitialDirectory = DirectoryManager.DESKTOP
-                            };
-                            bool? result = openFileDialog.ShowDialog();
-                            break;*/
                         case Commands.help:
                         default:
                             HelpWindow helpWindow = new HelpWindow();
