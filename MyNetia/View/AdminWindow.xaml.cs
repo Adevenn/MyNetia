@@ -179,7 +179,7 @@ namespace MyNetia
         }
 
         /// <summary>
-        /// Set the new chapter values on listChapters selection has changed
+        /// Set the new chapter values when listChapters selection has changed
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -193,19 +193,12 @@ namespace MyNetia
                 //Select by default the first item if nothing is selected
                 if (listChapters.SelectedIndex == -1)
                     listChapters.SelectedIndex = 0;
-                setChapterValues((Chapter)listChapters.SelectedItem);
+                //Set chapter values
+                Chapter ch = (Chapter)listChapters.SelectedItem;
+                chapTitle = ch.title;
+                texts = new ObservableCollection<string>(ch.texts);
+                images = new ObservableCollection<byte[]>(ch.images);
             }
-        }
-
-        /// <summary>
-        /// Set chapter values
-        /// </summary>
-        /// <param name="ch"></param>
-        private void setChapterValues(Chapter ch)
-        {
-            chapTitle = ch.title;
-            texts = new ObservableCollection<string>(ch.texts);
-            images = new ObservableCollection<byte[]>(ch.images);
         }
 
         /// <summary>
