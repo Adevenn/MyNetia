@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -19,19 +19,19 @@ namespace MyNetia.Model
                 }
             }
         }
-        public List<string> texts;
-        public List<byte[]> images;
+        public ObservableCollection<string> texts;
+        public ObservableCollection<byte[]> images;
 
         public Chapter(string title)
         {
             this.title = "Chapter " + title;
-            this.texts = new List<string>();
+            this.texts = new ObservableCollection<string>();
             this.texts.Add("");
-            this.images = new List<byte[]>();
+            this.images = new ObservableCollection<byte[]>();
             this.images.Add(new byte[0]);
         }
 
-        public Chapter(string title, List<string> texts, List<byte[]> images)
+        public Chapter(string title, ObservableCollection<string> texts, ObservableCollection<byte[]> images)
         {
             this.title = title;
             this.texts = texts;

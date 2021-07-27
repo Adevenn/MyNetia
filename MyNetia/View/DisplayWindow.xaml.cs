@@ -60,17 +60,14 @@ namespace MyNetia
         /// <param name="txt"></param>
         /// <param name="img"></param>
         /// <param name="sp"></param>
-        private void setUI(List<string> txt, List<byte[]> img, StackPanel sp)
+        private void setUI(ObservableCollection<string> txt, ObservableCollection<byte[]> img, StackPanel sp)
         {
             sp.Children.Clear();
             int idTxt = 0;
             int idImg = 0;
             while (true)
             {
-                StackPanel spHoriz = new StackPanel
-                {
-                    Style = (Style)Resources["spHCustom"]
-                };
+                StackPanel spHoriz = setStackPanel();
                 if (idTxt < txt.Count)
                 {
                     if (!string.IsNullOrWhiteSpace(txt[idTxt]))
@@ -80,7 +77,7 @@ namespace MyNetia
                 if (idImg < img.Count)
                 {
                     if (!string.IsNullOrWhiteSpace(img[idImg].ToString()))
-                        spHoriz.Children.Add(image(img[idImg]));
+                        spHoriz.Children.Add(setImage(img[idImg]));
                     idImg++;
                 }
                 sp.Children.Add(spHoriz);
@@ -105,10 +102,19 @@ namespace MyNetia
         /// </summary>
         /// <param name="imageFile"></param>
         /// <returns></returns>
-        private Image image(byte[] imageFile) => new Image
+        private Image setImage(byte[] imageFile) => new Image
         {
             Source = loadImage(imageFile),
             Style = (Style)Resources["image"]
+        };
+
+        /// <summary>
+        /// Create a custom StackPanel
+        /// </summary>
+        /// <returns></returns>
+        private StackPanel setStackPanel() => new StackPanel
+        {
+            Style = (Style)Resources["spHCustom"]
         };
         #endregion
 

@@ -1,6 +1,7 @@
 ﻿using Npgsql;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace MyNetia.Model
 {
@@ -27,7 +28,7 @@ namespace MyNetia.Model
         /// <param name="chapTitles"></param>
         /// <param name="texts"></param>
         /// <param name="images"></param>
-        public static async void addElement(string title, string subtitle, List<string> chapTitles, List<List<string>> texts, List<List<byte[]>> images)
+        public static async void addElement(string title, string subtitle, ObservableCollection<string> chapTitles, List<ObservableCollection<string>> texts, List<ObservableCollection<byte[]>> images)
         {
             /* Integrity constraint
              * Element title MUST be unique
@@ -90,7 +91,7 @@ namespace MyNetia.Model
         /// <param name="chapTitles"></param>
         /// <param name="texts"></param>
         /// <param name="images"></param>
-        public static void updateElement(string oldTitle, string title, string subtitle, List<string> chapTitles, List<List<string>> texts, List<List<byte[]>> images)
+        public static void updateElement(string oldTitle, string title, string subtitle, ObservableCollection<string> chapTitles, List<ObservableCollection<string>> texts, List<ObservableCollection<byte[]>> images)
         {
             deleteElement(oldTitle);
             addElement(title, subtitle, chapTitles, texts ,images);
@@ -152,10 +153,10 @@ namespace MyNetia.Model
                 NpgsqlDataReader reader;
                 string subtitle;
                 DateTime lastUpdate;
-                List<Chapter> chapters = new List<Chapter>();
-                List<string> chapTitles = new List<string>();
-                List<string> txtList;
-                List<byte[]> imgList;
+                ObservableCollection<Chapter> chapters = new ObservableCollection<Chapter>();
+                ObservableCollection<string> chapTitles = new ObservableCollection<string>();
+                ObservableCollection<string> txtList;
+                ObservableCollection<byte[]> imgList;
 
                 try
                 {
@@ -183,24 +184,24 @@ namespace MyNetia.Model
                     {
                         //SELECT TEXTS
                         connection.Open();
-                        txtList = new List<string>();
+                        txtList = new ObservableCollection<string>();
                         cmd = new NpgsqlCommand("SELECT string FROM texts WHERE idelem = @p AND idchap = @p2", connection);
                         cmd.Parameters.AddWithValue("p", title);
                         cmd.Parameters.AddWithValue("p2", ch);
                         reader = cmd.ExecuteReader();
                         while (reader.Read())
-                            txtList.Add(reader.GetString(1));
+                            txtList.Add(reader.GetString(0));
                         connection.Close();
 
                         //SELECT IMAGES
                         connection.Open();
-                        imgList = new List<byte[]>();
+                        imgList = new ObservableCollection<byte[]>();
                         cmd = new NpgsqlCommand("SELECT image FROM images WHERE idelem = @p AND idchap = @p2", connection);
                         cmd.Parameters.AddWithValue("p", title);
                         cmd.Parameters.AddWithValue("p2", ch);
                         reader = cmd.ExecuteReader();
                         while (reader.Read())
-                            imgList.Add(System.Text.Encoding.ASCII.GetBytes(reader.GetString(1)));
+                            imgList.Add(System.Text.Encoding.ASCII.GetBytes(reader.GetString(0)));
                         connection.Close();
 
                         chapters.Add(new Chapter(ch, txtList, imgList));

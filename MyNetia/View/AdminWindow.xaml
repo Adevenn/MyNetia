@@ -25,12 +25,11 @@
         <Style x:Key="tBoxChapTitle" BasedOn="{StaticResource tBox}" TargetType="TextBox">
             <EventSetter Event="TextChanged" Handler="chapTitle_TextChanged"/>
             <EventSetter Event="KeyDown" Handler="chapTitle_KeyDown"/>
-            <Setter Property="Text" Value="{Binding chapTitle, UpdateSourceTrigger=PropertyChanged}"/>
+            <Setter Property="Text" Value="{Binding Path=chapTitle, UpdateSourceTrigger=PropertyChanged}"/>
         </Style>
 
         <Style x:Key="tBoxDelete" BasedOn="{StaticResource tBox}" TargetType="TextBox">
-            <Setter Property="Text" Value="{Binding selectionDel, UpdateSourceTrigger=PropertyChanged}"/>
-            <EventSetter Event="GotFocus" Handler="selectionDelete_GotFocus"/>
+            <Setter Property="Text" Value="{Binding Path=selectionDel, UpdateSourceTrigger=PropertyChanged}"/>
             <EventSetter Event="KeyDown" Handler="selectionDelete_KeyDown"/>
             <EventSetter Event="TextChanged" Handler="onTextChangedDelete"/>
         </Style>
@@ -54,7 +53,7 @@
             <Setter Property="Padding" Value="0, 10"/>
         </Style>
         <!--#endregion-->
-        
+
         <!--#region StackPanel Style-->
         <Style x:Key="spElemPart" BasedOn="{StaticResource spV}" TargetType="StackPanel">
             <Setter Property="Visibility" Value="Hidden"/>
@@ -94,15 +93,14 @@
         <Style x:Key="listBoxChapters" BasedOn="{StaticResource listBoxBase}" TargetType="ListBox">
             <EventSetter Event="SelectionChanged" Handler="listChapters_SelectionChanged"/>
             <EventSetter Event="PreviewMouseMove" Handler="listChapters_PreviewMouseMove"/>
-            <Setter Property="ItemsSource" Value="{Binding chapters, UpdateSourceTrigger=PropertyChanged}"/>
+            <Setter Property="ItemsSource" Value="{Binding Path=currentElem.chapters, UpdateSourceTrigger=PropertyChanged}"/>
             <Setter Property="DisplayMemberPath" Value="title"/>
             <Setter Property="ItemContainerStyle" Value="{StaticResource itemListBoxChapters}"/>
         </Style>
 
         <Style x:Key="listBoxImg" BasedOn="{StaticResource listBoxBase}" TargetType="ListBox">
             <EventSetter Event="KeyDown" Handler="listImg_KeyDown"/>
-            <EventSetter Event="LostFocus" Handler="chapContent_LostFocus"/>
-            <Setter Property="ItemsSource" Value="{Binding images, UpdateSourceTrigger=PropertyChanged}"/>
+            <Setter Property="ItemsSource" Value="{Binding Path=images, UpdateSourceTrigger=PropertyChanged}"/>
             <Setter Property="ItemContainerStyle" Value="{StaticResource itemListBoxImage}"/>
             <Setter Property="Template">
                 <!--Remove the ScrollViewer from the ListBox-->
@@ -116,8 +114,7 @@
 
         <Style x:Key="listBoxTxt" BasedOn="{StaticResource listBoxBase}" TargetType="ListBox">
             <EventSetter Event="KeyDown" Handler="listTxt_KeyDown"/>
-            <EventSetter Event="LostFocus" Handler="chapContent_LostFocus"/>
-            <Setter Property="ItemsSource" Value="{Binding texts, UpdateSourceTrigger=PropertyChanged}"/>
+            <Setter Property="ItemsSource" Value="{Binding Path=texts, UpdateSourceTrigger=PropertyChanged}"/>
             <Setter Property="ItemContainerStyle" Value="{StaticResource itemListBoxText}"/>
             <Setter Property="Template">
                 <!--Remove the ScrollViewer from the ListBox-->
@@ -140,10 +137,10 @@
             <Setter Property="Margin" Value="0, 10"/>
         </Style>
         <!--#endregion-->
-        
+
         <!--#region ItemControl Style-->
         <Style x:Key="itemControlDelete" TargetType="ItemsControl">
-            <Setter Property="ItemsSource" Value="{Binding matchingResearch}"/>
+            <Setter Property="ItemsSource" Value="{Binding Path=matchingResearch}"/>
             <Setter Property="Margin" Value="10"/>
         </Style>
         <!--#endregion-->
@@ -244,7 +241,7 @@
                                     Content="Select element :"/>
                                 <TextBox
                                     Style="{StaticResource tBox}"
-                                    Text="{Binding selectAddUpdate, UpdateSourceTrigger=PropertyChanged}"
+                                    Text="{Binding Path=selectAddUpdate, UpdateSourceTrigger=PropertyChanged}"
                                     KeyDown="selectAddUpdate_KeyDown"/>
                             </StackPanel>
                         </Border>
@@ -259,7 +256,7 @@
                                 Content="Title :"/>
                             <TextBox
                                 Style="{StaticResource tBox}"
-                                Text="{Binding elemTitle, UpdateSourceTrigger=PropertyChanged}"/>
+                                Text="{Binding Path=currentElem.title, UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
                         <StackPanel Style="{StaticResource spH}">
                             <Label
@@ -267,7 +264,7 @@
                                 Content="Subtitle :"/>
                             <TextBox
                                 Style="{StaticResource tBox}"
-                                Text="{Binding elemSubtitle, UpdateSourceTrigger=PropertyChanged}"/>
+                                Text="{Binding Path=currentElem.subtitle, UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
                     </StackPanel>
                     <Border
@@ -313,9 +310,7 @@
                                         <Label
                                             Style="{StaticResource label}"
                                             Content="Chapter title :"/>
-                                        <TextBox
-                                            x:Name="chapTitle"
-                                            Style="{StaticResource tBoxChapTitle}"/>
+                                        <TextBox Style="{StaticResource tBoxChapTitle}"/>
                                     </StackPanel>
                                     <StackPanel Style="{StaticResource spH}">
                                         <Label
