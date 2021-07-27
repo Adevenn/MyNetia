@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -70,6 +71,30 @@ namespace MyNetia.Model
             this.subtitle = subtitle;
             this.chapters = chapters;
             this.lastUpdate = lastUpdate;
+        }
+
+        public ObservableCollection<string> getChapTitles()
+        {
+            ObservableCollection<string> titles = new ObservableCollection<string>();
+            foreach (Chapter ch in chapters)
+                titles.Add(ch.title);
+            return titles;
+        }
+
+        public List<ObservableCollection<string>> getAllTexts()
+        {
+            List<ObservableCollection<string>> allTextsList = new List<ObservableCollection<string>>();
+            foreach (Chapter ch in chapters)
+                allTextsList.Add(ch.texts);
+            return allTextsList;
+        }
+
+        public List<ObservableCollection<byte[]>> getAllImg()
+        {
+            List<ObservableCollection<byte[]>> allImagesList = new List<ObservableCollection<byte[]>>();
+            foreach (Chapter ch in chapters)
+                allImagesList.Add(ch.images);
+            return allImagesList;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

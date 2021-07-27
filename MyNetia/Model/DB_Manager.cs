@@ -28,7 +28,7 @@ namespace MyNetia.Model
         /// <param name="chapTitles"></param>
         /// <param name="texts"></param>
         /// <param name="images"></param>
-        public static async void addElement(string title, string subtitle, ObservableCollection<string> chapTitles, List<ObservableCollection<string>> texts, List<ObservableCollection<byte[]>> images)
+        public static async void addElement(Element elem)
         {
             /* Integrity constraint
              * Element title MUST be unique
@@ -41,17 +41,20 @@ namespace MyNetia.Model
 
                 //INSERT NEW ELEMENT
                 NpgsqlCommand cmd = new NpgsqlCommand("INSERT INTO elements (title, subtitle, lastupdate) VALUES (@p, @p2, @p3)", connection);
-                cmd.Parameters.AddWithValue("p", title);
-                cmd.Parameters.AddWithValue("p2", subtitle);
+                cmd.Parameters.AddWithValue("p", elem.title);
+                cmd.Parameters.AddWithValue("p2", elem.subtitle);
                 cmd.Parameters.AddWithValue("p3", DateTime.Now);
                 await cmd.ExecuteNonQueryAsync();
 
                 //INSERT CHAPTERS
-                for(int i = 0; i < chapTitles.Count; i++)
+                ObservableCollection<string> chapTitles = elem.getChapTitles();
+                List<ObservableCollection<string>> texts = elem.getAllTexts();
+                List<ObservableCollection<byte[]>> images = elem.getAllImg();
+                for (int i = 0; i < chapTitles.Count; i++)
                 {
                     cmd = new NpgsqlCommand("INSERT INTO chapters (title, idelem) VALUES (@p, @p2)", connection);
                     cmd.Parameters.AddWithValue("p", chapTitles[i]);
-                    cmd.Parameters.AddWithValue("p2", title);
+                    cmd.Parameters.AddWithValue("p2", elem.title);
                     await cmd.ExecuteNonQueryAsync();
 
                     //INSERT TEXTS
@@ -60,7 +63,7 @@ namespace MyNetia.Model
                         cmd = new NpgsqlCommand("INSERT INTO texts (string, idchap, idelem) VALUES (@p, @p2, @p3)", connection);
                         cmd.Parameters.AddWithValue("p", s);
                         cmd.Parameters.AddWithValue("p2", chapTitles[i]);
-                        cmd.Parameters.AddWithValue("p3", title);
+                        cmd.Parameters.AddWithValue("p3", elem.title);
                         await cmd.ExecuteNonQueryAsync();
                     }
 
@@ -70,7 +73,7 @@ namespace MyNetia.Model
                         cmd = new NpgsqlCommand("INSERT INTO texts (string, idchap, idelem) VALUES (@p, @p2, @p3)", connection);
                         cmd.Parameters.AddWithValue("p", img);
                         cmd.Parameters.AddWithValue("p2", chapTitles[i]);
-                        cmd.Parameters.AddWithValue("p3", title);
+                        cmd.Parameters.AddWithValue("p3", elem.title);
                         await cmd.ExecuteNonQueryAsync();
                     }
                 }
@@ -91,10 +94,10 @@ namespace MyNetia.Model
         /// <param name="chapTitles"></param>
         /// <param name="texts"></param>
         /// <param name="images"></param>
-        public static void updateElement(string oldTitle, string title, string subtitle, ObservableCollection<string> chapTitles, List<ObservableCollection<string>> texts, List<ObservableCollection<byte[]>> images)
+        public static void updateElement(string oldTitle, Element elem)
         {
             deleteElement(oldTitle);
-            addElement(title, subtitle, chapTitles, texts ,images);
+            addElement(elem);
         }
 
         /// <summary>

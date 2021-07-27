@@ -1,6 +1,5 @@
 ﻿using MyNetia.Model;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -15,7 +14,7 @@ namespace MyNetia
     public partial class AdminWindow : Window, INotifyPropertyChanged
     {
         private readonly App currentApp = (App)Application.Current;
-        public string oldElemTitle;
+        private string oldElemTitle;
         private Element _currentElem;
         public Element currentElem
         {
@@ -338,36 +337,12 @@ namespace MyNetia
         {
             saveCurrentChapter();
             if (DB_Manager.isElementExist(oldElemTitle))
-                DB_Manager.updateElement(oldElemTitle, currentElem.title, currentElem.subtitle, getChapTitles(), getAllTexts(), getAllImg());
+                DB_Manager.updateElement(oldElemTitle, currentElem);
             else
-                DB_Manager.addElement(currentElem.title, currentElem.subtitle, getChapTitles(), getAllTexts(), getAllImg());
+                DB_Manager.addElement(currentElem);
             //Show Validation image
             imageValid.Visibility = Visibility.Visible;
             animImageOpacity(imageValid);
-        }
-
-        public ObservableCollection<string> getChapTitles()
-        {
-            ObservableCollection<string> titles = new ObservableCollection<string>();
-            foreach (Chapter ch in currentElem.chapters)
-                titles.Add(ch.title);
-            return titles;
-        }
-
-        public List<ObservableCollection<string>> getAllTexts()
-        {
-            List<ObservableCollection<string>> masterList = new List<ObservableCollection<string>>();
-            foreach (Chapter ch in currentElem.chapters)
-                masterList.Add(ch.texts);
-            return masterList;
-        }
-
-        public List<ObservableCollection<byte[]>> getAllImg()
-        {
-            List<ObservableCollection<byte[]>> masterList = new List<ObservableCollection<byte[]>>();
-            foreach (Chapter ch in currentElem.chapters)
-                masterList.Add(ch.images);
-            return masterList;
         }
         #endregion
 
