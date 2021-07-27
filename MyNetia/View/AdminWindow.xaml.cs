@@ -3,6 +3,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -14,6 +15,8 @@ namespace MyNetia
     public partial class AdminWindow : Window, INotifyPropertyChanged
     {
         private readonly App currentApp = (App)Application.Current;
+
+        //ADD/UPDATE PART
         private string oldElemTitle;
         private Element _currentElem;
         public Element currentElem
@@ -28,7 +31,6 @@ namespace MyNetia
                 }
             }
         }
-        private int idSelectedChap = -1;
         private string _selectAddUpdate = "";
         public string selectAddUpdate
         {
@@ -81,32 +83,6 @@ namespace MyNetia
                 }
             }
         }
-        private string _selectionDel = "";
-        public string selectionDel
-        {
-            get => _selectionDel;
-            set
-            {
-                if (_selectionDel != value)
-                {
-                    _selectionDel = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        private ObservableCollection<string> _matchingResearch;
-        public ObservableCollection<string> matchingResearch
-        {
-            get => _matchingResearch;
-            set
-            {
-                if (value != _matchingResearch)
-                {
-                    _matchingResearch = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
         private Point dragOriginPoint;
         private bool isDraging = false;
         private bool isElemSelected;
@@ -139,6 +115,34 @@ namespace MyNetia
             "Chapter image :\n" +
             "   - Enter => New image zone\n" +
             "   - LAlt + Return => Delete image zone";
+
+        //DELETE PART
+        private string _selectionDel = "";
+        public string selectionDel
+        {
+            get => _selectionDel;
+            set
+            {
+                if (_selectionDel != value)
+                {
+                    _selectionDel = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private ObservableCollection<string> _matchingResearch;
+        public ObservableCollection<string> matchingResearch
+        {
+            get => _matchingResearch;
+            set
+            {
+                if (value != _matchingResearch)
+                {
+                    _matchingResearch = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public AdminWindow()
         {
@@ -190,7 +194,6 @@ namespace MyNetia
                 if (listChapters.SelectedIndex == -1)
                     listChapters.SelectedIndex = 0;
                 setChapterValues((Chapter)listChapters.SelectedItem);
-                idSelectedChap = listChapters.SelectedIndex;
             }
         }
 
@@ -212,7 +215,6 @@ namespace MyNetia
         /// <param name="e"></param>
         private void addChapter_Click(object sender, RoutedEventArgs e)
         {
-            //Add and select the new chapter
             currentElem.chapters.Add(new Chapter((listChapters.Items.Count + 1).ToString()));
             listChapters.SelectedIndex = listChapters.Items.Count - 1;
         }
@@ -225,7 +227,6 @@ namespace MyNetia
         private void chapTitle_TextChanged(object sender, TextChangedEventArgs e)
         {
             int id = listChapters.SelectedIndex;
-            currentElem.chapters[id].title = chapTitle;
             currentElem.chapters[id].title = chapTitle;
         }
 
@@ -259,20 +260,14 @@ namespace MyNetia
         {
             //Create a new text zone
             if (Keyboard.IsKeyDown(Key.LeftCtrl) && Keyboard.IsKeyDown(Key.Enter))
-            {
                 texts.Add("");
-                listTxt.SelectedIndex = listTxt.Items.Count - 1;
-            }
             //Remove text zone
             if (Keyboard.IsKeyDown(Key.LeftAlt) && Keyboard.IsKeyDown(Key.Enter) && listTxt.SelectedIndex != -1)
             {
                 int id = listTxt.SelectedIndex;
                 texts.RemoveAt(id);
                 if (texts.Count == 0)
-                {
                     texts.Add("");
-                    listTxt.SelectedIndex = listTxt.Items.Count - 1;
-                }
             }
         }
 
@@ -314,14 +309,31 @@ namespace MyNetia
         }
 
         /// <summary>
-        /// Save content when lost focus
+        /// Save text content when lose keayboard focus
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void listBoxItem_LostFocus(object sender, RoutedEventArgs e)
+        private void itemListTxt_PreviewLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            currentElem.chapters[idSelectedChap].texts = texts;
-            currentElem.chapters[idSelectedChap].images = images;
+            //No access to TextBox by another way than events (Cause ListBoxItem template changed)
+            //This code is really bullshit
+            TextBox t = (TextBox)sender;
+            texts[listTxt.SelectedIndex] = t.Text;
+            currentElem.chapters[listChapters.SelectedIndex].texts = texts;
+        }
+
+        /// <summary>
+        /// Save image content when lose keayboard focus
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void itemListImg_PreviewLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            //No access to TextBox by another way than events (Cause ListBoxItem template changed)
+            //This code is really bullshit
+            TextBox t = (TextBox)sender;
+            images[listTxt.SelectedIndex] = Encoding.ASCII.GetBytes(t.Text);
+            currentElem.chapters[listChapters.SelectedIndex].images = images;
         }
 
         /// <summary>
@@ -340,6 +352,7 @@ namespace MyNetia
             animImageOpacity(imageValid);
         }
         #endregion
+
 
         #region Drag and drop ItemListBox
         private void listChaptersItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -535,6 +548,7 @@ namespace MyNetia
         #endregion
 
         #endregion
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null)
