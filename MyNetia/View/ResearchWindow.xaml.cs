@@ -40,8 +40,8 @@ namespace MyNetia
 
         public ResearchWindow()
         {
-            DataContext = this;
             DB_Manager.setup();
+            DataContext = this;
             InitializeComponent();
             helpResearchBar();
         }

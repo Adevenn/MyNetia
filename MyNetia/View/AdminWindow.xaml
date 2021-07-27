@@ -62,52 +62,45 @@
         <!--#endregion-->
 
         <!--#region ListBox Style-->
-        <Style x:Key="itemListBoxChapters" BasedOn="{StaticResource listBoxItemBase}" TargetType="ListBoxItem">
-            <EventSetter Event="PreviewMouseLeftButtonDown" Handler="listChaptersItem_PreviewMouseLeftButtonDown"/>
-            <EventSetter Event="Drop" Handler="listChaptersItem_Drop"/>
-            <Setter Property="AllowDrop" Value="True"/>
-        </Style>
-
-        <Style x:Key="itemListBoxImage" TargetType="ListBoxItem">
-            <EventSetter Event="PreviewGotKeyboardFocus" Handler="itemList_PreviewGotKeyboardFocus"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                        <TextBox Style="{StaticResource tBox}" Text="{Binding content}"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="itemListBoxText" TargetType="ListBoxItem">
-            <EventSetter Event="PreviewGotKeyboardFocus" Handler="itemList_PreviewGotKeyboardFocus"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                        <TextBox Style="{StaticResource tBoxMultiLines}" Text="{Binding content}"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
         <Style x:Key="listBoxChapters" BasedOn="{StaticResource listBoxBase}" TargetType="ListBox">
             <EventSetter Event="SelectionChanged" Handler="listChapters_SelectionChanged"/>
             <EventSetter Event="PreviewMouseMove" Handler="listChapters_PreviewMouseMove"/>
             <Setter Property="ItemsSource" Value="{Binding Path=currentElem.chapters, UpdateSourceTrigger=PropertyChanged}"/>
             <Setter Property="DisplayMemberPath" Value="title"/>
-            <Setter Property="ItemContainerStyle" Value="{StaticResource itemListBoxChapters}"/>
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style BasedOn="{StaticResource listBoxItemBase}" TargetType="ListBoxItem">
+                        <EventSetter Event="PreviewMouseLeftButtonDown" Handler="listChaptersItem_PreviewMouseLeftButtonDown"/>
+                        <EventSetter Event="Drop" Handler="listChaptersItem_Drop"/>
+                        <Setter Property="AllowDrop" Value="True"/>
+                    </Style>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <Style x:Key="listBoxImg" BasedOn="{StaticResource listBoxBase}" TargetType="ListBox">
             <EventSetter Event="KeyDown" Handler="listImg_KeyDown"/>
             <Setter Property="ItemsSource" Value="{Binding Path=images, UpdateSourceTrigger=PropertyChanged}"/>
-            <Setter Property="ItemContainerStyle" Value="{StaticResource itemListBoxImage}"/>
             <Setter Property="Template">
                 <!--Remove the ScrollViewer from the ListBox-->
                 <Setter.Value>
                     <ControlTemplate>
                         <ItemsPresenter/>
                     </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="ListBoxItem">
+                        <EventSetter Event="PreviewGotKeyboardFocus" Handler="itemList_PreviewGotKeyboardFocus"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                    <TextBox Style="{StaticResource tBox}" Text="{Binding Content.images, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
                 </Setter.Value>
             </Setter>
         </Style>
@@ -115,13 +108,26 @@
         <Style x:Key="listBoxTxt" BasedOn="{StaticResource listBoxBase}" TargetType="ListBox">
             <EventSetter Event="KeyDown" Handler="listTxt_KeyDown"/>
             <Setter Property="ItemsSource" Value="{Binding Path=texts, UpdateSourceTrigger=PropertyChanged}"/>
-            <Setter Property="ItemContainerStyle" Value="{StaticResource itemListBoxText}"/>
             <Setter Property="Template">
                 <!--Remove the ScrollViewer from the ListBox-->
                 <Setter.Value>
                     <ControlTemplate>
                         <ItemsPresenter/>
                     </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="ListBoxItem">
+                        <EventSetter Event="PreviewGotKeyboardFocus" Handler="itemList_PreviewGotKeyboardFocus"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                    <TextBox Style="{StaticResource tBoxMultiLines}" Text="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
                 </Setter.Value>
             </Setter>
         </Style>
