@@ -8,41 +8,77 @@ using System.Windows.Input;
 
 namespace MyNetia
 {
-    public partial class ResearchWindow : Window
+    public partial class ResearchWindow : Window, INotifyPropertyChanged
     {
         private readonly App currentApp = (App)Application.Current;
-        private readonly InfoBinding binds = new InfoBinding();
+        private string _selection = "";
+        public string selection
+        {
+            get => _selection;
+            set
+            {
+                if(_selection != value)
+                {
+                    _selection = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private ObservableCollection<string> _matchingResearch;
+        public ObservableCollection<string> matchingResearch
+        {
+            get => _matchingResearch;
+            set
+            {
+                if (value != _matchingResearch)
+                {
+                    _matchingResearch = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public ResearchWindow()
         {
-            DataContext = binds;
+            DataContext = this;
             DB_Manager.setup();
             InitializeComponent();
             helpResearchBar();
         }
 
         #region EVENTS
+
+        /// <summary>
+        /// Update match list when the selection text change
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         private void onTextChanged(object sender, TextChangedEventArgs args)
         {
             helpResearchBar();
         }
 
+        /// <summary>
+        /// Apply the command when Enter is pressed, Auto-complete with the first item of match list when Tab is pressed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void onKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Return)
             {
-                if (DB_Manager.isElementExist(txtBox.Text))
+                if (DB_Manager.isElementExist(selection))
                 {
-                    if (!currentApp.isOpenWindow(txtBox.Text))
+                    if (!currentApp.isOpenWindow(selection))
                     {
-                        DisplayWindow displayWindow = new DisplayWindow(txtBox.Text);
+                        DisplayWindow displayWindow = new DisplayWindow(selection);
                         currentApp.addWindow(displayWindow.Title);
                         displayWindow.Show();
                     }
                 }
-                if (txtBox.Text.StartsWith("-") || txtBox.Text.Equals("Help") || txtBox.Text.Equals("help") || string.IsNullOrWhiteSpace(txtBox.Text))
+                if (selection.StartsWith("-") || selection.Equals("Help") || selection.Equals("help") || string.IsNullOrWhiteSpace(selection))
                 {
-                    switch (txtBox.Text)
+                    switch (selection)
                     {
                         case Commands.admin:
                             AdminWindow adminWindow = new AdminWindow();
@@ -72,19 +108,23 @@ namespace MyNetia
                     }
                 }
             }
-            else if (e.Key.Equals(Key.Tab) && binds.matchingResearch.Count > 0)
+            else if (e.Key.Equals(Key.Tab) && matchingResearch.Count > 0)
             {
-                txtBox.Text = binds.matchingResearch[0];
+                selection = matchingResearch[0];
                 //Set Keyboard focus at the end
-                txtBox.CaretIndex = txtBox.Text.Length;
+                txtBox.CaretIndex = selection.Length;
             }
         }
         #endregion
 
         #region OTHERS METHODS
+
+        /// <summary>
+        /// Update the match list with the selection
+        /// </summary>
         private void helpResearchBar()
         {
-            binds.matchingResearch = new ObservableCollection<string>(DB_Manager.matchingResearch(txtBox.Text));
+            matchingResearch = new ObservableCollection<string>(DB_Manager.matchingResearch(selection));
         }
         #endregion
 
@@ -135,27 +175,10 @@ namespace MyNetia
 
         #endregion
 
-        private class InfoBinding : INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
-            private ObservableCollection<string> _matchingResearch;
-            public ObservableCollection<string> matchingResearch
-            {
-                get => _matchingResearch;
-                set
-                {
-                    if (value != _matchingResearch)
-                    {
-                        _matchingResearch = value;
-                        OnPropertyChanged();
-                    }
-                }
-            }
-
-            public event PropertyChangedEventHandler PropertyChanged;
-            protected void OnPropertyChanged([CallerMemberName] string name = null)
-            {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }
