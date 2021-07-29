@@ -9,6 +9,7 @@ namespace MyNetia.Model
     public static class DB_Manager
     {
         public static List<string> elemTitles { get; private set; }
+        public static List<string> elemSubtitles { get; private set; }
         private static NpgsqlConnection connection;
 
         /// <summary>
@@ -136,12 +137,34 @@ namespace MyNetia.Model
 
             //SELECT TITLES
             NpgsqlCommand cmd = new NpgsqlCommand("SELECT title FROM elements ORDER BY title", connection);
-            var reader = cmd.ExecuteReader();
+            NpgsqlDataReader reader = cmd.ExecuteReader();
 
             //STORE TITLES
             elemTitles = new List<string>();
             while (reader.Read())
                 elemTitles.Add(reader.GetString(0));
+
+            //DISCONNECT FROM DB
+            cmd.Dispose();
+            connection.Close();
+        }
+
+        /// <summary>
+        /// Select every element subtitle in the database and store them in elemSubtitles
+        /// </summary>
+        public static void getSubtitles()
+        {
+            //Connect to DB
+            connection.Open();
+
+            //SELECT TITLES
+            NpgsqlCommand cmd = new NpgsqlCommand("SELECT subtitle FROM elements ORDER BY subtitle", connection);
+            NpgsqlDataReader reader = cmd.ExecuteReader();
+
+            //STORE TITLES
+            elemSubtitles = new List<string>();
+            while (reader.Read())
+                elemSubtitles.Add(reader.GetString(0));
 
             //DISCONNECT FROM DB
             cmd.Dispose();
