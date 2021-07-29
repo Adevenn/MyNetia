@@ -81,17 +81,17 @@ namespace MyNetia.Model
             return titles;
         }
 
-        public List<ObservableCollection<string>> getAllTexts()
+        public List<ObservableCollection<TextManager>> getAllTexts()
         {
-            List<ObservableCollection<string>> allTextsList = new List<ObservableCollection<string>>();
+            List<ObservableCollection<TextManager>> allTextsList = new List<ObservableCollection<TextManager>>();
             foreach (Chapter ch in chapters)
                 allTextsList.Add(ch.texts);
             return allTextsList;
         }
 
-        public List<ObservableCollection<byte[]>> getAllImg()
+        public List<ObservableCollection<ImageManager>> getAllImg()
         {
-            List<ObservableCollection<byte[]>> allImagesList = new List<ObservableCollection<byte[]>>();
+            List<ObservableCollection<ImageManager>> allImagesList = new List<ObservableCollection<ImageManager>>();
             foreach (Chapter ch in chapters)
                 allImagesList.Add(ch.images);
             return allImagesList;

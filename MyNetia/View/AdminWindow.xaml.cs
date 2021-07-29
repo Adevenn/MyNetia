@@ -25,7 +25,7 @@ namespace MyNetia
             get => _currentElem;
             set
             {
-                if(_currentElem != value)
+                if (_currentElem != value)
                 {
                     _currentElem = value;
                     OnPropertyChanged();
@@ -58,8 +58,8 @@ namespace MyNetia
                 }
             }
         }
-        private ObservableCollection<string> _texts;
-        public ObservableCollection<string> texts
+        private ObservableCollection<TextManager> _texts;
+        public ObservableCollection<TextManager> texts
         {
             get => _texts;
             set
@@ -71,8 +71,8 @@ namespace MyNetia
                 }
             }
         }
-        private ObservableCollection<byte[]> _images;
-        public ObservableCollection<byte[]> images
+        private ObservableCollection<ImageManager> _images;
+        public ObservableCollection<ImageManager> images
         {
             get => _images;
             set
@@ -147,7 +147,7 @@ namespace MyNetia
 
         public AdminWindow()
         {
-            this.DataContext = this;
+            DataContext = this;
             InitializeComponent();
             matchingResearchUpdate();
         }
@@ -197,8 +197,8 @@ namespace MyNetia
                 //Set chapter values
                 Chapter ch = (Chapter)listChapters.SelectedItem;
                 chapTitle = ch.title;
-                texts = new ObservableCollection<string>(ch.texts);
-                images = new ObservableCollection<byte[]>(ch.images);
+                texts = ch.texts;
+                images = ch.images;
             }
         }
 
@@ -233,7 +233,7 @@ namespace MyNetia
         {
             if (Keyboard.IsKeyDown(Key.LeftAlt) && Keyboard.IsKeyDown(Key.Return))
             {
-                ConfirmationWindow window = new ConfirmationWindow("Do you realy want to delete\n" + chapTitle + " ?")
+                ConfirmationWindow window = new ConfirmationWindow($"Do you realy want to delete\n{chapTitle} ?")
                 {
                     Owner = this
                 };
@@ -254,14 +254,14 @@ namespace MyNetia
         {
             //Create a new text zone
             if (Keyboard.IsKeyDown(Key.LeftCtrl) && Keyboard.IsKeyDown(Key.Enter))
-                texts.Add("");
+                texts.Add(new TextManager(Types.none));
             //Remove text zone
             if (Keyboard.IsKeyDown(Key.LeftAlt) && Keyboard.IsKeyDown(Key.Enter) && listTxt.SelectedIndex != -1)
             {
                 int id = listTxt.SelectedIndex;
                 texts.RemoveAt(id);
                 if (texts.Count == 0)
-                    texts.Add("");
+                    texts.Add(new TextManager(Types.none));
             }
         }
 
@@ -275,7 +275,7 @@ namespace MyNetia
             //Create a new image zone
             if (e.Key == Key.Return)
             {
-                images.Add(new byte[0]);
+                images.Add(new ImageManager());
                 listImg.SelectedIndex = listImg.Items.Count - 1;
             }
             //Remove image zone
@@ -285,7 +285,7 @@ namespace MyNetia
                 images.RemoveAt(id);
                 if (images.Count == 0)
                 {
-                    images.Add(new byte[0]);
+                    images.Add(new ImageManager());
                     listImg.SelectedIndex = listImg.Items.Count - 1;
                 }
             }
@@ -309,10 +309,9 @@ namespace MyNetia
         /// <param name="e"></param>
         private void itemListTxt_PreviewLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            //No access to TextBox by another way than events (Cause ListBoxItem template changed)
-            //This code is really bullshit
+            //No access to TextBox.Text by another way than events (Cause ListBoxItem template changed => impossible via ItemsSource)
             TextBox t = (TextBox)sender;
-            texts[listTxt.SelectedIndex] = t.Text;
+            texts[listTxt.SelectedIndex].text = t.Text;
             currentElem.chapters[listChapters.SelectedIndex].texts = texts;
         }
 
@@ -323,13 +322,17 @@ namespace MyNetia
         /// <param name="e"></param>
         private void addImg_Click(object sender, RoutedEventArgs e)
         {
-            images.Add(new byte[0]);
+            images.Add(new ImageManager());
         }
 
+        /// <summary>
+        /// Open a window to manage the image (modify, delete)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void imgBtn_Click(object sender, RoutedEventArgs e)
         {
-            Button btn = (Button)sender;
-            ImageEditorWindow window = new ImageEditorWindow(btn.Content.ToString())
+            ImageEditorWindow window = new ImageEditorWindow(images[listImg.SelectedIndex].fileName, images[listImg.SelectedIndex].datas)
             {
                 Owner = this
             };
@@ -338,17 +341,19 @@ namespace MyNetia
                 string path = window.path;
                 if (path == "delete"){
                     //Remove item from list
+                    images.RemoveAt(listImg.SelectedIndex);
                 }
                 else if (path == "")
                 {
-                    string fileName = "";
-                    byte[] image = new byte[0];
+                    //Reset values
+                    images[listImg.SelectedIndex].fileName = "";
+                    images[listImg.SelectedIndex].datas = new byte[0];
                 }
                 else
                 {
-                    string fileName = FileManager.getFileName(window.path);
-                    byte[] image = FileManager.readByteFile(window.path);
-                    //Change item from list
+                    //Modify values
+                    images[listImg.SelectedIndex].fileName = FileManager.getFileName(window.path);
+                    images[listImg.SelectedIndex].datas = FileManager.readByteFile(window.path);
                 }
             }
         }
@@ -448,8 +453,8 @@ namespace MyNetia
         {
             if (e.Key == Key.Return && DB_Manager.isElementExist(selectionDel))
             {
-                //Confirm element creation
-                ConfirmationWindow window = new ConfirmationWindow("Do you want to delete " + selectionDel + " ?")
+                //Confirm delete element
+                ConfirmationWindow window = new ConfirmationWindow($"Do you want to delete {selectDelete} ?")
                 {
                     Owner = this
                 };
@@ -484,7 +489,7 @@ namespace MyNetia
         /// </summary>
         private void matchingResearchUpdate()
         {
-            matchingResearch = new ObservableCollection<string>(DB_Manager.matchingResearch(selectionDel));
+            matchingResearch = DB_Manager.matchingResearch(selectionDel);
         }
         #endregion
 

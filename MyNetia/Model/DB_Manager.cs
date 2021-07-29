@@ -33,7 +33,7 @@ namespace MyNetia.Model
         {
             /* Integrity constraint
              * Element title MUST be unique
-             * Chapter title MUST be unique inside a element
+             * Chapter title MUST be unique inside an element
              */
             try
             {
@@ -49,8 +49,8 @@ namespace MyNetia.Model
 
                 //INSERT CHAPTERS
                 ObservableCollection<string> chapTitles = elem.getChapTitles();
-                List<ObservableCollection<string>> texts = elem.getAllTexts();
-                List<ObservableCollection<byte[]>> images = elem.getAllImg();
+                List<ObservableCollection<TextManager>> texts = elem.getAllTexts();
+                List<ObservableCollection<ImageManager>> images = elem.getAllImg();
                 for (int i = 0; i < chapTitles.Count; i++)
                 {
                     cmd = new NpgsqlCommand("INSERT INTO chapters (title, idelem) VALUES (@p, @p2)", connection);
@@ -59,23 +59,25 @@ namespace MyNetia.Model
                     await cmd.ExecuteNonQueryAsync();
 
                     //INSERT TEXTS
-                    foreach (string s in texts[i])
+                    foreach (TextManager t in texts[i])
                     {
-                        cmd = new NpgsqlCommand("INSERT INTO texts (string, idchap, idelem) VALUES (@p, @p2, @p3)", connection);
-                        cmd.Parameters.AddWithValue("p", s);
-                        cmd.Parameters.AddWithValue("p2", chapTitles[i]);
-                        cmd.Parameters.AddWithValue("p3", elem.title);
-                        await cmd .ExecuteNonQueryAsync();
+                        cmd = new NpgsqlCommand("INSERT INTO texts (idchap, idelem, type, txt) VALUES (@p, @p2, @p3, @p4)", connection);
+                        cmd.Parameters.AddWithValue("p", chapTitles[i]);
+                        cmd.Parameters.AddWithValue("p2", elem.title);
+                        cmd.Parameters.AddWithValue("p3", t.type);
+                        cmd.Parameters.AddWithValue("p4", t.text);
+                        await cmd.ExecuteNonQueryAsync();
                     }
 
                     //INSERT IMAGES
-                    foreach (byte[] img in images[i])
+                    foreach (ImageManager img in images[i])
                     {
-                        cmd = new NpgsqlCommand("INSERT INTO images (image, idchap, idelem) VALUES (@p, @p2, @p3)", connection);
-                        cmd.Parameters.AddWithValue("p", img);
-                        cmd.Parameters.AddWithValue("p2", chapTitles[i]);
-                        cmd.Parameters.AddWithValue("p3", elem.title);
-                        await cmd .ExecuteNonQueryAsync();
+                        cmd = new NpgsqlCommand("INSERT INTO images (idchap, idelem, filename, image) VALUES (@p, @p2, @p3, @p4)", connection);
+                        cmd.Parameters.AddWithValue("p", chapTitles[i]);
+                        cmd.Parameters.AddWithValue("p2", elem.title);
+                        cmd.Parameters.AddWithValue("p3", img.fileName);
+                        cmd.Parameters.AddWithValue("p3", img.datas);
+                        await cmd.ExecuteNonQueryAsync();
                     }
                 }
 
@@ -155,70 +157,133 @@ namespace MyNetia.Model
         {
             if (isElementExist(title))
             {
-                NpgsqlCommand cmd;
-                NpgsqlDataReader reader;
                 string subtitle;
                 DateTime lastUpdate;
                 ObservableCollection<Chapter> chapters = new ObservableCollection<Chapter>();
-                ObservableCollection<string> chapTitles = new ObservableCollection<string>();
-                ObservableCollection<string> txtList;
-                ObservableCollection<byte[]> imgList;
+                ObservableCollection<string> chapTitles;
+                ObservableCollection<TextManager> txtList;
+                ObservableCollection<ImageManager> imgList;
 
-                try
+                //SELECT ELEMENT
+                object[] values = getElemValues(title);
+                subtitle = (string)values[0];
+                lastUpdate = (DateTime)values[1];
+
+                //SELECT CHAPTERS
+                chapTitles = getChapTitles(title);
+
+                //STORE CHAPTERS DATAS
+                foreach (string ch in chapTitles)
                 {
-                    //SELECT ELEMENT
-                    connection.Open();
-                    cmd = new NpgsqlCommand("SELECT subtitle, lastupdate FROM elements WHERE title = @p;", connection);
-                    cmd.Parameters.AddWithValue("p", title);
-                    reader = cmd.ExecuteReader();
-                    reader.Read();
-                    subtitle = reader.GetString(0);
-                    lastUpdate = reader.GetDateTime(1);
-                    connection.Close();
-                
-                    //SELECT CHAPTERS
-                    connection.Open();
-                    cmd = new NpgsqlCommand("SELECT title FROM chapters WHERE idelem = @p", connection);
-                    cmd.Parameters.AddWithValue("p", title);
-                    reader = cmd.ExecuteReader();
-                    while (reader.Read())
-                        chapTitles.Add(reader.GetString(0));
-                    connection.Close();
-
-                    //STORE CHAPTERS DATA
-                    foreach (string ch in chapTitles)
-                    {
-                        //SELECT TEXTS
-                        connection.Open();
-                        txtList = new ObservableCollection<string>();
-                        cmd = new NpgsqlCommand("SELECT string FROM texts WHERE idelem = @p AND idchap = @p2", connection);
-                        cmd.Parameters.AddWithValue("p", title);
-                        cmd.Parameters.AddWithValue("p2", ch);
-                        reader = cmd.ExecuteReader();
-                        while (reader.Read())
-                            txtList.Add(reader.GetString(0));
-                        connection.Close();
-
-                        //SELECT IMAGES
-                        connection.Open();
-                        imgList = new ObservableCollection<byte[]>();
-                        cmd = new NpgsqlCommand("SELECT image FROM images WHERE idelem = @p AND idchap = @p2", connection);
-                        cmd.Parameters.AddWithValue("p", title);
-                        cmd.Parameters.AddWithValue("p2", ch);
-                        DataTable dt = new DataTable();
-                        NpgsqlDataAdapter nda = new NpgsqlDataAdapter(cmd);
-                        nda.Fill(dt);
-                        connection.Close();
-                        foreach (DataRow row in dt.Rows)
-                            imgList.Add((byte[])row["image"]);
-
-                        chapters.Add(new Chapter(ch, txtList, imgList));
-                    }
-                    return new Element(title, subtitle, chapters, lastUpdate);
+                    txtList = getTextsFromChapter(title, ch);
+                    imgList = getImagesFromChapter(title, ch);
+                    chapters.Add(new Chapter(ch, txtList, imgList));
                 }
-                catch (NpgsqlException e) { throw new NpgsqlException(e.Message); }
+                return new Element(title, subtitle, chapters, lastUpdate);
             }
             return new Element(title);
+        }
+
+        /// <summary>
+        /// Get subtitle and last update from idElem in database
+        /// </summary>
+        /// <param name="idElem"></param>
+        /// <returns></returns>
+        private static object[] getElemValues(string idElem)
+        {
+            object[] values = new object[2];
+            try
+            {
+                connection.Open();
+                NpgsqlCommand cmd = new NpgsqlCommand("SELECT subtitle, lastupdate FROM elements WHERE title = @p;", connection);
+                cmd.Parameters.AddWithValue("p", idElem);
+                NpgsqlDataReader reader = cmd.ExecuteReader();
+                reader.Read();
+                values[0] = reader.GetString(0);
+                values[1] = reader.GetDateTime(1);
+                connection.Close();
+                return values;
+            }
+            catch (NpgsqlException e) { throw new NpgsqlException(e.Message); }
+        }
+
+        /// <summary>
+        /// Get chapters titles from idElem in database
+        /// </summary>
+        /// <param name="idElem"></param>
+        /// <returns></returns>
+        private static ObservableCollection<string> getChapTitles(string idElem)
+        {
+            ObservableCollection<string> chapTitles = new ObservableCollection<string>();
+            try
+            {
+                connection.Open();
+                NpgsqlCommand cmd = new NpgsqlCommand("SELECT title FROM chapters WHERE idelem = @p", connection);
+                cmd.Parameters.AddWithValue("p", idElem);
+                NpgsqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                    chapTitles.Add(reader.GetString(0));
+                connection.Close();
+                return chapTitles;
+            }
+            catch (NpgsqlException e) { throw new NpgsqlException(e.Message); }
+        }
+
+        /// <summary>
+        /// Get all texts from a chapter
+        /// </summary>
+        /// <param name="idElem"></param>
+        /// <param name="idChap"></param>
+        /// <returns></returns>
+        private static ObservableCollection<TextManager> getTextsFromChapter(string idElem, string idChap)
+        {
+            ObservableCollection<TextManager> txtList = new ObservableCollection<TextManager>();
+            try
+            {
+                connection.Open();
+                NpgsqlCommand cmd = new NpgsqlCommand("SELECT type, txt FROM texts WHERE idelem = @p AND idchap = @p2", connection);
+                cmd.Parameters.AddWithValue("p", idElem);
+                cmd.Parameters.AddWithValue("p2", idChap);
+                NpgsqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    int type = reader.GetInt32(0);
+                    if (type == 0)
+                        txtList.Add(new TextManager(Types.none));
+                    else
+                        txtList.Add(new TextManager((Types)type, reader.GetString(0)));
+                }
+                connection.Close();
+                return txtList;
+            }
+            catch (NpgsqlException e) { throw new NpgsqlException(e.Message); }
+        }
+
+        /// <summary>
+        /// Get all images from a chapter
+        /// </summary>
+        /// <param name="idElem"></param>
+        /// <param name="idChap"></param>
+        /// <returns></returns>
+        private static ObservableCollection<ImageManager> getImagesFromChapter(string idElem, string idChap)
+        {
+            ObservableCollection<ImageManager> imgList = new ObservableCollection<ImageManager>();
+            try
+            {
+                connection.Open();
+                imgList = new ObservableCollection<ImageManager>();
+                NpgsqlCommand cmd = new NpgsqlCommand("SELECT filename, image FROM images WHERE idelem = @p AND idchap = @p2", connection);
+                cmd.Parameters.AddWithValue("p", idElem);
+                cmd.Parameters.AddWithValue("p2", idChap);
+                DataTable dt = new DataTable();
+                NpgsqlDataAdapter nda = new NpgsqlDataAdapter(cmd);
+                nda.Fill(dt);
+                connection.Close();
+                foreach (DataRow row in dt.Rows)
+                    imgList.Add(new ImageManager((string)row["filename"], (byte[])row["image"]));
+                return imgList;
+            }
+            catch (NpgsqlException e) { throw new NpgsqlException(e.Message); }
         }
 
         /// <summary>
@@ -241,9 +306,9 @@ namespace MyNetia.Model
         /// </summary>
         /// <param name="txt"></param>
         /// <returns></returns>
-        public static List<string> matchingResearch(string txt)
+        public static ObservableCollection<string> matchingResearch(string txt)
         {
-            List<string> matchList = new List<string>();
+            ObservableCollection<string> matchList = new ObservableCollection<string>();
             foreach (string s in elemTitles)
             {
                 if (s.Contains(txt))

@@ -23,7 +23,7 @@ namespace MyNetia.View
             }
         }
 
-        public ImageEditorWindow(string imgName)
+        public ImageEditorWindow(string imgName, byte[] imgData)
         {
             DataContext = this;
             InitializeComponent();

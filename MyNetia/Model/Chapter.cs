@@ -19,8 +19,8 @@ namespace MyNetia.Model
                 }
             }
         }
-        private ObservableCollection<string> _texts;
-        public ObservableCollection<string> texts
+        private ObservableCollection<TextManager> _texts;
+        public ObservableCollection<TextManager> texts
         {
             get => _texts;
             set
@@ -32,8 +32,8 @@ namespace MyNetia.Model
                 }
             }
         }
-        private ObservableCollection<byte[]> _images;
-        public ObservableCollection<byte[]> images
+        private ObservableCollection<ImageManager> _images;
+        public ObservableCollection<ImageManager> images
         {
             get => _images;
             set
@@ -49,13 +49,13 @@ namespace MyNetia.Model
         public Chapter(string title)
         {
             this.title = "Chapter " + title;
-            this.texts = new ObservableCollection<string>();
-            this.texts.Add("");
-            this.images = new ObservableCollection<byte[]>();
-            this.images.Add(new byte[0]);
+            this.texts = new ObservableCollection<TextManager>();
+            this.texts.Add(new TextManager(Types.none));
+            this.images = new ObservableCollection<ImageManager>();
+            this.images.Add(new ImageManager());
         }
 
-        public Chapter(string title, ObservableCollection<string> texts, ObservableCollection<byte[]> images)
+        public Chapter(string title, ObservableCollection<TextManager> texts, ObservableCollection<ImageManager> images)
         {
             this.title = title;
             this.texts = texts;

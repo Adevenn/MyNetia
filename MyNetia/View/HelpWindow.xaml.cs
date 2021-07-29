@@ -12,12 +12,16 @@ namespace MyNetia
         public HelpWindow()
         {
             InitializeComponent();
-            loadCommands();
-            loadProtocols();
+            showCommands();
+            showElements();
         }
 
         #region UI CREATOR
-        private void loadProtocols()
+
+        /// <summary>
+        /// Show elements on screen
+        /// </summary>
+        private void showElements()
         {
             List<string> list = DB_Manager.elemTitles;
             for (int i = 0; i < list.Count; i++)
@@ -35,7 +39,10 @@ namespace MyNetia
             }
         }
 
-        private void loadCommands()
+        /// <summary>
+        /// Show commands on screen
+        /// </summary>
+        private void showCommands()
         {
             List<string> commands = currentApp.commandsList();
             foreach (string txt in commands)

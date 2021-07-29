@@ -28,9 +28,9 @@ namespace MyNetia
 
         public DisplayWindow(string title)
         {
-            this.DataContext = this;
+            DataContext = this;
             InitializeComponent();
-            this.Title = title;
+            Title = title;
             setValues(title);
         }
 
@@ -71,8 +71,8 @@ namespace MyNetia
         private void setUI(Chapter ch, StackPanel sp)
         {
             chapTitle.Text = ch.title;
-            ObservableCollection<string> texts = ch.texts;
-            ObservableCollection<byte[]> images = ch.images;
+            ObservableCollection<TextManager> texts = ch.texts;
+            ObservableCollection<ImageManager> images = ch.images;
             sp.Children.Clear();
             int idTxt = 0;
             int idImg = 0;
@@ -81,14 +81,14 @@ namespace MyNetia
                 StackPanel spHoriz = setStackPanel();
                 if (idTxt < texts.Count)
                 {
-                    if (!string.IsNullOrWhiteSpace(texts[idTxt]))
-                        spHoriz.Children.Add(setTxtBlock(texts[idTxt]));
+                    if (texts[idTxt].type != 0)
+                        spHoriz.Children.Add(setTxtBlock(texts[idTxt].text));
                     idTxt++;
                 }
                 if (idImg < images.Count)
                 {
-                    if (!string.IsNullOrWhiteSpace(images[idImg].ToString()))
-                        spHoriz.Children.Add(setImage(images[idImg]));
+                    if (images[idImg].fileName != "")
+                        spHoriz.Children.Add(setImage(images[idImg].datas));
                     idImg++;
                 }
                 sp.Children.Add(spHoriz);
