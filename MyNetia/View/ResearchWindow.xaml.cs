@@ -43,7 +43,7 @@ namespace MyNetia
             DB_Manager.setup();
             DataContext = this;
             InitializeComponent();
-            helpResearchBar();
+            matchingResearchUpdate();
         }
 
         #region EVENTS
@@ -55,7 +55,7 @@ namespace MyNetia
         /// <param name="args"></param>
         private void onTextChanged(object sender, TextChangedEventArgs args)
         {
-            helpResearchBar();
+            matchingResearchUpdate();
         }
 
         /// <summary>
@@ -67,6 +67,8 @@ namespace MyNetia
         {
             if (e.Key == Key.Return)
             {
+                DB_Manager.getTitles();
+                matchingResearchUpdate();
                 if (DB_Manager.isElementExist(selection))
                 {
                     if (!currentApp.isOpenWindow(selection))
@@ -114,7 +116,7 @@ namespace MyNetia
         /// <summary>
         /// Update the match list with the selection
         /// </summary>
-        private void helpResearchBar()
+        private void matchingResearchUpdate()
         {
             matchingResearch = new ObservableCollection<string>(DB_Manager.matchingResearch(selection));
         }

@@ -365,6 +365,11 @@ namespace MyNetia
                 new Thread(() => DB_Manager.updateElement(oldElemTitle, currentElem)).Start();
             else
                 new Thread(() => DB_Manager.addElement(currentElem)).Start();
+            new Thread(() =>
+            {
+                DB_Manager.getTitles();
+                matchingResearchUpdate();
+            }).Start();
             //Show Validation image
             imageValid.Visibility = Visibility.Visible;
             animImageOpacity(imageValid);
@@ -457,9 +462,12 @@ namespace MyNetia
                 if (window.ShowDialog() == true)
                 {
                     //Delete element
-                    DB_Manager.deleteElement(selectionDel);
-                    DB_Manager.getTitles();
-                    matchingResearchUpdate();
+                    new Thread(() => DB_Manager.deleteElement(selectionDel)).Start();
+                    new Thread(() =>
+                    {
+                        DB_Manager.getTitles();
+                        matchingResearchUpdate();
+                    }).Start();
                 }
             }
             else if (e.Key == Key.Tab && matchingResearch.Count > 0)
