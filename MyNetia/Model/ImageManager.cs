@@ -34,7 +34,7 @@ namespace MyNetia.Model
 
         public ImageManager()
         {
-            fileName = "TEST";
+            fileName = "";
             datas = new byte[0];
         }
 
