@@ -292,30 +292,6 @@ namespace MyNetia
         }
 
         /// <summary>
-        /// Select the item that has the keyboard focus
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void itemList_PreviewGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-        {
-            ListBoxItem item = (ListBoxItem)sender;
-            item.IsSelected = true;
-        }
-
-        /// <summary>
-        /// Save text content when lose keayboard focus
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void itemListTxt_PreviewLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-        {
-            //No access to TextBox.Text by another way than events (Cause ListBoxItem template changed => impossible via ItemsSource)
-            TextBox t = (TextBox)sender;
-            texts[listTxt.SelectedIndex].text = t.Text;
-            currentElem.chapters[listChapters.SelectedIndex].texts = texts;
-        }
-
-        /// <summary>
         /// Add an image in the list
         /// </summary>
         /// <param name="sender"></param>
