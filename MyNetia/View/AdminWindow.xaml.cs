@@ -109,13 +109,17 @@ namespace MyNetia
             "   - Can not containt this characters :\n" +
             "       < > : \" / \\ | ? *\n" +
             "       and can't be empty or white space\n" +
-            "   - Return => Apply selection\n\n" +
+            "   - Enter => Apply selection\n\n" +
+            "Chapter title :\n" +
+            "   - Titles have to be unique inside\n" +
+            "       the same element\n" +
+            "   - LAlt + Enter => Delete chapter\n\n" +
             "Chapter text :\n" +
-            "   - LCtrl + Return => New paragraph\n" +
-            "   - LAlt + Return => Delete paragraph\n\n" +
+            "   - LCtrl + Enter => New paragraph\n" +
+            "   - LAlt + Enter => Delete paragraph\n\n" +
             "Chapter image :\n" +
             "   - Enter => New image zone\n" +
-            "   - LAlt + Return => Delete image zone";
+            "   - LAlt + Enter => Delete image zone";
 
         //DELETE PART
         private string _selectionDel = "";
@@ -221,7 +225,12 @@ namespace MyNetia
         private void chapTitle_TextChanged(object sender, TextChangedEventArgs e)
         {
             int id = listChapters.SelectedIndex;
-            currentElem.chapters[id].title = chapTitle;
+            if(currentElem.isChapTitleUnique(chapTitle))
+                currentElem.chapters[id].title = chapTitle;
+            else
+            {
+                //TODO : * to show the name is not correct
+            }
         }
 
         /// <summary>
@@ -289,6 +298,17 @@ namespace MyNetia
                     listImg.SelectedIndex = listImg.Items.Count - 1;
                 }
             }
+        }
+
+        /// <summary>
+        /// Select the item that has the keyboard focus
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void itemList_PreviewGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            ListBoxItem item = (ListBoxItem)sender;
+            item.IsSelected = true;
         }
 
         /// <summary>

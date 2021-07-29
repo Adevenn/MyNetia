@@ -97,6 +97,15 @@
             <Setter Property="Content" Value="+"/>
         </Style>
 
+        <Style x:Key="btnAddImg" TargetType="Button" BasedOn="{StaticResource btnBase}">
+            <EventSetter Event="Click" Handler="addImg_Click"/>
+            <Setter Property="Content" Value="+"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Width" Value="30"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Margin" Value="0, 10"/>
+        </Style>
+
         <Style x:Key="btnImg" TargetType="Button" BasedOn="{StaticResource btnBase}">
             <EventSetter Event="Click" Handler="imgBtn_Click"/>
             <Setter Property="FontSize" Value="15"/>
@@ -143,9 +152,10 @@
             <Setter Property="ItemContainerStyle">
                 <Setter.Value>
                     <Style TargetType="ListBoxItem">
+                        <EventSetter Event="PreviewGotKeyboardFocus" Handler="itemList_PreviewGotKeyboardFocus"/>
                         <Setter Property="Template">
                             <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                <ControlTemplate TargetType="ListBoxItem">
                                     <Button
                                         Style="{StaticResource btnImg}"
                                         Content="{Binding fileName, UpdateSourceTrigger=PropertyChanged}"/>
@@ -173,7 +183,7 @@
                     <Style TargetType="ListBoxItem">
                         <Setter Property="Template">
                             <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                <ControlTemplate TargetType="ListBoxItem">
                                     <Border Style="{StaticResource borderFull}">
                                         <StackPanel>
                                             <ComboBox SelectedIndex="{Binding type, UpdateSourceTrigger=PropertyChanged}">
@@ -321,7 +331,7 @@
                     </Border>
                     <Grid
                         x:Name="chapContentPart"
-                        Visibility="Hidden">
+                        Visibility="Visible">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="70"/>
@@ -349,11 +359,7 @@
                                         <Label
                                             Style="{StaticResource label}"
                                             Content="Image :"/>
-                                        <Button
-                                            Style="{StaticResource btnBase}"
-                                            VerticalAlignment="Top"
-                                            Content="+"
-                                            Click="addImg_Click"/>
+                                        <Button Style="{StaticResource btnAddImg}"/>
                                         <ListBox
                                             x:Name="listImg"
                                             Style="{StaticResource listBoxImg}"/>

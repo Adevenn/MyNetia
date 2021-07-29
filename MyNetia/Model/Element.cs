@@ -97,6 +97,16 @@ namespace MyNetia.Model
             return allImagesList;
         }
 
+        public bool isChapTitleUnique(string title)
+        {
+            foreach(Chapter ch in chapters)
+            {
+                if (ch.title == title)
+                    return false;
+            }
+            return true;
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
