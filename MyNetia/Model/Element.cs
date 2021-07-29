@@ -53,7 +53,7 @@ namespace MyNetia.Model
         {
             this.title = title;
             this.subtitle = "";
-            this.chapters.Add(new Chapter("0"));
+            this.chapters.Add(new Chapter("1"));
             this.lastUpdate = DateTime.Now;
         }
 

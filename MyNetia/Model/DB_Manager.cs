@@ -76,7 +76,7 @@ namespace MyNetia.Model
                         cmd.Parameters.AddWithValue("p", chapTitles[i]);
                         cmd.Parameters.AddWithValue("p2", elem.title);
                         cmd.Parameters.AddWithValue("p3", img.fileName);
-                        cmd.Parameters.AddWithValue("p3", img.datas);
+                        cmd.Parameters.AddWithValue("p4", img.datas);
                         await cmd.ExecuteNonQueryAsync();
                     }
                 }
@@ -251,7 +251,7 @@ namespace MyNetia.Model
                     if (type == 0)
                         txtList.Add(new TextManager(Types.none));
                     else
-                        txtList.Add(new TextManager((Types)type, reader.GetString(0)));
+                        txtList.Add(new TextManager((Types)type, reader.GetString(1)));
                 }
                 connection.Close();
                 return txtList;

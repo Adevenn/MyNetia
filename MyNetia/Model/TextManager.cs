@@ -5,7 +5,7 @@ namespace MyNetia.Model
 {
     public class TextManager : INotifyPropertyChanged
     {
-        private string _text;
+        private string _text = "";
         public string text
         {
             get => _text;
