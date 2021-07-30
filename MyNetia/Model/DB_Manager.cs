@@ -30,7 +30,7 @@ namespace MyNetia.Model
         /// <param name="chapTitles"></param>
         /// <param name="texts"></param>
         /// <param name="images"></param>
-        public static async void addElement(Element elem)
+        public static void addElement(Element elem)
         {
             /* Integrity constraint
              * Element title MUST be unique
@@ -38,53 +38,56 @@ namespace MyNetia.Model
              */
             try
             {
-                //Connect to DB
-                connection.Open();
-
-                //INSERT NEW ELEMENT
-                NpgsqlCommand cmd = new NpgsqlCommand("INSERT INTO elements (title, subtitle, lastupdate) VALUES (@p, @p2, @p3)", connection);
-                cmd.Parameters.AddWithValue("p", elem.title);
-                cmd.Parameters.AddWithValue("p2", elem.subtitle);
-                cmd.Parameters.AddWithValue("p3", DateTime.Now);
-                await cmd.ExecuteNonQueryAsync();
-
-                //INSERT CHAPTERS
-                ObservableCollection<string> chapTitles = elem.getChapTitles();
-                List<ObservableCollection<TextManager>> texts = elem.getAllTexts();
-                List<ObservableCollection<ImageManager>> images = elem.getAllImg();
-                for (int i = 0; i < chapTitles.Count; i++)
+                lock (connection)
                 {
-                    cmd = new NpgsqlCommand("INSERT INTO chapters (title, idelem) VALUES (@p, @p2)", connection);
-                    cmd.Parameters.AddWithValue("p", chapTitles[i]);
-                    cmd.Parameters.AddWithValue("p2", elem.title);
-                    await cmd.ExecuteNonQueryAsync();
+                    //Connect to DB
+                    connection.Open();
 
-                    //INSERT TEXTS
-                    foreach (TextManager t in texts[i])
+                    //INSERT NEW ELEMENT
+                    NpgsqlCommand cmd = new NpgsqlCommand("INSERT INTO elements (title, subtitle, lastupdate) VALUES (@p, @p2, @p3)", connection);
+                    cmd.Parameters.AddWithValue("p", elem.title);
+                    cmd.Parameters.AddWithValue("p2", elem.subtitle);
+                    cmd.Parameters.AddWithValue("p3", DateTime.Now);
+                    cmd.ExecuteNonQuery();
+
+                    //INSERT CHAPTERS
+                    ObservableCollection<string> chapTitles = elem.getChapTitles();
+                    List<ObservableCollection<TextManager>> texts = elem.getAllTexts();
+                    List<ObservableCollection<ImageManager>> images = elem.getAllImg();
+                    for (int i = 0; i < chapTitles.Count; i++)
                     {
-                        cmd = new NpgsqlCommand("INSERT INTO texts (idchap, idelem, type, txt) VALUES (@p, @p2, @p3, @p4)", connection);
+                        cmd = new NpgsqlCommand("INSERT INTO chapters (title, idelem) VALUES (@p, @p2)", connection);
                         cmd.Parameters.AddWithValue("p", chapTitles[i]);
                         cmd.Parameters.AddWithValue("p2", elem.title);
-                        cmd.Parameters.AddWithValue("p3", t.type);
-                        cmd.Parameters.AddWithValue("p4", t.text);
-                        await cmd.ExecuteNonQueryAsync();
+                        cmd.ExecuteNonQuery();
+
+                        //INSERT TEXTS
+                        foreach (TextManager t in texts[i])
+                        {
+                            cmd = new NpgsqlCommand("INSERT INTO texts (idchap, idelem, type, txt) VALUES (@p, @p2, @p3, @p4)", connection);
+                            cmd.Parameters.AddWithValue("p", chapTitles[i]);
+                            cmd.Parameters.AddWithValue("p2", elem.title);
+                            cmd.Parameters.AddWithValue("p3", t.type);
+                            cmd.Parameters.AddWithValue("p4", t.text);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        //INSERT IMAGES
+                        foreach (ImageManager img in images[i])
+                        {
+                            cmd = new NpgsqlCommand("INSERT INTO images (idchap, idelem, filename, image) VALUES (@p, @p2, @p3, @p4)", connection);
+                            cmd.Parameters.AddWithValue("p", chapTitles[i]);
+                            cmd.Parameters.AddWithValue("p2", elem.title);
+                            cmd.Parameters.AddWithValue("p3", img.fileName);
+                            cmd.Parameters.AddWithValue("p4", img.datas);
+                            cmd.ExecuteNonQuery();
+                        }
                     }
 
-                    //INSERT IMAGES
-                    foreach (ImageManager img in images[i])
-                    {
-                        cmd = new NpgsqlCommand("INSERT INTO images (idchap, idelem, filename, image) VALUES (@p, @p2, @p3, @p4)", connection);
-                        cmd.Parameters.AddWithValue("p", chapTitles[i]);
-                        cmd.Parameters.AddWithValue("p2", elem.title);
-                        cmd.Parameters.AddWithValue("p3", img.fileName);
-                        cmd.Parameters.AddWithValue("p4", img.datas);
-                        await cmd.ExecuteNonQueryAsync();
-                    }
+                    //DISCONNECT FROM DB
+                    cmd.Dispose();
+                    connection.Close();
                 }
-
-                //DISCONNECT FROM DB
-                cmd.Dispose();
-                connection.Close();
             }
             catch (NpgsqlException e) { throw new NpgsqlException(e.Message); }
         }
@@ -112,17 +115,20 @@ namespace MyNetia.Model
         {
             try
             {
-                //CONNECT TO DB
-                connection.Open();
+                lock (connection)
+                {
+                    //CONNECT TO DB
+                    connection.Open();
 
-                //DELETE ELEMENT
-                NpgsqlCommand cmd = new NpgsqlCommand("DELETE FROM elements WHERE title=(@p)", connection);
-                cmd.Parameters.AddWithValue("p", title);
-                cmd.ExecuteNonQueryAsync();
+                    //DELETE ELEMENT
+                    NpgsqlCommand cmd = new NpgsqlCommand("DELETE FROM elements WHERE title=(@p)", connection);
+                    cmd.Parameters.AddWithValue("p", title);
+                    cmd.ExecuteNonQuery();
 
-                //DISCONNECT FROM DB
-                cmd.Dispose();
-                connection.Close();
+                    //DISCONNECT FROM DB
+                    cmd.Dispose();
+                    connection.Close();
+                }
             }
             catch (NpgsqlException e) { throw new NpgsqlException(e.Message); }
         }
@@ -132,21 +138,24 @@ namespace MyNetia.Model
         /// </summary>
         public static void getTitles()
         {
-            //Connect to DB
-            connection.Open();
+            lock (connection)
+            {
+                //Connect to DB
+                connection.Open();
 
-            //SELECT TITLES
-            NpgsqlCommand cmd = new NpgsqlCommand("SELECT title FROM elements ORDER BY title", connection);
-            NpgsqlDataReader reader = cmd.ExecuteReader();
+                //SELECT TITLES
+                NpgsqlCommand cmd = new NpgsqlCommand("SELECT title FROM elements ORDER BY title", connection);
+                NpgsqlDataReader reader = cmd.ExecuteReader();
 
-            //STORE TITLES
-            elemTitles = new List<string>();
-            while (reader.Read())
-                elemTitles.Add(reader.GetString(0));
+                //STORE TITLES
+                elemTitles = new List<string>();
+                while (reader.Read())
+                    elemTitles.Add(reader.GetString(0));
 
-            //DISCONNECT FROM DB
-            cmd.Dispose();
-            connection.Close();
+                //DISCONNECT FROM DB
+                cmd.Dispose();
+                connection.Close();
+            }
         }
 
         /// <summary>
@@ -154,21 +163,24 @@ namespace MyNetia.Model
         /// </summary>
         public static void getSubtitles()
         {
-            //Connect to DB
-            connection.Open();
+            lock (connection)
+            {
+                //Connect to DB
+                connection.Open();
 
-            //SELECT TITLES
-            NpgsqlCommand cmd = new NpgsqlCommand("SELECT subtitle FROM elements ORDER BY subtitle", connection);
-            NpgsqlDataReader reader = cmd.ExecuteReader();
+                //SELECT TITLES
+                NpgsqlCommand cmd = new NpgsqlCommand("SELECT subtitle FROM elements ORDER BY subtitle", connection);
+                NpgsqlDataReader reader = cmd.ExecuteReader();
 
-            //STORE TITLES
-            elemSubtitles = new List<string>();
-            while (reader.Read())
-                elemSubtitles.Add(reader.GetString(0));
+                //STORE TITLES
+                elemSubtitles = new List<string>();
+                while (reader.Read())
+                    elemSubtitles.Add(reader.GetString(0));
 
-            //DISCONNECT FROM DB
-            cmd.Dispose();
-            connection.Close();
+                //DISCONNECT FROM DB
+                cmd.Dispose();
+                connection.Close();
+            }
         }
 
         /// <summary>

@@ -9,8 +9,8 @@
         Title="MyNetia-Admin"
         WindowStartupLocation="CenterScreen"
         Closing="Window_Closing"
-        MinHeight="800" MaxHeight="800"
-        MinWidth="750" MaxWidth="750">
+        MinHeight="850" MaxHeight="850"
+        MinWidth="800" MaxWidth="800">
     
     <Window.Resources>
 
@@ -22,28 +22,30 @@
             <Setter Property="Margin" Value="0, 10"/>
         </Style>
 
-        <Style x:Key="tBoxChapTitle" BasedOn="{StaticResource tBox}" TargetType="TextBox">
+        <Style x:Key="tBoxChapTitle" TargetType="TextBox" BasedOn="{StaticResource tBox}">
             <EventSetter Event="TextChanged" Handler="chapTitle_TextChanged"/>
             <EventSetter Event="KeyDown" Handler="chapTitle_KeyDown"/>
             <Setter Property="Text" Value="{Binding Path=chapTitle, UpdateSourceTrigger=PropertyChanged}"/>
         </Style>
 
-        <Style x:Key="tBoxDelete" BasedOn="{StaticResource tBox}" TargetType="TextBox">
+        <Style x:Key="tBoxDelete" TargetType="TextBox" BasedOn="{StaticResource tBox}">
             <Setter Property="Text" Value="{Binding Path=selectionDel, UpdateSourceTrigger=PropertyChanged}"/>
             <EventSetter Event="KeyDown" Handler="selectionDelete_KeyDown"/>
             <EventSetter Event="TextChanged" Handler="onTextChangedDelete"/>
         </Style>
 
-        <Style x:Key="tBoxMultiLines" BasedOn="{StaticResource tBox}" TargetType="TextBox">
+        <Style x:Key="tBoxMultiLines" TargetType="TextBox" BasedOn="{StaticResource tBox}">
             <Setter Property="AcceptsReturn" Value="True"/>
-            <Setter Property="Height" Value="70"/>
+            <Setter Property="Height" Value="100"/>
+            <Setter Property="Margin" Value="10, 20"/>
         </Style>
         <!--#endregion-->
 
         <!--#region TextBlock Style-->
-        <Style x:Key="tBlock" BasedOn="{StaticResource tBlockBase}" TargetType="TextBlock">
+        <Style x:Key="{x:Type TextBlock}" BasedOn="{StaticResource tBlockBase}" TargetType="TextBlock">
             <Setter Property="FontSize" Value="18"/>
             <Setter Property="Padding" Value="5"/>
+            <Setter Property="Margin" Value="10, 0"/>
         </Style>
         <!--#endregion-->
 
@@ -61,17 +63,6 @@
         </Style>
         <!--#endregion-->
 
-        <!--#region Label Style-->
-        <Style x:Key="label" BasedOn="{StaticResource labelBase}" TargetType="Label">
-            <Setter Property="FontSize" Value="20"/>
-            <Setter Property="Width" Value="160"/>
-            <Setter Property="Height" Value="40"/>
-            <Setter Property="VerticalAlignment" Value="Top"/>
-            <Setter Property="HorizontalContentAlignment" Value="Left"/>
-            <Setter Property="Margin" Value="0, 10"/>
-        </Style>
-        <!--#endregion-->
-
         <!--#region ItemControl Style-->
         <Style x:Key="itemControlDelete" TargetType="ItemsControl">
             <Setter Property="ItemsSource" Value="{Binding Path=matchingResearch}"/>
@@ -80,7 +71,7 @@
         <!--#endregion-->
 
         <!--#region Image style-->
-        <Style x:Key="image" TargetType="Image">
+        <Style x:Key="{x:Type Image}" TargetType="Image">
             <Setter Property="Source" Value="/AppResources/Images/Valid_MyNetia.png"/>
             <Setter Property="Visibility" Value="Hidden"/>
             <Setter Property="Height" Value="40"/>
@@ -166,7 +157,7 @@
             <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
             <Setter Property="FontFamily" Value="{StaticResource OrkneyLight}"/>
             <Setter Property="FontSize" Value="20"/>
-            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Margin" Value="10, 20, 10, 10"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ComboBox}">
@@ -235,22 +226,10 @@
         <!--#endregion -->
 
         <!--#region Button Style-->
-        <Style x:Key="btnAddChapter" BasedOn="{StaticResource btnBase}" TargetType="Button">
-            <EventSetter Event="Click" Handler="addChapter_Click"/>
-            <Setter Property="FontSize" Value="15"/>
-            <Setter Property="Height" Value="20"/>
-            <Setter Property="Width" Value="75"/>
-            <Setter Property="Content" Value="+"/>
-        </Style>
-
-        <Style x:Key="btnAddImg" TargetType="Button" BasedOn="{StaticResource btnBase}">
-            <EventSetter Event="Click" Handler="addImg_Click"/>
+        <Style x:Key="btnAdd" TargetType="Button" BasedOn="{StaticResource btnBase}">
             <Setter Property="Content" Value="+"/>
             <Setter Property="Height" Value="40"/>
             <Setter Property="Width" Value="40"/>
-            <Setter Property="VerticalAlignment" Value="Top"/>
-            <Setter Property="HorizontalContentAlignment" Value="Left"/>
-            <Setter Property="Margin" Value="0, 10"/>
         </Style>
 
         <Style x:Key="btnImg" TargetType="Button" BasedOn="{StaticResource btnBase}">
@@ -304,9 +283,7 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="ListBoxItem">
-                                    <Button
-                                        Style="{StaticResource btnImg}"
-                                        Content="{Binding fileName, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <Button Style="{StaticResource btnImg}" Content="{Binding fileName, UpdateSourceTrigger=PropertyChanged}"/>
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
@@ -329,23 +306,20 @@
             <Setter Property="ItemContainerStyle">
                 <Setter.Value>
                     <Style TargetType="ListBoxItem">
-                        <Setter Property="Margin" Value="0, 10"/>
-                        <Setter Property="Padding" Value="5"/>
+                        <Setter Property="Margin" Value="20, 10"/>
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="ListBoxItem">
                                     <Border Style="{StaticResource borderFull}">
                                         <StackPanel>
                                             <ComboBox SelectedIndex="{Binding type, UpdateSourceTrigger=PropertyChanged}">
-                                                <ComboBoxItem Content="none"/>
-                                                <ComboBoxItem Content="title"/>
-                                                <ComboBoxItem Content="subtitle"/>
-                                                <ComboBoxItem Content="subsubtitle"/>
-                                                <ComboBoxItem Content="text"/>
+                                                <ComboBoxItem Content="None"/>
+                                                <ComboBoxItem Content="Title"/>
+                                                <ComboBoxItem Content="Subtitle"/>
+                                                <ComboBoxItem Content="Subsubtitle"/>
+                                                <ComboBoxItem Content="Text"/>
                                             </ComboBox>
-                                            <TextBox
-                                                Style="{StaticResource tBoxMultiLines}"
-                                                Text="{Binding text, Mode=TwoWay}"/>
+                                            <TextBox Style="{StaticResource tBoxMultiLines}" Text="{Binding text, Mode=TwoWay}"/>
                                         </StackPanel>
                                     </Border>
                                 </ControlTemplate>
@@ -417,20 +391,16 @@
         </Grid>
         <!--#endregion-->
         <TabControl Style="{StaticResource tabControl}">
-            <TabItem
-                Style="{StaticResource tabItem}"
-                Header="Add/Update">
+            <TabItem Style="{StaticResource tabItem}" Header="Add/Update">
                 <DockPanel>
                     <StackPanel DockPanel.Dock="Top">
                         <Border Style="{StaticResource borderBot}">
                             <StackPanel Style="{StaticResource spH}">
-                                <Label
-                                    Style="{StaticResource label}"
-                                    Content="Select element :"/>
+                                <TextBlock Text="Select element :"/>
                                 <TextBox
                                     Style="{StaticResource tBox}"
-                                    Text="{Binding Path=selectAddUpdate, UpdateSourceTrigger=PropertyChanged}"
-                                    KeyDown="selectAddUpdate_KeyDown"/>
+                                    KeyDown="selectAddUpdate_KeyDown"
+                                    Text="{Binding Path=selectAddUpdate, UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>
                         </Border>
                     </StackPanel>
@@ -439,39 +409,28 @@
                         x:Name="spElemPart"
                         Style="{StaticResource spElemPart}">
                         <StackPanel Style="{StaticResource spH}">
-                            <Label
-                                Style="{StaticResource label}"
-                                Content="Title :"/>
-                            <TextBox
-                                Style="{StaticResource tBox}"
-                                Text="{Binding Path=currentElem.title, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock Text="Title :"/>
+                            <TextBox Style="{StaticResource tBox}" Text="{Binding Path=currentElem.title, UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
                         <StackPanel Style="{StaticResource spH}">
-                            <Label
-                                Style="{StaticResource label}"
-                                Content="Subtitle :"/>
-                            <TextBox
-                                Style="{StaticResource tBox}"
-                                Text="{Binding Path=currentElem.subtitle, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock Text="Subtitle :"/>
+                            <TextBox Style="{StaticResource tBox}" Text="{Binding Path=currentElem.subtitle, UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
                     </StackPanel>
                     <Border
+                        DockPanel.Dock="Left"
                         x:Name="chaptersListPart"
                         Style="{StaticResource borderRight}"
+                        Width="200"
                         Visibility="Hidden">
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="120"/>
+                                <RowDefinition Height="70"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-                            <StackPanel
-                                Grid.Row="0"
-                                Style="{StaticResource spV}">
-                                <Label
-                                    Style="{StaticResource label}"
-                                    HorizontalContentAlignment="Center"
-                                    Content="Chapters :"/>
-                                <Button Style="{StaticResource btnAddChapter}"/>
+                            <StackPanel Grid.Row="0" Style="{StaticResource spH}">
+                                <TextBlock Text="Chapters :"/>
+                                <Button Style="{StaticResource btnAdd}" Click="addChapter_Click"/>
                             </StackPanel>
                             <ListBox
                                 Grid.Row="1"
@@ -479,84 +438,84 @@
                                 Style="{StaticResource listBoxChapters}"/>
                         </Grid>
                     </Border>
-                    <Grid
-                        x:Name="chapContentPart"
-                        Visibility="Hidden">
+                    <Grid x:Name="chapContentPart" Visibility="Hidden">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="70"/>
                         </Grid.RowDefinitions>
                         <Border Style="{StaticResource borderTopBot}">
-                            <ScrollViewer
-                                Grid.Row="0"
-                                Style="{StaticResource scrollViewer}">
-                                <StackPanel Style="{StaticResource spV}">
-                                    <StackPanel Style="{StaticResource spH}">
-                                        <Label
-                                            Style="{StaticResource label}"
-                                            Content="Chapter title :"/>
-                                        <TextBox Style="{StaticResource tBoxChapTitle}"/>
+                            <ScrollViewer Grid.Row="0" Style="{StaticResource scrollViewer}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="70"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock
+                                        Grid.Column="0" Grid.Row="0"
+                                        Text="Chapter title :"/>
+                                    <TextBox
+                                        Grid.Column="1" Grid.Row="0"
+                                        Style="{StaticResource tBoxChapTitle}"/>
+                                    <StackPanel
+                                        Grid.Column="0" Grid.Row="1"
+                                        Style="{StaticResource spH}"
+                                        VerticalAlignment="Top"
+                                        HorizontalAlignment="Left">
+                                        <TextBlock Text="Text :"/>
+                                        <Button
+                                            Style="{StaticResource btnAdd}"
+                                            Click="addTxt_Click"
+                                            HorizontalContentAlignment="Left"/>
                                     </StackPanel>
-                                    <StackPanel Style="{StaticResource spH}">
-                                        <Label
-                                            Style="{StaticResource label}"
-                                            Content="Text :"/>
-                                        <ListBox
-                                            x:Name="listTxt"
-                                            Style="{StaticResource listBoxTxt}"/>
+                                    <ListBox
+                                        Grid.Column="1" Grid.Row="1"
+                                        x:Name="listTxt"
+                                        Style="{StaticResource listBoxTxt}"/>
+                                    <StackPanel
+                                        Grid.Column="0" Grid.Row="2"
+                                        Style="{StaticResource spH}"
+                                        VerticalAlignment="Top"
+                                        HorizontalAlignment="Left">
+                                        <TextBlock Text="Image :"/>
+                                        <Button
+                                            Style="{StaticResource btnAdd}"
+                                            Click="addImg_Click"
+                                            HorizontalContentAlignment="Left"/>
                                     </StackPanel>
-                                    <StackPanel Style="{StaticResource spH}">
-                                        <Label
-                                            Style="{StaticResource label}"
-                                            Content="Image :"/>
-                                        <Button Style="{StaticResource btnAddImg}"/>
-                                        <ListBox
-                                            x:Name="listImg"
-                                            Style="{StaticResource listBoxImg}"/>
-                                    </StackPanel>
-                                </StackPanel>
+                                    <ListBox
+                                        Grid.Column="1" Grid.Row="2"
+                                        x:Name="listImg"
+                                        Style="{StaticResource listBoxImg}"/>
+                                </Grid>
                             </ScrollViewer>
                         </Border>
-                        <StackPanel
-                            Grid.Row="1"
-                            Style="{StaticResource spH}">
-                            <Button
-                                Style="{StaticResource btnValid}"
-                                Content="Valid"/>
-                            <Image
-                                x:Name="imageValid"
-                                Style="{StaticResource image}"/>
+                        <StackPanel Grid.Row="1" Style="{StaticResource spH}">
+                            <Button Style="{StaticResource btnValid}" Content="Valid"/>
+                            <Image x:Name="imageValid"/>
                         </StackPanel>
                     </Grid>
                 </DockPanel>
             </TabItem>
-            <TabItem
-                Style="{StaticResource tabItem}"
-                Header="Delete">
+            <TabItem Style="{StaticResource tabItem}" Header="Delete">
                 <StackPanel>
                     <Border Style="{StaticResource borderBot}">
                         <StackPanel Style="{StaticResource spH}">
-                            <Label
-                                Style="{StaticResource label}"
-                                Content="Select element :"/>
-                            <TextBox
-                                x:Name="selectDelete"
-                                Style="{StaticResource tBoxDelete}"/>
+                            <TextBlock Text="Select element :"/>
+                            <TextBox x:Name="selectDelete" Style="{StaticResource tBoxDelete}"/>
                         </StackPanel>
                     </Border>
                     <ItemsControl Style="{StaticResource itemControlDelete}"/>
                 </StackPanel>
             </TabItem>
-            <TabItem
-                Style="{StaticResource tabItem}"
-                Header="Options">
+            <TabItem Style="{StaticResource tabItem}" Header="Options">
                 <StackPanel Style="{StaticResource spV}">
-                    <TextBlock
-                        Style="{StaticResource tBlock}"
-                        Text="Work in progress"/>
-                    <TextBlock
-                        Style="{StaticResource tBlock}"
-                        Text="This'll content every others infos, like database server, themes, etc .."/>
+                    <TextBlock Text="Work in progress"/>
+                    <TextBlock Text="This'll content every others infos, like database server, themes, etc .."/>
                 </StackPanel>
             </TabItem>
         </TabControl>

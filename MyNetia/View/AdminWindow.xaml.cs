@@ -312,6 +312,16 @@ namespace MyNetia
         }
 
         /// <summary>
+        /// Add a text in the list
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void addTxt_Click(object sender, RoutedEventArgs e)
+        {
+            texts.Add(new TextManager(Types.none));
+        }
+
+        /// <summary>
         /// Add an image in the list
         /// </summary>
         /// <param name="sender"></param>
@@ -361,15 +371,16 @@ namespace MyNetia
         /// <param name="e"></param>
         private void valid_Click(object sender, RoutedEventArgs e)
         {
-            if (DB_Manager.isElementExist(oldElemTitle))
-                new Thread(() => DB_Manager.updateElement(oldElemTitle, currentElem)).Start();
-            else
-                new Thread(() => DB_Manager.addElement(currentElem)).Start();
             new Thread(() =>
             {
+                if (DB_Manager.isElementExist(oldElemTitle))
+                    DB_Manager.updateElement(oldElemTitle, currentElem);
+                else
+                    DB_Manager.addElement(currentElem);
                 DB_Manager.getTitles();
                 matchingResearchUpdate();
             }).Start();
+
             //Show Validation image
             imageValid.Visibility = Visibility.Visible;
             animImageOpacity(imageValid);
@@ -455,16 +466,16 @@ namespace MyNetia
             if (e.Key == Key.Return && DB_Manager.isElementExist(selectionDel))
             {
                 //Confirm delete element
-                ConfirmationWindow window = new ConfirmationWindow($"Do you want to delete {selectDelete} ?")
+                ConfirmationWindow window = new ConfirmationWindow($"Do you want to delete\n{selectionDel} ?")
                 {
                     Owner = this
                 };
                 if (window.ShowDialog() == true)
                 {
                     //Delete element
-                    new Thread(() => DB_Manager.deleteElement(selectionDel)).Start();
                     new Thread(() =>
                     {
+                        DB_Manager.deleteElement(selectionDel);
                         DB_Manager.getTitles();
                         matchingResearchUpdate();
                     }).Start();

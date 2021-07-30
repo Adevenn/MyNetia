@@ -1,4 +1,5 @@
-﻿TODO :
+﻿
+TODO :
 
 - Personnalisation de text, via RichTextBox e.g.
 	- Lien hypertext
