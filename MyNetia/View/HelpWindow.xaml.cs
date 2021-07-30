@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using MyNetia.Model;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -11,23 +12,25 @@ namespace MyNetia
         public HelpWindow()
         {
             InitializeComponent();
-            loadCommands();
-            loadProtocols();
+            showCommands();
+            showElements();
         }
 
         #region UI CREATOR
-        private void loadProtocols()
+
+        /// <summary>
+        /// Show elements on screen
+        /// </summary>
+        private void showElements()
         {
-            for (int i = 0; i < currentApp.dbManager.db.Count; i++)
+            List<string> list = DB_Manager.elemTitles;
+            for (int i = 0; i < list.Count; i++)
             {
-                StackPanel s = new StackPanel
-                {
-                    Style = (Style)Application.Current.TryFindResource("spH")
-                };
+                StackPanel s = setSP();
                 for (int j = i; j < i + 3; j++)
                 {
-                    if (j < currentApp.dbManager.db.Count)
-                        s.Children.Add(setLabel(currentApp.dbManager.db[j].title));
+                    if (j < list.Count)
+                        s.Children.Add(setLabel(list[j]));
                     else
                         break;
                 }
@@ -35,16 +38,35 @@ namespace MyNetia
                 i += 2;
             }
         }
-        private void loadCommands()
+
+        /// <summary>
+        /// Show commands on screen
+        /// </summary>
+        private void showCommands()
         {
             List<string> commands = currentApp.commandsList();
             foreach (string txt in commands)
                 stackCommands.Children.Add(setLabel(txt));
         }
+
+        /// <summary>
+        /// Create a custom Label
+        /// </summary>
+        /// <param name="content"></param>
+        /// <returns></returns>
         private Label setLabel(string content) => new Label
         {
             Content = content,
             Style = (Style)Resources["label"]
+        };
+
+        /// <summary>
+        /// Create a custom StackPanel
+        /// </summary>
+        /// <returns></returns>
+        private StackPanel setSP() => new StackPanel
+        {
+            Style = (Style)Application.Current.TryFindResource("spH")
         };
         #endregion
 

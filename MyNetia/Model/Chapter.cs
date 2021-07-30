@@ -1,47 +1,63 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace MyNetia.Model
 {
-    [Serializable]
     public class Chapter : INotifyPropertyChanged
     {
-        private string _chapTitle;
-        public string chapTitle
+        private string _title;
+        public string title
         {
-            get => _chapTitle;
+            get => _title;
             set
             {
-                if(_chapTitle != value)
+                if(_title != value)
                 {
-                    _chapTitle = value;
+                    _title = value;
                     OnPropertyChanged();
                 }
             }
         }
-        public List<string> texts;
-        public List<string> images;
-
-        public Chapter()
+        private ObservableCollection<TextManager> _texts;
+        public ObservableCollection<TextManager> texts
         {
-            chapTitle = "New chapter";
-            texts = new List<string>
+            get => _texts;
+            set
             {
-                ""
-            };
-            images = new List<string>
+                if(_texts != value)
+                {
+                    _texts = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private ObservableCollection<ImageManager> _images;
+        public ObservableCollection<ImageManager> images
+        {
+            get => _images;
+            set
             {
-                ""
-            };
+                if(_images != value)
+                {
+                    _images = value;
+                    OnPropertyChanged();
+                }
+            }
         }
 
-        [JsonConstructor]
-        public Chapter(string chapTitle, List<string> texts, List<string> images)
+        public Chapter(string title)
         {
-            this.chapTitle = chapTitle;
+            this.title = "Chapter " + title;
+            this.texts = new ObservableCollection<TextManager>();
+            this.texts.Add(new TextManager(Types.none));
+            this.images = new ObservableCollection<ImageManager>();
+            this.images.Add(new ImageManager());
+        }
+
+        public Chapter(string title, ObservableCollection<TextManager> texts, ObservableCollection<ImageManager> images)
+        {
+            this.title = title;
             this.texts = texts;
             this.images = images;
         }

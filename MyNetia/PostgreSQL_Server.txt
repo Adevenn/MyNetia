@@ -1,0 +1,57 @@
+﻿
+Make your own PostgreSQL server :
+    -> Download Postgresql : https://www.postgresql.org/download/
+    -> Learn PostgreSQL : https://www.postgresql.org/docs/13/index.html
+
+--ELEMENTS TABLE
+CREATE TABLE public.elements
+(
+    title text COLLATE pg_catalog."default" NOT NULL,
+    subtitle text COLLATE pg_catalog."default",
+    lastupdate date NOT NULL,
+    CONSTRAINT "Element_pkey" PRIMARY KEY (title)
+)
+
+--CHAPTERS TABLE
+CREATE TABLE public.chapters
+(
+    title text COLLATE pg_catalog."default" NOT NULL,
+    idelem text COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT chapters_pkey PRIMARY KEY (title, idelem),
+    CONSTRAINT "elem_fkey" FOREIGN KEY (idelem)
+        REFERENCES public.elements (title) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
+        NOT VALID
+)
+
+--TEXTS TABLE
+CREATE TABLE public.texts
+(
+    idtxt integer NOT NULL DEFAULT nextval('texts_idtxt_seq'::regclass),
+    idchap text COLLATE pg_catalog."default" NOT NULL,
+    idelem text COLLATE pg_catalog."default" NOT NULL,
+    txt text COLLATE pg_catalog."default",
+    CONSTRAINT texts_pkey PRIMARY KEY (idtxt),
+    CONSTRAINT "chapelem_fkey" FOREIGN KEY (idchap, idelem)
+        REFERENCES public.chapters (title, idelem) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
+        NOT VALID
+)
+
+--IMAGES TABLE
+CREATE TABLE public.images
+(
+    idimg integer NOT NULL DEFAULT nextval('images_idimg_seq'::regclass),
+    idchap text COLLATE pg_catalog."default" NOT NULL,
+    idelem text COLLATE pg_catalog."default" NOT NULL,
+    image bytea,
+    filename text COLLATE pg_catalog."default",
+    CONSTRAINT images_pkey PRIMARY KEY (idimg),
+    CONSTRAINT "chapelem_fkey" FOREIGN KEY (idchap, idelem)
+        REFERENCES public.chapters (title, idelem) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
+        NOT VALID
+)

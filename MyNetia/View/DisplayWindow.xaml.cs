@@ -1,5 +1,4 @@
 ﻿using MyNetia.Model;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -10,92 +9,133 @@ using System.Windows.Media.Imaging;
 
 namespace MyNetia
 {
-    public partial class DisplayWindow : Window
+    public partial class DisplayWindow : Window, INotifyPropertyChanged
     {
         private readonly App currentApp = (App)Application.Current;
-        private readonly InfoBinding binding = new InfoBinding();
+        private Element _elem;
+        public Element elem
+        {
+            get => _elem;
+            set
+            {
+                if(_elem != value)
+                {
+                    _elem = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public DisplayWindow(string title)
         {
-            DataContext = binding;
+            DataContext = this;
             InitializeComponent();
             Title = title;
             setValues(title);
         }
 
         #region EVENTS
-        private void listChapters_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            setChapterValues((Chapter)listChapters.SelectedItem);
-        }
 
+        /// <summary>
+        /// Set the element values and select the first chapter
+        /// </summary>
+        /// <param name="title"></param>
         private void setValues(string title)
         {
-            DB_Element elem = currentApp.dbManager.getElement(title);
-            elemTitle.Text = elem.title;
-            elemSubtitle.Text = elem.subtitle;
-            binding.chapters = new ObservableCollection<Chapter>(elem.chapters);
+            elem = DB_Manager.getElement(title);
             listChapters.SelectedIndex = 0;
             elemLastUpdate.Text = "Last update : " + elem.lastUpdate.Month.ToString() + "/" + elem.lastUpdate.Day.ToString() + "/" + elem.lastUpdate.Year.ToString();
         }
 
-        private void setChapterValues(Chapter ch)
+        /// <summary>
+        /// Set the chapters values on chapter selection changed and scroll to top
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void listChapters_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            Chapter ch = (Chapter)listChapters.SelectedItem;
+            setUI(ch, spContent);
             scrollViewer.ScrollToTop();
-            binding.chapTitle = ch.chapTitle;
-            setUI(ch.texts, ch.images, spContent);
         }
         #endregion
 
         #region UI CREATOR
-        private void setUI(List<string> txt, List<string> img, StackPanel sp)
+
+        /// <summary>
+        /// Create text and image zones and set title
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <param name="img"></param>
+        /// <param name="sp"></param>
+        private void setUI(Chapter ch, StackPanel sp)
         {
+            chapTitle.Text = ch.title;
+            ObservableCollection<TextManager> texts = ch.texts;
+            ObservableCollection<ImageManager> images = ch.images;
             sp.Children.Clear();
             int idTxt = 0;
             int idImg = 0;
             while (true)
             {
-                StackPanel spHoriz = new StackPanel
+                StackPanel spHoriz = setStackPanel();
+                if (idTxt < texts.Count)
                 {
-                    Style = (Style)Resources["spHCustom"]
-                };
-                if (idTxt < txt.Count)
-                {
-                    if (!string.IsNullOrWhiteSpace(txt[idTxt]))
-                        spHoriz.Children.Add(setTxtBlock(txt[idTxt]));
+                    if (texts[idTxt].type != 0)
+                        spHoriz.Children.Add(setTxtBlock(texts[idTxt].text));
                     idTxt++;
                 }
-                if (idImg < img.Count)
+                if (idImg < images.Count)
                 {
-                    if (!string.IsNullOrWhiteSpace(img[idImg]))
-                    {
-                        string path = elemTitle.Text + @"\" + img[idImg];
-                        if (FileManager.isImageExist(path))
-                            spHoriz.Children.Add(image(FileManager.readByteFile(path)));
-                        else
-                            spHoriz.Children.Add(image(FileManager.defaultImage()));
-                    }
+                    if (images[idImg].fileName != "")
+                        spHoriz.Children.Add(setImage(images[idImg].datas));
                     idImg++;
                 }
                 sp.Children.Add(spHoriz);
-                if (idTxt >= txt.Count && idImg >= img.Count)
+                if (idTxt >= texts.Count && idImg >= images.Count)
                     break;
             }
         }
 
+        /// <summary>
+        /// Create a custom TextBox
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         private TextBlock setTxtBlock(string text) => new TextBlock
         {
             Text = text,
             Style = (Style)Resources["tBlock"]
         };
 
-        private Image image(byte[] imageFile) => new Image
+        /// <summary>
+        /// Create a custom image
+        /// </summary>
+        /// <param name="imageFile"></param>
+        /// <returns></returns>
+        private Image setImage(byte[] imageFile) => new Image
         {
             Source = loadImage(imageFile),
             Style = (Style)Resources["image"]
         };
+
+        /// <summary>
+        /// Create a custom StackPanel
+        /// </summary>
+        /// <returns></returns>
+        private StackPanel setStackPanel() => new StackPanel
+        {
+            Style = (Style)Resources["spHCustom"]
+        };
         #endregion
 
         #region OTHERS METHODS
+
+        /// <summary>
+        /// Create WPF BitmapImage from byte[] values
+        /// </summary>
+        /// <param name="imageData"></param>
+        /// <returns></returns>
         private BitmapImage loadImage(byte[] imageData)
         {
             if (imageData == null || imageData.Length == 0)
@@ -163,41 +203,10 @@ namespace MyNetia
 
         #endregion
 
-        private class InfoBinding : INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
-            private string _chapTitle;
-            public string chapTitle
-            {
-                get { return _chapTitle; }
-                set
-                {
-                    if (_chapTitle != value)
-                    {
-                        _chapTitle = value;
-                        OnPropertyChanged();
-                    }
-                }
-            }
-
-            private ObservableCollection<Chapter> _chapters;
-            public ObservableCollection<Chapter> chapters
-            {
-                get { return _chapters; }
-                set
-                {
-                    if (_chapters != value)
-                    {
-                        _chapters = value;
-                        OnPropertyChanged();
-                    }
-                }
-            }
-
-            public event PropertyChangedEventHandler PropertyChanged;
-            protected void OnPropertyChanged([CallerMemberName] string name = null)
-            {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }

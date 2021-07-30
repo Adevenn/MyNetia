@@ -13,15 +13,16 @@
     <PackageLicenseFile>Licence.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <AssemblyVersion>1.1.0.0</AssemblyVersion>
-    <FileVersion>1.1.0.0</FileVersion>
-    <PackageReleaseNotes>v 1.1.0</PackageReleaseNotes>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <FileVersion>2.0.0.0</FileVersion>
+    <PackageReleaseNotes>v 2.0.0</PackageReleaseNotes>
+    <Version>2.0.0</Version>
+    <Description>This application is a personnal encyclopedia. Everything you want to remember can be saved in MyNetia. Notes, summaries, quick reminders, ToDo list, etc</Description>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="AppResources\Images\DefaultImage.png" />
     <None Remove="AppResources\Images\Valid_MyNetia.png" />
-    <None Remove="AppResources\SaveDB.json" />
     <None Remove="ReadMe.txt" />
     <Content Include="Licence.txt">
       <Pack>True</Pack>
@@ -36,6 +37,7 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Npgsql" Version="5.0.7" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,20 +48,22 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="AppResources\Images\DefaultImage.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="AppResources\SaveDB.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Resource Include="AppResources\Images\DefaultImage.png" />
     <Content Include="ReadMe.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
   <ItemGroup>
+    <Page Include="App.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="MyNetia_Icon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PostgreSQL_Server.txt">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

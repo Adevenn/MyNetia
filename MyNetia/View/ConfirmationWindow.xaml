@@ -1,4 +1,4 @@
-﻿<Window x:Class="MyNetia.ResearchWindow"
+﻿<Window x:Class="MyNetia.ConfirmationWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,26 +6,31 @@
         xmlns:local="clr-namespace:MyNetia"
         mc:Ignorable="d"
         Style="{StaticResource window}"
-        Title="MyNetia"
-        WindowStartupLocation="CenterScreen"
-        Closing="Window_Closing"
-        MinHeight="200" MaxHeight="200"
-        MinWidth="300" MaxWidth="300">
+        Title="Confirmation"
+        WindowStartupLocation="CenterOwner"
+        MinHeight="250" MaxHeight="250"
+        MinWidth="400" MaxWidth="400">
     
     <Window.Resources>
-        <Style x:Key="tBox" BasedOn="{StaticResource tBoxBase}" TargetType="TextBox">
-            <EventSetter Event="KeyDown" Handler="onKeyDown"/>
-            <EventSetter Event="TextChanged" Handler="onTextChanged"/>
+        
+        <!--#region Label Style-->
+        <Style x:Key="label" BasedOn="{StaticResource labelBase}" TargetType="Label">
             <Setter Property="FontSize" Value="20"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="Width" Value="Auto"/>
-            <Setter Property="Padding" Value="10, 0"/>
+            <Setter Property="Height" Value="60"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Margin" Value="0, 10"/>
         </Style>
+        <!--#endregion-->
 
-        <Style x:Key="itemControl" BasedOn="{StaticResource itemControlBase}" TargetType="ItemsControl">
-            <Setter Property="ItemsSource" Value="{Binding matchingResearch}"/>
+        <!--#region Button Style-->
+        <Style x:Key="btnConfirm" BasedOn="{StaticResource btnBase}" TargetType="Button">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="Margin" Value="10"/>
         </Style>
+        <!--#endregion-->
+        
     </Window.Resources>
     
     <DockPanel>
@@ -36,7 +41,8 @@
             Style="{StaticResource gridTitleBar}"
             MouseDown="titleBar_MouseDown">
             <Grid.Triggers>
-                <EventTrigger RoutedEvent="Grid.MouseEnter">
+                <EventTrigger
+                    RoutedEvent="Grid.MouseEnter">
                     <BeginStoryboard>
                         <Storyboard>
                             <DoubleAnimation
@@ -46,7 +52,8 @@
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger>
-                <EventTrigger RoutedEvent="Grid.MouseLeave">
+                <EventTrigger
+                    RoutedEvent="Grid.MouseLeave">
                     <BeginStoryboard>
                         <Storyboard>
                             <DoubleAnimation
@@ -59,7 +66,7 @@
             </Grid.Triggers>
             <Label
                 Style="{StaticResource labelTitleBar}"
-                Content="MyNetia"/>
+                Content="Confirmation"/>
             <StackPanel
                 Orientation="Horizontal"
                 HorizontalAlignment="Right">
@@ -69,11 +76,6 @@
                     Style="{StaticResource btnTitleBar}"
                     Content="-"/>
                 <Button
-                    x:Name="maxBtn"
-                    Click="maxBtn_Click"
-                    Style="{StaticResource btnTitleBar}"
-                    Content="o"/>
-                <Button
                     x:Name="closeBtn"
                     Click="closeBtn_Click"
                     Style="{StaticResource btnTitleBar}"
@@ -81,13 +83,20 @@
             </StackPanel>
         </Grid>
         <!--#endregion-->
-        <StackPanel DockPanel.Dock="Top">
-            <Border Style="{StaticResource borderBot}">
-                <TextBox
-                    x:Name="txtBox"
-                    Style="{StaticResource tBox}"/>
-            </Border>
-            <ItemsControl Style="{StaticResource itemControl}"/>
+        <StackPanel Style="{StaticResource spV}">
+            <Label
+                x:Name="label"
+                Style="{StaticResource label}"/>
+            <StackPanel Style="{StaticResource spH}">
+                <Button
+                    Style="{StaticResource btnConfirm}"
+                    Click="btnYes_Click"
+                    Content="Yes"/>
+                <Button
+                    Style="{StaticResource btnConfirm}"
+                    Click="btnNo_Click"
+                    Content="No"/>
+            </StackPanel>
         </StackPanel>
     </DockPanel>
 </Window>

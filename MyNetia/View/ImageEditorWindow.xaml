@@ -1,0 +1,94 @@
+﻿<Window x:Class="MyNetia.View.ImageEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MyNetia.View"
+        mc:Ignorable="d"
+        Style="{StaticResource window}"
+        Title="Image Editor"
+        WindowStartupLocation="CenterOwner"
+        MinHeight="300" MaxHeight="300"
+        MinWidth="400" MaxWidth="400">
+    
+    <Window.Resources>
+        
+        <Style x:Key="tBlock" TargetType="TextBlock" BasedOn="{StaticResource tBlockBase}">
+            <Setter Property="Text" Value="{Binding Path=content, UpdateSourceTrigger=PropertyChanged}"/>
+            <Setter Property="Width" Value="150"/>
+        </Style>
+
+        <Style x:Key="btn" TargetType="Button" BasedOn="{StaticResource btnBase}">
+            
+        </Style>
+    </Window.Resources>
+
+    <DockPanel>
+        <!--#region TITLE BAR-->
+        <Grid
+            x:Name="titleBar"
+            DockPanel.Dock="Top"
+            Style="{StaticResource gridTitleBar}"
+            MouseDown="titleBar_MouseDown">
+            <Grid.Triggers>
+                <EventTrigger
+                    RoutedEvent="Grid.MouseEnter">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                                Storyboard.TargetName="titleBar"
+                                Storyboard.TargetProperty="(Grid.Opacity)" 
+                                From="0" To="1" Duration="0:0:0.2"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+                <EventTrigger
+                    RoutedEvent="Grid.MouseLeave">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                                Storyboard.TargetName="titleBar"
+                                Storyboard.TargetProperty="(Grid.Opacity)" 
+                                From="1" To="0" Duration="0:0:0.2"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Grid.Triggers>
+            <Label
+                Style="{StaticResource labelTitleBar}"
+                Content="Confirmation"/>
+            <StackPanel
+                Orientation="Horizontal"
+                HorizontalAlignment="Right">
+                <Button
+                    x:Name="minBtn"
+                    Click="minBtn_Click"
+                    Style="{StaticResource btnTitleBar}"
+                    Content="-"/>
+                <Button
+                    x:Name="closeBtn"
+                    Click="closeBtn_Click"
+                    Style="{StaticResource btnTitleBar}"
+                    Content="x"/>
+            </StackPanel>
+        </Grid>
+        <!--#endregion-->
+        <StackPanel Style="{StaticResource spV}">
+            <StackPanel Style="{StaticResource spH}">
+                <TextBlock Style="{StaticResource tBlock}"/>
+                <Button
+                    Style="{StaticResource btn}"
+                    Content="_>"
+                    Click="reasearch_Click"/>
+            </StackPanel>
+            <Button
+                Style="{StaticResource btn}"
+                Content="Delete"
+                Click="delete_Click"/>
+            <Button
+                Style="{StaticResource btn}"
+                Content="Make null"
+                Click="null_Click"/>
+        </StackPanel>
+    </DockPanel>
+</Window>

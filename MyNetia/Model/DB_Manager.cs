@@ -1,131 +1,355 @@
-﻿using Newtonsoft.Json;
+﻿using Npgsql;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data;
 
 namespace MyNetia.Model
 {
-    [Serializable]
-    public class DB_Manager
+    public static class DB_Manager
     {
-        private List<DB_Element> _db = new List<DB_Element>();
-        public List<DB_Element> db => _db;
+        public static List<string> elemTitles { get; private set; }
+        public static List<string> elemSubtitles { get; private set; }
+        private static NpgsqlConnection connection;
 
-        #region DB modifs
-        public void addElement(string title)
+        /// <summary>
+        /// Setup connection and app datas
+        /// </summary>
+        public static void setup()
         {
-            if (!isElementExist(title))
+            string connString = "Server = localhost; Port = 5432; Database = MyNetia; Username = Adeven; Password = 1963258740";
+            connection = new NpgsqlConnection(connString);
+            getTitles();
+        }
+
+        /// <summary>
+        /// Add a new element in the database
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="subtitle"></param>
+        /// <param name="chapTitles"></param>
+        /// <param name="texts"></param>
+        /// <param name="images"></param>
+        public static void addElement(Element elem)
+        {
+            /* Integrity constraint
+             * Element title MUST be unique
+             * Chapter title MUST be unique inside an element
+             */
+            try
             {
-                DirectoryManager.createDirectory(title);
-                _db.Add(new DB_Element(title));
-                sortDB();
-            }
-            else
-                throw new Exception("Impossible to add 2 times the same element title");
-        }
-
-        public void updateElement(string oldTitle, string title, string subtitle, List<Chapter> chapList)
-        {
-            if(oldTitle != title)
-                DirectoryManager.renameDirectory(oldTitle, title);
-            int id = getElementID(oldTitle);
-            _db[id] = new DB_Element(title, subtitle, chapList);
-            sortDB();
-        }
-
-        public void deleteElement(string title)
-        {
-            DirectoryManager.deleteDirectory(title);
-            int id = getElementID(title);
-            _db.RemoveAt(id);
-            sortDB();
-        }
-
-        private void sortDB()
-        {
-            for (int i = 1; i < db.Count; i++)
-            {
-                if (_db[i].title.CompareTo(_db[i - 1].title) == -1)
+                lock (connection)
                 {
-                    DB_Element elem = _db[i];
-                    _db[i] = _db[i - 1];
-                    _db[i - 1] = elem;
-                    i = 1;
+                    //Connect to DB
+                    connection.Open();
+
+                    //INSERT NEW ELEMENT
+                    NpgsqlCommand cmd = new NpgsqlCommand("INSERT INTO elements (title, subtitle, lastupdate) VALUES (@p, @p2, @p3)", connection);
+                    cmd.Parameters.AddWithValue("p", elem.title);
+                    cmd.Parameters.AddWithValue("p2", elem.subtitle);
+                    cmd.Parameters.AddWithValue("p3", DateTime.Now);
+                    cmd.ExecuteNonQuery();
+
+                    //INSERT CHAPTERS
+                    ObservableCollection<string> chapTitles = elem.getChapTitles();
+                    List<ObservableCollection<TextManager>> texts = elem.getAllTexts();
+                    List<ObservableCollection<ImageManager>> images = elem.getAllImg();
+                    for (int i = 0; i < chapTitles.Count; i++)
+                    {
+                        cmd = new NpgsqlCommand("INSERT INTO chapters (title, idelem) VALUES (@p, @p2)", connection);
+                        cmd.Parameters.AddWithValue("p", chapTitles[i]);
+                        cmd.Parameters.AddWithValue("p2", elem.title);
+                        cmd.ExecuteNonQuery();
+
+                        //INSERT TEXTS
+                        foreach (TextManager t in texts[i])
+                        {
+                            cmd = new NpgsqlCommand("INSERT INTO texts (idchap, idelem, type, txt) VALUES (@p, @p2, @p3, @p4)", connection);
+                            cmd.Parameters.AddWithValue("p", chapTitles[i]);
+                            cmd.Parameters.AddWithValue("p2", elem.title);
+                            cmd.Parameters.AddWithValue("p3", t.type);
+                            cmd.Parameters.AddWithValue("p4", t.text);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        //INSERT IMAGES
+                        foreach (ImageManager img in images[i])
+                        {
+                            cmd = new NpgsqlCommand("INSERT INTO images (idchap, idelem, filename, image) VALUES (@p, @p2, @p3, @p4)", connection);
+                            cmd.Parameters.AddWithValue("p", chapTitles[i]);
+                            cmd.Parameters.AddWithValue("p2", elem.title);
+                            cmd.Parameters.AddWithValue("p3", img.fileName);
+                            cmd.Parameters.AddWithValue("p4", img.datas);
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    //DISCONNECT FROM DB
+                    cmd.Dispose();
+                    connection.Close();
                 }
             }
-            saveJson();
-        }
-        #endregion
-
-        #region Access to DB
-        public List<string> getTitles()
-        {
-            List<string> titles = new List<string>();
-            foreach (DB_Element elem in db)
-                titles.Add(elem.title);
-            return titles;
+            catch (NpgsqlException e) { throw new NpgsqlException(e.Message); }
         }
 
-        public DB_Element getElement(string title)
+        /// <summary>
+        /// Update an element in the database
+        /// </summary>
+        /// <param name="oldTitle"></param>
+        /// <param name="title"></param>
+        /// <param name="subtitle"></param>
+        /// <param name="chapTitles"></param>
+        /// <param name="texts"></param>
+        /// <param name="images"></param>
+        public static void updateElement(string oldTitle, Element elem)
         {
-            for (int i = 0; i < db.Count; i++)
+            deleteElement(oldTitle);
+            addElement(elem);
+        }
+
+        /// <summary>
+        /// Delete an element in the database
+        /// </summary>
+        /// <param name="title"></param>
+        public static void deleteElement(string title)
+        {
+            try
             {
-                if (db[i].title.Equals(title))
-                    return db[i];
+                lock (connection)
+                {
+                    //CONNECT TO DB
+                    connection.Open();
+
+                    //DELETE ELEMENT
+                    NpgsqlCommand cmd = new NpgsqlCommand("DELETE FROM elements WHERE title=(@p)", connection);
+                    cmd.Parameters.AddWithValue("p", title);
+                    cmd.ExecuteNonQuery();
+
+                    //DISCONNECT FROM DB
+                    cmd.Dispose();
+                    connection.Close();
+                }
             }
-            return new DB_Element(title);
+            catch (NpgsqlException e) { throw new NpgsqlException(e.Message); }
         }
 
-        public bool isElementExist(string title)
+        /// <summary>
+        /// Select every element title in the database and store them in elemTitles
+        /// </summary>
+        public static void getTitles()
         {
-            for (int i = 0; i < db.Count; i++)
+            lock (connection)
             {
-                if (db[i].title.Equals(title))
+                //Connect to DB
+                connection.Open();
+
+                //SELECT TITLES
+                NpgsqlCommand cmd = new NpgsqlCommand("SELECT title FROM elements ORDER BY title", connection);
+                NpgsqlDataReader reader = cmd.ExecuteReader();
+
+                //STORE TITLES
+                elemTitles = new List<string>();
+                while (reader.Read())
+                    elemTitles.Add(reader.GetString(0));
+
+                //DISCONNECT FROM DB
+                cmd.Dispose();
+                connection.Close();
+            }
+        }
+
+        /// <summary>
+        /// Select every element subtitle in the database and store them in elemSubtitles
+        /// </summary>
+        public static void getSubtitles()
+        {
+            lock (connection)
+            {
+                //Connect to DB
+                connection.Open();
+
+                //SELECT TITLES
+                NpgsqlCommand cmd = new NpgsqlCommand("SELECT subtitle FROM elements ORDER BY subtitle", connection);
+                NpgsqlDataReader reader = cmd.ExecuteReader();
+
+                //STORE TITLES
+                elemSubtitles = new List<string>();
+                while (reader.Read())
+                    elemSubtitles.Add(reader.GetString(0));
+
+                //DISCONNECT FROM DB
+                cmd.Dispose();
+                connection.Close();
+            }
+        }
+
+        /// <summary>
+        /// Select the element if it exists, else return a new element
+        /// </summary>
+        /// <param name="title"></param>
+        /// <returns></returns>
+        public static Element getElement(string title)
+        {
+            if (isElementExist(title))
+            {
+                string subtitle;
+                DateTime lastUpdate;
+                ObservableCollection<Chapter> chapters = new ObservableCollection<Chapter>();
+                ObservableCollection<string> chapTitles;
+                ObservableCollection<TextManager> txtList;
+                ObservableCollection<ImageManager> imgList;
+
+                //SELECT ELEMENT
+                object[] values = getElemValues(title);
+                subtitle = (string)values[0];
+                lastUpdate = (DateTime)values[1];
+
+                //SELECT CHAPTERS
+                chapTitles = getChapTitles(title);
+
+                //STORE CHAPTERS DATAS
+                foreach (string ch in chapTitles)
+                {
+                    txtList = getTextsFromChapter(title, ch);
+                    imgList = getImagesFromChapter(title, ch);
+                    chapters.Add(new Chapter(ch, txtList, imgList));
+                }
+                return new Element(title, subtitle, chapters, lastUpdate);
+            }
+            return new Element(title);
+        }
+
+        /// <summary>
+        /// Get subtitle and last update from idElem in database
+        /// </summary>
+        /// <param name="idElem"></param>
+        /// <returns></returns>
+        private static object[] getElemValues(string idElem)
+        {
+            object[] values = new object[2];
+            try
+            {
+                connection.Open();
+                NpgsqlCommand cmd = new NpgsqlCommand("SELECT subtitle, lastupdate FROM elements WHERE title = @p;", connection);
+                cmd.Parameters.AddWithValue("p", idElem);
+                NpgsqlDataReader reader = cmd.ExecuteReader();
+                reader.Read();
+                values[0] = reader.GetString(0);
+                values[1] = reader.GetDateTime(1);
+                connection.Close();
+                return values;
+            }
+            catch (NpgsqlException e) { throw new NpgsqlException(e.Message); }
+        }
+
+        /// <summary>
+        /// Get chapters titles from idElem in database
+        /// </summary>
+        /// <param name="idElem"></param>
+        /// <returns></returns>
+        private static ObservableCollection<string> getChapTitles(string idElem)
+        {
+            ObservableCollection<string> chapTitles = new ObservableCollection<string>();
+            try
+            {
+                connection.Open();
+                NpgsqlCommand cmd = new NpgsqlCommand("SELECT title FROM chapters WHERE idelem = @p", connection);
+                cmd.Parameters.AddWithValue("p", idElem);
+                NpgsqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                    chapTitles.Add(reader.GetString(0));
+                connection.Close();
+                return chapTitles;
+            }
+            catch (NpgsqlException e) { throw new NpgsqlException(e.Message); }
+        }
+
+        /// <summary>
+        /// Get all texts from a chapter
+        /// </summary>
+        /// <param name="idElem"></param>
+        /// <param name="idChap"></param>
+        /// <returns></returns>
+        private static ObservableCollection<TextManager> getTextsFromChapter(string idElem, string idChap)
+        {
+            ObservableCollection<TextManager> txtList = new ObservableCollection<TextManager>();
+            try
+            {
+                connection.Open();
+                NpgsqlCommand cmd = new NpgsqlCommand("SELECT type, txt FROM texts WHERE idelem = @p AND idchap = @p2", connection);
+                cmd.Parameters.AddWithValue("p", idElem);
+                cmd.Parameters.AddWithValue("p2", idChap);
+                NpgsqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    int type = reader.GetInt32(0);
+                    if (type == 0)
+                        txtList.Add(new TextManager(Types.none));
+                    else
+                        txtList.Add(new TextManager((Types)type, reader.GetString(1)));
+                }
+                connection.Close();
+                return txtList;
+            }
+            catch (NpgsqlException e) { throw new NpgsqlException(e.Message); }
+        }
+
+        /// <summary>
+        /// Get all images from a chapter
+        /// </summary>
+        /// <param name="idElem"></param>
+        /// <param name="idChap"></param>
+        /// <returns></returns>
+        private static ObservableCollection<ImageManager> getImagesFromChapter(string idElem, string idChap)
+        {
+            ObservableCollection<ImageManager> imgList = new ObservableCollection<ImageManager>();
+            try
+            {
+                connection.Open();
+                imgList = new ObservableCollection<ImageManager>();
+                NpgsqlCommand cmd = new NpgsqlCommand("SELECT filename, image FROM images WHERE idelem = @p AND idchap = @p2", connection);
+                cmd.Parameters.AddWithValue("p", idElem);
+                cmd.Parameters.AddWithValue("p2", idChap);
+                DataTable dt = new DataTable();
+                NpgsqlDataAdapter nda = new NpgsqlDataAdapter(cmd);
+                nda.Fill(dt);
+                connection.Close();
+                foreach (DataRow row in dt.Rows)
+                    imgList.Add(new ImageManager((string)row["filename"], (byte[])row["image"]));
+                return imgList;
+            }
+            catch (NpgsqlException e) { throw new NpgsqlException(e.Message); }
+        }
+
+        /// <summary>
+        /// Return true if the element exits, else return false
+        /// </summary>
+        /// <param name="title"></param>
+        /// <returns></returns>
+        public static bool isElementExist(string title)
+        {
+            for (int i = 0; i < elemTitles.Count; i++)
+            {
+                if (elemTitles[i] == title)
                     return true;
             }
             return false;
         }
 
-        private int getElementID(string title)
+        /// <summary>
+        /// Return a list of string matching with the parameter
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <returns></returns>
+        public static ObservableCollection<string> matchingResearch(string txt)
         {
-            for (int i = 0; i < db.Count; i++)
+            ObservableCollection<string> matchList = new ObservableCollection<string>();
+            foreach (string s in elemTitles)
             {
-                if (db[i].title.Equals(title))
-                    return i;
+                if (s.Contains(txt))
+                    matchList.Add(s);
             }
-            return -1;
+            return matchList;
         }
-        #endregion
-
-        #region Json Manager
-        public void readJson()
-        {
-            try
-            {
-                string jsonContent = FileManager.loadJson();
-                if (!string.IsNullOrWhiteSpace(jsonContent))
-                    _db = JsonConvert.DeserializeObject<DB_Manager>(jsonContent).db;
-            }
-            catch (JsonSerializationException) { _db = new List<DB_Element>(); }
-        }
-
-        public void saveJson()
-        {
-            string jsonContent = JsonConvert.SerializeObject(new { db }, Formatting.None);
-            FileManager.saveJson(jsonContent);
-        }
-
-        public void saveJsonToDesktop()
-        {
-            string path = DirectoryManager.DESKTOP;
-            FileManager.copyJson(path);
-        }
-
-        public void loadJson(string path)
-        {
-            string jsonContent = FileManager.readTxtFile(path);
-            FileManager.saveJson(jsonContent);
-            readJson();
-        }
-        #endregion
     }
 }

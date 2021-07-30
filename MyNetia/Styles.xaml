@@ -54,7 +54,7 @@
 
     <!--#region Button Style-->
     <Style x:Key="btnEssential" TargetType="Button">
-        <Setter Property="Background" Value="{StaticResource Border}"/>
+        <Setter Property="Background" Value="{StaticResource Background}"/>
         <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -62,7 +62,7 @@
         <Setter Property="FontFamily" Value="{StaticResource OrkneyLight}"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource Background}"/>
+                <Setter Property="Background" Value="{StaticResource Border}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
