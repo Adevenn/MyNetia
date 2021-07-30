@@ -86,22 +86,17 @@ namespace MyNetia
         }
         private Point dragOriginPoint;
         private bool isDraging = false;
-        private bool isElemSelected;
-        private void setIsElemSelected(bool value)
+        private Visibility _isElemSelected = Visibility.Hidden;
+        public Visibility isElemSelected
         {
-            if (value && value != isElemSelected)
+            get => _isElemSelected;
+            set
             {
-                spElemPart.Visibility = Visibility.Visible;
-                chaptersListPart.Visibility = Visibility.Visible;
-                chapContentPart.Visibility = Visibility.Visible;
-                isElemSelected = value;
-            }
-            else if (value != isElemSelected)
-            {
-                spElemPart.Visibility = Visibility.Hidden;
-                chaptersListPart.Visibility = Visibility.Hidden;
-                chapContentPart.Visibility = Visibility.Hidden;
-                isElemSelected = value;
+                if (_isElemSelected != value)
+                {
+                    _isElemSelected = value;
+                    OnPropertyChanged();
+                }
             }
         }
         private readonly string infoContent =
@@ -173,12 +168,12 @@ namespace MyNetia
                     currentElem = DB_Manager.getElement(selectAddUpdate);
                     oldElemTitle = currentElem.title;
                     listChapters.SelectedIndex = 0;
-                    setIsElemSelected(true);
+                    isElemSelected = Visibility.Visible;
                 }
                 else
                 {
                     //TODO : Display something in the window : *invalid
-                    setIsElemSelected(false);
+                    isElemSelected = Visibility.Hidden;
                 }
             }
         }

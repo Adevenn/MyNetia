@@ -17,7 +17,7 @@
         <!--#region TextBox Style-->
         <Style x:Key="tBox" BasedOn="{StaticResource tBoxBase}" TargetType="TextBox">
             <Setter Property="FontSize" Value="20"/>
-            <Setter Property="Width" Value="300"/>
+            <Setter Property="Width" Value="330"/>
             <Setter Property="Height" Value="40"/>
             <Setter Property="Margin" Value="0, 10"/>
         </Style>
@@ -53,13 +53,6 @@
         <Style x:Key="tabControl" BasedOn="{StaticResource tabControlBase}"  TargetType="TabControl">
             <Setter Property="BorderThickness" Value="0, 1, 0, 0"/>
             <Setter Property="Padding" Value="0, 10"/>
-        </Style>
-        <!--#endregion-->
-
-        <!--#region StackPanel Style-->
-        <Style x:Key="spElemPart" BasedOn="{StaticResource spV}" TargetType="StackPanel">
-            <Setter Property="Visibility" Value="Hidden"/>
-            <Setter Property="Margin" Value="10"/>
         </Style>
         <!--#endregion-->
 
@@ -152,7 +145,7 @@
             <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden"/>
             <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Hidden"/>
             <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
-            <Setter Property="Width" Value="300"/>
+            <Setter Property="Width" Value="330"/>
             <Setter Property="Height" Value="30"/>
             <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
             <Setter Property="FontFamily" Value="{StaticResource OrkneyLight}"/>
@@ -404,25 +397,43 @@
                             </StackPanel>
                         </Border>
                     </StackPanel>
-                    <StackPanel
+                    <Grid
                         DockPanel.Dock="Top"
-                        x:Name="spElemPart"
-                        Style="{StaticResource spElemPart}">
-                        <StackPanel Style="{StaticResource spH}">
-                            <TextBlock Text="Title :"/>
-                            <TextBox Style="{StaticResource tBox}" Text="{Binding Path=currentElem.title, UpdateSourceTrigger=PropertyChanged}"/>
-                        </StackPanel>
-                        <StackPanel Style="{StaticResource spH}">
-                            <TextBlock Text="Subtitle :"/>
-                            <TextBox Style="{StaticResource tBox}" Text="{Binding Path=currentElem.subtitle, UpdateSourceTrigger=PropertyChanged}"/>
-                        </StackPanel>
-                    </StackPanel>
+                        Visibility="{Binding Path=isElemSelected, UpdateSourceTrigger=PropertyChanged}"
+                        Margin="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock
+                            Grid.Column="0" Grid.Row="0"
+                            HorizontalAlignment="Right"
+                            Text="Title :"/>
+                        <TextBox
+                            Grid.Column="1" Grid.Row="0"
+                            Style="{StaticResource tBox}"
+                            HorizontalAlignment="Left"
+                            Text="{Binding Path=currentElem.title, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock
+                            Grid.Column="0" Grid.Row="1"
+                            HorizontalAlignment="Right"
+                            Text="Subtitle :"/>
+                        <TextBox
+                            Grid.Column="1" Grid.Row="1"
+                            Style="{StaticResource tBox}"
+                            HorizontalAlignment="Left"
+                            Text="{Binding Path=currentElem.subtitle, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Grid>
                     <Border
                         DockPanel.Dock="Left"
                         x:Name="chaptersListPart"
                         Style="{StaticResource borderRight}"
                         Width="200"
-                        Visibility="Hidden">
+                        Visibility="{Binding Path=isElemSelected, UpdateSourceTrigger=PropertyChanged}">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="70"/>
@@ -438,7 +449,7 @@
                                 Style="{StaticResource listBoxChapters}"/>
                         </Grid>
                     </Border>
-                    <Grid x:Name="chapContentPart" Visibility="Hidden">
+                    <Grid x:Name="chapContentPart" Visibility="{Binding Path=isElemSelected, UpdateSourceTrigger=PropertyChanged}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="70"/>
