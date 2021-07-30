@@ -48,9 +48,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="AppResources\Images\DefaultImage.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
+    <Resource Include="AppResources\Images\DefaultImage.png" />
     <Content Include="ReadMe.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -63,6 +61,9 @@
   <ItemGroup>
     <None Update="MyNetia_Icon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PostgreSQL_Server.txt">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
