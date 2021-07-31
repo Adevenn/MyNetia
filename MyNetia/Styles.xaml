@@ -111,9 +111,9 @@
     <!--#endregion-->
 
     <!--#region ItemControl Style-->
-    <Style x:Key="itemControlBase" TargetType="ItemsControl">
+    <Style x:Key="{x:Type ItemsControl}" TargetType="ItemsControl">
         <Setter Property="IsTabStop" Value="False"/>
-        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontSize" Value="17"/>
         <Setter Property="Padding" Value="8"/>
     </Style>
     <!--#endregion-->
@@ -173,8 +173,9 @@
     <!--#endregion-->
 
     <!--#region ScrollViewer Style-->
-    <Style x:Key="scrollViewer" TargetType="ScrollViewer">
+    <Style x:Key="{x:Type ScrollViewer}" TargetType="ScrollViewer">
         <Setter Property="VerticalScrollBarVisibility" Value="Hidden"/>
+        <Setter Property="HorizontalScrollBarVisibility" Value="Hidden"/>
     </Style>
     <!--#endregion-->
 
@@ -192,29 +193,32 @@
     <!--#endregion-->
 
     <!--#region TabControl Style-->
-    <Style x:Key="tabControlBase" TargetType="TabControl">
+    <Style x:Key="{x:Type TabControl}" TargetType="TabControl">
         <Setter Property="IsTabStop" Value="False"/>
         <Setter Property="Background" Value="{StaticResource Background}"/>
         <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
         <Setter Property="BorderBrush" Value="{StaticResource Border}"/>
+        <Setter Property="BorderThickness" Value="0, 1, 0, 0"/>
+        <Setter Property="Padding" Value="0, 10"/>
     </Style>
 
-    <Style x:Key="tabItem" TargetType="TabItem">
+    <Style x:Key="{x:Type TabItem}" TargetType="TabItem">
         <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
         <Setter Property="FontSize" Value="15"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TabItem">
-                    <Border Name="Border"
-                                BorderThickness="1"
-                                BorderBrush="{StaticResource Border}"
-                                Margin="10">
+                    <Border
+                        Name="Border"
+                        BorderThickness="1"
+                        BorderBrush="{StaticResource Border}"
+                        Margin="10">
                         <ContentPresenter
-                                x:Name="ContentSite"
-                                VerticalAlignment="Center"
-                                HorizontalAlignment="Center"
-                                ContentSource="Header"
-                                Margin="10,2"/>
+                            x:Name="ContentSite"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                            ContentSource="Header"
+                            Margin="10,2"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
@@ -267,7 +271,7 @@
     <!--#endregion-->
 
     <!--#region Window Style-->
-    <Style x:Key="window" TargetType="Window">
+    <Style x:Key="window" TargetType="{x:Type Window}">
         <Setter Property="Background" Value="{StaticResource Background}"/>
         <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
         <Setter Property="WindowStyle" Value="None"/>

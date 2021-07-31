@@ -81,8 +81,21 @@ namespace MyNetia
                 StackPanel spHoriz = setStackPanel();
                 if (idTxt < texts.Count)
                 {
-                    if (texts[idTxt].type != 0)
-                        spHoriz.Children.Add(setTxtBlock(texts[idTxt].text));
+                    switch ((Types)texts[idTxt].type)
+                    {
+                        case Types.title:
+                            spHoriz.Children.Add(setTitle(texts[idTxt].text));
+                            break;
+                        case Types.subtitle:
+                            spHoriz.Children.Add(setSubtitle(texts[idTxt].text));
+                            break;
+                        case Types.subsubtitle:
+                            spHoriz.Children.Add(setSubsubtitle(texts[idTxt].text));
+                            break;
+                        case Types.text:
+                            spHoriz.Children.Add(setText(texts[idTxt].text));
+                            break;
+                    }
                     idTxt++;
                 }
                 if (idImg < images.Count)
@@ -98,14 +111,47 @@ namespace MyNetia
         }
 
         /// <summary>
-        /// Create a custom TextBox
+        /// Create a custom Title from TextBox
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        private TextBlock setTxtBlock(string text) => new TextBlock
+        private TextBlock setTitle(string text) => new TextBlock
         {
             Text = text,
-            Style = (Style)Resources["tBlock"]
+            Style = (Style)Resources["tTxtTitle"]
+        };
+
+        /// <summary>
+        /// Create a custom Subtitle from TextBox
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        private TextBlock setSubtitle(string text) => new TextBlock
+        {
+            Text = text,
+            Style = (Style)Resources["tTxtSubtitle"]
+        };
+
+        /// <summary>
+        /// Create a custom Subsubtitle from TextBox
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        private TextBlock setSubsubtitle(string text) => new TextBlock
+        {
+            Text = text,
+            Style = (Style)Resources["tTxtSubsubtitle"]
+        };
+
+        /// <summary>
+        /// Create a custom Text from TextBox
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        private TextBlock setText(string text) => new TextBlock
+        {
+            Text = text,
+            Style = (Style)Resources["tTxtText"]
         };
 
         /// <summary>
@@ -115,8 +161,7 @@ namespace MyNetia
         /// <returns></returns>
         private Image setImage(byte[] imageFile) => new Image
         {
-            Source = loadImage(imageFile),
-            Style = (Style)Resources["image"]
+            Source = loadImage(imageFile)
         };
 
         /// <summary>

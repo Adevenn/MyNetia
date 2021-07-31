@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MyNetia"
         mc:Ignorable="d"
         Style="{StaticResource window}"
-        Title="MyNetia-Admin"
+        Title="Admin"
         WindowStartupLocation="CenterScreen"
         Closing="Window_Closing"
         MinHeight="850" MaxHeight="850"
@@ -46,20 +46,6 @@
             <Setter Property="FontSize" Value="18"/>
             <Setter Property="Padding" Value="5"/>
             <Setter Property="Margin" Value="10, 0"/>
-        </Style>
-        <!--#endregion-->
-
-        <!--#region TabControl Style-->
-        <Style x:Key="tabControl" BasedOn="{StaticResource tabControlBase}"  TargetType="TabControl">
-            <Setter Property="BorderThickness" Value="0, 1, 0, 0"/>
-            <Setter Property="Padding" Value="0, 10"/>
-        </Style>
-        <!--#endregion-->
-
-        <!--#region ItemControl Style-->
-        <Style x:Key="itemControlDelete" TargetType="ItemsControl">
-            <Setter Property="ItemsSource" Value="{Binding Path=matchingResearch}"/>
-            <Setter Property="Margin" Value="10"/>
         </Style>
         <!--#endregion-->
 
@@ -383,8 +369,8 @@
             </StackPanel>
         </Grid>
         <!--#endregion-->
-        <TabControl Style="{StaticResource tabControl}">
-            <TabItem Style="{StaticResource tabItem}" Header="Add/Update">
+        <TabControl>
+            <TabItem Header="Add/Update">
                 <DockPanel>
                     <StackPanel DockPanel.Dock="Top">
                         <Border Style="{StaticResource borderBot}">
@@ -455,7 +441,7 @@
                             <RowDefinition Height="70"/>
                         </Grid.RowDefinitions>
                         <Border Style="{StaticResource borderTopBot}">
-                            <ScrollViewer Grid.Row="0" Style="{StaticResource scrollViewer}">
+                            <ScrollViewer Grid.Row="0">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="1*"/>
@@ -512,7 +498,7 @@
                     </Grid>
                 </DockPanel>
             </TabItem>
-            <TabItem Style="{StaticResource tabItem}" Header="Delete">
+            <TabItem Header="Delete">
                 <StackPanel>
                     <Border Style="{StaticResource borderBot}">
                         <StackPanel Style="{StaticResource spH}">
@@ -520,10 +506,10 @@
                             <TextBox x:Name="selectDelete" Style="{StaticResource tBoxDelete}"/>
                         </StackPanel>
                     </Border>
-                    <ItemsControl Style="{StaticResource itemControlDelete}"/>
+                    <ItemsControl ItemsSource="{Binding Path=matchingResearch}"/>
                 </StackPanel>
             </TabItem>
-            <TabItem Style="{StaticResource tabItem}" Header="Options">
+            <TabItem Header="Options">
                 <StackPanel Style="{StaticResource spV}">
                     <TextBlock Text="Work in progress"/>
                     <TextBlock Text="This'll content every others infos, like database server, themes, etc .."/>

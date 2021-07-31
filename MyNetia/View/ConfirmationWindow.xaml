@@ -84,9 +84,7 @@
         </Grid>
         <!--#endregion-->
         <StackPanel Style="{StaticResource spV}">
-            <Label
-                x:Name="label"
-                Style="{StaticResource label}"/>
+            <Label x:Name="label" Style="{StaticResource label}"/>
             <StackPanel Style="{StaticResource spH}">
                 <Button
                     Style="{StaticResource btnConfirm}"
