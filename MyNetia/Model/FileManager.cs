@@ -1,10 +1,12 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace MyNetia.Model
 {
     public static class FileManager
     {
         private static readonly string defaultImgPath = Path.GetFullPath(@".\AppResources\Images\DefaultImage.png");
+        public static readonly string CONFIG_PATH = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "MyNetia.ini";
 
         /// <summary>
         /// Read all bytes from a file
@@ -34,6 +36,19 @@ namespace MyNetia.Model
         public static byte[] defaultImage()
         {
             return readByteFile(defaultImgPath);
+        }
+
+        /// <summary>
+        /// Check if the file exist and create it if not
+        /// </summary>
+        public static string loadConfig()
+        {
+            if (!File.Exists(CONFIG_PATH))
+            {
+
+            }
+
+            return CONFIG_PATH;
         }
     }
 }

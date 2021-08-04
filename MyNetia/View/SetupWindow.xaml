@@ -18,6 +18,14 @@
             <Setter Property="Margin" Value="10, 0"/>
         </Style>
 
+        <Style x:Key="txtBlockError" TargetType="TextBlock" BasedOn="{StaticResource tBlockBase}">
+            <Setter Property="Visibility" Value="Hidden"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Foreground" Value="{StaticResource Background2}"/>
+            <Setter Property="Text" Value="*"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+        </Style>
+
         <Style x:Key="{x:Type TextBox}" TargetType="TextBox" BasedOn="{StaticResource tBoxBase}">
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="Height" Value="40"/>
@@ -105,9 +113,13 @@
                 <RowDefinition Height="60"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <TextBlock
+            <StackPanel
                 Grid.Column="0" Grid.Row="1"
-                Text="Theme :"/>
+                Style="{StaticResource spH}"
+                HorizontalAlignment="Right">
+                <TextBlock Text="Theme :"/>
+                <TextBlock Style="{StaticResource txtBlockError}"/>
+            </StackPanel>
             <ComboBox
                 Grid.Column="1" Grid.Row="1"
                 SelectedIndex="{Binding Path=themes, UpdateSourceTrigger=PropertyChanged}">
@@ -115,33 +127,53 @@
                 <ComboBoxItem Content="Blue"/>
                 <ComboBoxItem Content="Black"/>
             </ComboBox>
-            <TextBlock
+            <StackPanel
                 Grid.Column="0" Grid.Row="2"
-                Text="PostgreSQL server ip :"/>
+                Style="{StaticResource spH}"
+                HorizontalAlignment="Right">
+                <TextBlock Text="PostgreSQL server ip :"/>
+                <TextBlock x:Name="ipError" Style="{StaticResource txtBlockError}"/>
+            </StackPanel>
             <TextBox
                 Grid.Column="1" Grid.Row="2"
                 Text="{Binding Path=server, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock
+            <StackPanel
                 Grid.Column="0" Grid.Row="3"
-                Text="Port :"/>
+                Style="{StaticResource spH}"
+                HorizontalAlignment="Right">
+                <TextBlock Text="Port :"/>
+                <TextBlock x:Name="portError" Style="{StaticResource txtBlockError}"/>
+            </StackPanel>
             <TextBox
                 Grid.Column="1" Grid.Row="3"
                 Text="{Binding Path=port, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock
+            <StackPanel
                 Grid.Column="0" Grid.Row="4"
-                Text="Database :"/>
+                Style="{StaticResource spH}"
+                HorizontalAlignment="Right">
+                <TextBlock Text="Database :"/>
+                <TextBlock x:Name="dbError" Style="{StaticResource txtBlockError}"/>
+            </StackPanel>
             <TextBox
                 Grid.Column="1" Grid.Row="4"
                 Text="{Binding Path=database, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock
+            <StackPanel
                 Grid.Column="0" Grid.Row="5"
-                Text="Username :"/>
+                Style="{StaticResource spH}"
+                HorizontalAlignment="Right">
+                <TextBlock Text="Username :"/>
+                <TextBlock x:Name="userNameError" Style="{StaticResource txtBlockError}"/>
+            </StackPanel>
             <TextBox
                 Grid.Column="1" Grid.Row="5"
                 Text="{Binding Path=userName, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock
+            <StackPanel
                 Grid.Column="0" Grid.Row="6"
-                Text="Password :"/>
+                Style="{StaticResource spH}"
+                HorizontalAlignment="Right">
+                <TextBlock Text="Password :"/>
+                <TextBlock x:Name="pswError" Style="{StaticResource txtBlockError}"/>
+            </StackPanel>
             <TextBox
                 Grid.Column="1" Grid.Row="6"
                 Text="{Binding Path=password, UpdateSourceTrigger=PropertyChanged}"/>

@@ -69,7 +69,7 @@ namespace MyNetia
             {
                 DB_Manager.getTitles();
                 matchingResearchUpdate();
-                if (DB_Manager.isElementExist(selection))
+                if (DB_Manager.checkTitleAvailablity(selection))
                 {
                     if (!currentApp.isOpenWindow(selection))
                     {

@@ -4,6 +4,4 @@ TODO :
 - Personnalisation de text, via RichTextBox e.g.
 	- Lien hypertext
 - Drag and drop des texts et images
-- Selection du theme
-- Selection dans reasearch via le subtitle aussi (utile pour la recherche via le port e.g.) (Probleme, plusieurs fois le meme nom)
 - Crypter les save + UI (password)
