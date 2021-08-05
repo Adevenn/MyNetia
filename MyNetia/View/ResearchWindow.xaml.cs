@@ -40,7 +40,7 @@ namespace MyNetia
 
         public ResearchWindow()
         {
-            DB_Manager.setup();
+            DB_Manager.getTitles();
             DataContext = this;
             InitializeComponent();
             matchingResearchUpdate();

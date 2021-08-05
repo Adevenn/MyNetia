@@ -18,6 +18,7 @@ namespace MyNetia.Model
 
         public Ini(string IniPath = null)
         {
+            DirectoryManager.isConfigDirectoryExist();
             Path = new FileInfo(IniPath ?? EXE + ".ini").FullName;
         }
 

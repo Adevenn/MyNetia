@@ -12,13 +12,9 @@ namespace MyNetia.Model
         private static NpgsqlConnection connection;
 
         /// <summary>
-        /// Setup connection and app datas
+        /// Return true if connection succeed, false if fails
         /// </summary>
-        public static void setup()
-        {
-            getTitles();
-        }
-
+        /// <returns></returns>
         public static bool testConnection()
         {
             string connString = $"Server = {UserSettings.serverIP}; Port = {UserSettings.port}; Database = {UserSettings.database}; Username = {UserSettings.userName}; Password = {UserSettings.password}";
