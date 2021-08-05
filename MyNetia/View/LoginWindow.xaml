@@ -5,8 +5,125 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyNetia.View"
         mc:Ignorable="d"
-        Title="LoginWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Style="{StaticResource window}"
+        WindowStartupLocation="CenterScreen"
+        Title="Login"
+        MinHeight="400" MaxHeight="400" MinWidth="600" MaxWidth="600">
+
+    <Window.Resources>
+        <Style x:Key="{x:Type TextBlock}" TargetType="TextBlock" BasedOn="{StaticResource tBlockBase}">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Margin" Value="10, 0"/>
+        </Style>
+
+        <Style x:Key="{x:Type TextBox}" TargetType="TextBox" BasedOn="{StaticResource tBoxBase}">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="200"/>
+            <Setter Property="Margin" Value="20, 0"/>
+        </Style>
+
+        <Style x:Key="setupBtn" TargetType="Button" BasedOn="{StaticResource btnBase}">
+            <EventSetter Event="Click" Handler="loadSetup_Click"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Content" Value="Change setup"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Width" Value="100"/>
+        </Style>
+
+        <Style x:Key="validBtn" TargetType="Button" BasedOn="{StaticResource btnBase}">
+            <EventSetter Event="Click" Handler="valid_Click"/>
+            <Setter Property="Content" Value="Login"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="150"/>
+        </Style>
+    </Window.Resources>
+    
+    <DockPanel>
+        <!--#region TITLE BAR-->
+        <Grid
+            x:Name="titleBar"
+            DockPanel.Dock="Top"
+            Style="{StaticResource gridTitleBar}"
+            MouseDown="titleBar_MouseDown">
+            <Grid.Triggers>
+                <EventTrigger RoutedEvent="Grid.MouseEnter">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                                Storyboard.TargetName="titleBar"
+                                Storyboard.TargetProperty="(Grid.Opacity)" 
+                                From="0" To="1" Duration="0:0:0.2"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="Grid.MouseLeave">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                                Storyboard.TargetName="titleBar"
+                                Storyboard.TargetProperty="(Grid.Opacity)" 
+                                From="1" To="0" Duration="0:0:0.2"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Grid.Triggers>
+            <Label Style="{StaticResource labelTitleBar}" Content="Login"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button
+                    x:Name="minBtn"
+                    Click="minBtn_Click"
+                    Style="{StaticResource btnTitleBar}"
+                    Content="-"/>
+                <Button
+                    x:Name="maxBtn"
+                    Click="maxBtn_Click"
+                    Style="{StaticResource btnTitleBar}"
+                    Content="o"/>
+                <Button
+                    x:Name="closeBtn"
+                    Click="closeBtn_Click"
+                    Style="{StaticResource btnTitleBar}"
+                    Content="x"/>
+            </StackPanel>
+        </Grid>
+        <!--#endregion-->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Button
+                Grid.Column="4" Grid.Row="0"
+                Style="{StaticResource setupBtn}"/>
+            <TextBlock
+                Grid.Column="1" Grid.Row="1"
+                Text="User name :"/>
+            <TextBox
+                Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1"
+                Text="{Binding Path=login, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock
+                Grid.Column="1" Grid.Row="2"
+                Text="Password :"/>
+            <PasswordBox
+                Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="2"
+                x:Name="passwordBox"/>
+            <Button
+                Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3"
+                Style="{StaticResource validBtn}"/>
+        </Grid>
+    </DockPanel>
 </Window>

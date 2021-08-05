@@ -9,11 +9,9 @@ namespace MyNetia.View
 {
     public partial class SetupWindow : Window, INotifyPropertyChanged
     {
-        private readonly App currentApp = (App)Application.Current;
-        private bool isIPValid = true;
-        private readonly Regex ipv4Regex = new Regex(@"^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
+        private readonly Regex ipv4Regex = new Regex(@"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$");
         private int _themes;
-        private string _server, _port, _database, _userName, _password;
+        private string _server, _port, _database, _userName;
         public int themes
         {
             get => _themes;
@@ -74,18 +72,6 @@ namespace MyNetia.View
                 }
             }
         }
-        public string password
-        {
-            get => _password;
-            set
-            {
-                if (_password != value)
-                {
-                    _password = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
 
         public SetupWindow()
         {
@@ -108,7 +94,7 @@ namespace MyNetia.View
         }
 
         /// <summary>
-        /// Save userdatas
+        /// Save user settings and check connection
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -121,17 +107,22 @@ namespace MyNetia.View
                 UserSettings.port = port;
                 UserSettings.database = database;
                 UserSettings.userName = userName;
-                UserSettings.password = password;
+                UserSettings.password = passwordBox.Password;
 
-                //TestConnection
-
-                ResearchWindow window = new ResearchWindow();
-                window.Show();
-                Close();
+                if (DB_Manager.testConnection())
+                {
+                    ResearchWindow research = new ResearchWindow();
+                    research.Show();
+                    Close();
+                }
+                else
+                {
+                    InfoWindow info = new InfoWindow("Connection failed, verify your infos");
+                    info.ShowDialog();
+                }
             }
         }
 
-        #region OTHERS METHODS
         /// <summary>
         /// Check values and show if an error occurs
         /// </summary>
@@ -139,7 +130,7 @@ namespace MyNetia.View
         private bool checkValues()
         {
             bool isValid = true;
-            if (ipv4Regex.Match(server).Success)
+            if (!ipv4Regex.Match(server).Success)
             {
                 ipError.Visibility = Visibility.Visible;
                 isValid = false;
@@ -163,7 +154,7 @@ namespace MyNetia.View
                 isValid = false;
             }
             else { userNameError.Visibility = Visibility.Hidden; }
-            if (string.IsNullOrWhiteSpace(password))
+            if (string.IsNullOrWhiteSpace(passwordBox.Password))
             {
                 pswError.Visibility = Visibility.Visible;
                 isValid = false;
@@ -171,7 +162,6 @@ namespace MyNetia.View
             else { pswError.Visibility = Visibility.Hidden; }
             return isValid;
         }
-        #endregion
 
         #region TITLE BAR
 
@@ -189,11 +179,6 @@ namespace MyNetia.View
         private void closeBtn_Click(object sender, RoutedEventArgs e)
         {
             Close();
-        }
-
-        private void Window_Closing(object sender, CancelEventArgs e)
-        {
-            currentApp.deleteWindow(Title);
         }
 
         private void titleBar_MouseDown(object sender, MouseButtonEventArgs e)
@@ -225,7 +210,5 @@ namespace MyNetia.View
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
-
-        
     }
 }

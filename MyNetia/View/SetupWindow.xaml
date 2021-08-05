@@ -6,8 +6,9 @@
         xmlns:local="clr-namespace:MyNetia.View"
         mc:Ignorable="d"
         Style="{StaticResource window}"
-        Title="SetupWindow"
-        Height="450" Width="800">
+        WindowStartupLocation="CenterScreen"
+        Title="Setup"
+        MinHeight="400" MaxHeight="400" MinWidth="600" MaxWidth="600">
 
     <Window.Resources>
 
@@ -27,15 +28,16 @@
         </Style>
 
         <Style x:Key="{x:Type TextBox}" TargetType="TextBox" BasedOn="{StaticResource tBoxBase}">
+            <Setter Property="FontSize" Value="18"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="Height" Value="40"/>
-            <Setter Property="Width" Value="350"/>
+            <Setter Property="Width" Value="200"/>
             <Setter Property="Margin" Value="20, 0"/>
         </Style>
 
         <Style x:Key="{x:Type ComboBox}" TargetType="ComboBox" BasedOn="{StaticResource comboBoxBase}">
             <Setter Property="Height" Value="40"/>
-            <Setter Property="Width" Value="350"/>
+            <Setter Property="Width" Value="200"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="Margin" Value="20, 0"/>
         </Style>
@@ -174,9 +176,9 @@
                 <TextBlock Text="Password :"/>
                 <TextBlock x:Name="pswError" Style="{StaticResource txtBlockError}"/>
             </StackPanel>
-            <TextBox
+            <PasswordBox
                 Grid.Column="1" Grid.Row="6"
-                Text="{Binding Path=password, UpdateSourceTrigger=PropertyChanged}"/>
+                x:Name="passwordBox"/>
             <Button
                 Grid.ColumnSpan="2" Grid.Row="7"
                 Content="Valid"/>

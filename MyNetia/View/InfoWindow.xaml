@@ -12,7 +12,7 @@
         MinWidth="600" MaxWidth="600">
     
     <Window.Resources>
-        <Style x:Key="txtBlock" BasedOn="{StaticResource tBlockBase}" TargetType="TextBlock">
+        <Style x:Key="{x:Type TextBlock}" BasedOn="{StaticResource tBlockBase}" TargetType="TextBlock">
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="Margin" Value="30"/>
         </Style>
@@ -72,11 +72,9 @@
             </StackPanel>
         </Grid>
         <!--#endregion-->
-        <ScrollViewer Style="{StaticResource scrollViewer}">
+        <ScrollViewer>
             <StackPanel Style="{StaticResource spV}">
-                <TextBlock
-                    x:Name="txtBlock"
-                    Style="{StaticResource txtBlock}"/>
+                <TextBlock x:Name="txtBlock"/>
             </StackPanel>
         </ScrollViewer>
     </DockPanel>

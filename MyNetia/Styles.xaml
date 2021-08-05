@@ -319,6 +319,41 @@
         </Setter>
     </Style>
     <!--#endregion-->
+    
+    <!--#region PasswordBox Style-->
+    <Style x:Key="{x:Type PasswordBox}" TargetType="PasswordBox">
+        <Setter Property="Background" Value="{StaticResource Background}"/>
+        <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Border}"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Width" Value="200"/>
+        <Setter Property="Margin" Value="20, 0"/>
+        <Setter Property="Padding" Value="4, 0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type PasswordBox}">
+                    <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                        <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Opacity" TargetName="border" Value="0.56"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Border}"/>
+                        </Trigger>
+                        <Trigger Property="IsFocused" Value="true">
+                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Border}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--#endregion-->
 
     <!--#region ScrollViewer Style-->
     <Style x:Key="{x:Type ScrollViewer}" TargetType="ScrollViewer">

@@ -5,3 +5,7 @@ TODO :
 	- Lien hypertext
 - Drag and drop des texts et images
 - Crypter les save + UI (password)
+- Cherche par mots associer, trier d abbord les  pour afficher les titres qui matchent,
+	puis un seconde section pour afficher les mots clées en rapport avec la selection
+	(Mots clées peuvent etre ChaptersTitles, subtitle, etc..)
+- Ajouter plus de personnalisation des texts (Ex : ToggleButton to mark as complete)

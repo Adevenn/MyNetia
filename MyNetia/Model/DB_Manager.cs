@@ -16,10 +16,20 @@ namespace MyNetia.Model
         /// </summary>
         public static void setup()
         {
-            string connString = $"Server = localhost; Port = 5432; Database = MyNetia; Username = Adeven; Password = 1963258740";
-            //string connString = $"Server = {UserSettings.serverIP}; Port = {UserSettings.port}; Database = {UserSettings.database}; Username = {UserSettings.userName}; Password = {UserSettings.password}";
-            connection = new NpgsqlConnection(connString);
             getTitles();
+        }
+
+        public static bool testConnection()
+        {
+            string connString = $"Server = {UserSettings.serverIP}; Port = {UserSettings.port}; Database = {UserSettings.database}; Username = {UserSettings.userName}; Password = {UserSettings.password}";
+            connection = new NpgsqlConnection(connString);
+            try
+            {
+                connection.Open();
+                connection.Close();
+                return true;
+            }
+            catch { return false; }
         }
 
         /// <summary>
