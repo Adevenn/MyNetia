@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyNetia"
         mc:Ignorable="d"
+        Style="{StaticResource window}"
         Title="MyNetia-Help"
         WindowStartupLocation="CenterScreen"
         Closing="Window_Closing"
-        Style="{StaticResource window}"
         MinHeight="500" MaxHeight="500"
         MinWidth="500" Width="700">
     
@@ -18,7 +18,7 @@
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
         </Style>
         
-        <Style x:Key="tBlock" BasedOn="{StaticResource tBlockBase}" TargetType="TextBlock">
+        <Style x:Key="{x:Type TextBlock}" BasedOn="{StaticResource tBlockBase}" TargetType="TextBlock">
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="15"/>
@@ -78,21 +78,12 @@
             </StackPanel>
         </Grid>
         <!--#endregion-->
-        <ScrollViewer Style="{StaticResource scrollViewer}">
+        <ScrollViewer>
             <StackPanel Style="{StaticResource spV}">
-                <TextBlock
-                    Style="{StaticResource tBlock}"
-                    Text="Commands :"/>
-                <StackPanel
-                    x:Name="stackCommands"
-                    Style="{StaticResource spH}"/>
-                <TextBlock
-                    Style="{StaticResource tBlock}"
-                    Margin="15, 45, 15, 15"
-                    Text="Elements :"/>
-                <StackPanel
-                    x:Name="stackProtocols"
-                    Style="{StaticResource spV}"/>
+                <TextBlock Text="Commands :"/>
+                <StackPanel x:Name="stackCommands" Style="{StaticResource spH}"/>
+                <TextBlock Text="Elements :" Margin="15, 45, 15, 15"/>
+                <StackPanel x:Name="stackProtocols" Style="{StaticResource spV}"/>
             </StackPanel>
         </ScrollViewer>
     </DockPanel>

@@ -4,7 +4,7 @@ namespace MyNetia.Model
 {
     public static class FileManager
     {
-        private static readonly string defaultImgPath = Path.GetFullPath(@".\AppResources\Images\DefaultImage.png");
+        public static readonly string CONFIG_PATH = DirectoryManager.APPDATA + @"/MyNetia/CONFIG.ini";
 
         /// <summary>
         /// Read all bytes from a file
@@ -25,15 +25,6 @@ namespace MyNetia.Model
         public static string getFileName(string path)
         {
             return Path.GetFileName(path);
-        }
-
-        /// <summary>
-        /// Return the default image
-        /// </summary>
-        /// <returns></returns>
-        public static byte[] defaultImage()
-        {
-            return readByteFile(defaultImgPath);
         }
     }
 }

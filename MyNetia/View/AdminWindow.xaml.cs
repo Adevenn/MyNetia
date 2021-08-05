@@ -17,8 +17,6 @@ namespace MyNetia
     {
         private readonly App currentApp = (App)Application.Current;
 
-        //ADD/UPDATE PART
-        private string oldElemTitle;
         private Element _currentElem;
         public Element currentElem
         {
@@ -32,7 +30,7 @@ namespace MyNetia
                 }
             }
         }
-        private string _selectAddUpdate = "";
+        private string oldElemTitle, _selectAddUpdate = "", _chapTitle, _selectionDel = "";
         public string selectAddUpdate
         {
             get => _selectAddUpdate;
@@ -45,7 +43,6 @@ namespace MyNetia
                 }
             }
         }
-        private string _chapTitle;
         public string chapTitle
         {
             get => _chapTitle;
@@ -115,9 +112,6 @@ namespace MyNetia
             "Chapter image :\n" +
             "   - Enter => New image zone\n" +
             "   - LAlt + Enter => Delete image zone";
-
-        //DELETE PART
-        private string _selectionDel = "";
         public string selectionDel
         {
             get => _selectionDel;
@@ -368,7 +362,7 @@ namespace MyNetia
         {
             new Thread(() =>
             {
-                if (DB_Manager.isElementExist(oldElemTitle))
+                if (DB_Manager.checkTitleAvailablity(oldElemTitle))
                     DB_Manager.updateElement(oldElemTitle, currentElem);
                 else
                     DB_Manager.addElement(currentElem);
@@ -458,7 +452,7 @@ namespace MyNetia
         /// <param name="e"></param>
         private void selectionDelete_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Return && DB_Manager.isElementExist(selectionDel))
+            if (e.Key == Key.Return && DB_Manager.checkTitleAvailablity(selectionDel))
             {
                 //Confirm delete element
                 ConfirmationWindow window = new ConfirmationWindow($"Do you want to delete\n{selectionDel} ?")

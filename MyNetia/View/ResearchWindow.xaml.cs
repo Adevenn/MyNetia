@@ -40,7 +40,7 @@ namespace MyNetia
 
         public ResearchWindow()
         {
-            DB_Manager.setup();
+            DB_Manager.getTitles();
             DataContext = this;
             InitializeComponent();
             matchingResearchUpdate();
@@ -69,7 +69,7 @@ namespace MyNetia
             {
                 DB_Manager.getTitles();
                 matchingResearchUpdate();
-                if (DB_Manager.isElementExist(selection))
+                if (DB_Manager.checkTitleAvailablity(selection))
                 {
                     if (!currentApp.isOpenWindow(selection))
                     {

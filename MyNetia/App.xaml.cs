@@ -1,4 +1,5 @@
 ﻿using MyNetia.Model;
+using MyNetia.View;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,30 @@ namespace MyNetia
         //1 window type open at a time
         private readonly List<string> openWindows = new List<string>();
 
+        /// <summary>
+        /// Select the right window to load on application starts
+        /// </summary>
+        /// <param name="e"></param>
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+            if (UserSettings.userName != "")
+            {
+                LoginWindow login = new LoginWindow();
+                login.Show();
+            }
+            else
+            {
+                SetupWindow setup = new SetupWindow();
+                setup.Show();
+            }
+        }
+
         #region OpenWindow Manager
+        /// <summary>
+        /// Check is a window is open
+        /// </summary>
+        /// <param name="title"></param>
+        /// <returns></returns>
         public bool isOpenWindow(string title)
         {
             for (int i = 0; i < openWindows.Count; i++)
@@ -23,6 +47,10 @@ namespace MyNetia
             return false;
         }
 
+        /// <summary>
+        /// Add a window to the openWindows list
+        /// </summary>
+        /// <param name="title"></param>
         public void addWindow(string title)
         {
             if (!isOpenWindow(title))
@@ -31,6 +59,10 @@ namespace MyNetia
                 throw new Exception("Impossible to open 2 times the same window");
         }
 
+        /// <summary>
+        /// Delete a window from the openWindows list
+        /// </summary>
+        /// <param name="title"></param>
         public void deleteWindow(string title)
         {
             for(int i = 0; i < openWindows.Count; i++)
@@ -46,6 +78,10 @@ namespace MyNetia
         #endregion
 
         #region Commands
+        /// <summary>
+        /// List every commands inside the Commands class
+        /// </summary>
+        /// <returns></returns>
         public List<string> commandsList()
         {
             Commands commands = new Commands();
@@ -55,6 +91,11 @@ namespace MyNetia
             return list;
         }
 
+        /// <summary>
+        /// Get all constants from a class Type
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         private List<FieldInfo> getConstants(Type type)
         {
             FieldInfo[] fieldInfos = type.GetFields(BindingFlags.Public |

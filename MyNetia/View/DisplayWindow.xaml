@@ -26,7 +26,7 @@
         <!--#endregion-->
         
         <!--#region Image Style-->
-        <Style x:Key="image" TargetType="Image">
+        <Style x:Key="{x:Type Image}" TargetType="Image">
             <Setter Property="Stretch" Value="Uniform"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="MinHeight" Value="256"/>
@@ -36,9 +36,9 @@
             <Setter Property="Margin" Value="15"/>
         </Style>
         <!--#endregion-->
-        
+
         <!--#region ListBox Style-->
-        <Style x:Key="listBox" BasedOn="{StaticResource listBoxBase}" TargetType="ListBox">
+        <Style x:Key="{x:Type ListBox}" BasedOn="{StaticResource listBoxBase}" TargetType="ListBox">
             <EventSetter Event="SelectionChanged" Handler="listChapters_SelectionChanged"/>
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="MaxWidth" Value="350"/>
@@ -48,7 +48,7 @@
             <Setter Property="Margin" Value="10"/>
         </Style>
         <!--#endregion-->
-        
+
         <!--#region StackPanel Style-->
         <Style x:Key="spHCustom" BasedOn="{StaticResource spH}" TargetType="StackPanel">
             <Setter Property="Margin" Value="10, 30, 20, 30"/>
@@ -57,34 +57,51 @@
          
         <!--#region TextBlock Style-->
         <Style x:Key="tBlock" BasedOn="{StaticResource tBlockBase}" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="20"/>
             <Setter Property="MaxWidth" Value="500"/>
             <Setter Property="TextWrapping" Value="Wrap"/>
             <Setter Property="Height" Value="Auto"/>
+        </Style>
+
+        <Style x:Key="tTxtTitle" BasedOn="{StaticResource tBlock}" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="40"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+
+        <Style x:Key="tTxtSubtitle" BasedOn="{StaticResource tBlock}" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="30"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+
+        <Style x:Key="tTxtSubsubtitle" BasedOn="{StaticResource tBlock}" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+
+        <Style x:Key="tTxtText" BasedOn="{StaticResource tBlock}" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="20"/>
             <Setter Property="HorizontalAlignment" Value="Right"/>
         </Style>
-        
-        <Style x:Key="tBlockChapSubtitle" BasedOn="{StaticResource tBlock}" TargetType="TextBlock">
 
-        </Style>
-
-        <Style x:Key="tBlockChapTitle" BasedOn="{StaticResource tBlock}" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="30"/>
+        <Style x:Key="tChapTitle" BasedOn="{StaticResource tBlock}" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="50"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="Margin" Value="0, 60, 0, 20"/>
         </Style>
 
-        <Style x:Key="tBlockElemSubtitle" BasedOn="{StaticResource tBlock}" TargetType="TextBlock">
+        <Style x:Key="tElemSubtitle" BasedOn="{StaticResource tBlock}" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="20"/>
             <Setter Property="Text" Value="{Binding Path=elem.subtitle, UpdateSourceTrigger=PropertyChanged}"/>
         </Style>
 
-        <Style x:Key="tBlockElemTitle" BasedOn="{StaticResource tBlockBase}" TargetType="TextBlock">
+        <Style x:Key="tElemTitle" BasedOn="{StaticResource tBlockBase}" TargetType="TextBlock">
             <Setter Property="Text" Value="{Binding Path=elem.title, UpdateSourceTrigger=PropertyChanged}"/>
             <Setter Property="FontSize" Value="50"/>
         </Style>
 
-        <Style x:Key="tBlockLastUpdate" BasedOn="{StaticResource tBlock}" TargetType="TextBlock">
+        <Style x:Key="tLastUpdate" BasedOn="{StaticResource tBlock}" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="20"/>
             <Setter Property="Margin" Value="0, 10"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
         </Style>
         <!--#endregion-->
         
@@ -146,9 +163,7 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="40"/>
             </Grid.RowDefinitions>
-            <Border
-                Grid.Row="0"
-                Style="{StaticResource borderBotCustom}">
+            <Border Grid.Row="0" Style="{StaticResource borderBotCustom}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
@@ -156,12 +171,8 @@
                         <ColumnDefinition Width="3*"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock
-                        Grid.Column="1"
-                        Style="{StaticResource tBlockElemTitle}"/>
-                    <TextBlock
-                        Grid.Column="2"
-                        Style="{StaticResource tBlockElemSubtitle}"/>
+                    <TextBlock Grid.Column="1" Style="{StaticResource tElemTitle}"/>
+                    <TextBlock Grid.Column="2" Style="{StaticResource tElemSubtitle}"/>
                 </Grid>
             </Border>
             <Grid Grid.Row="1">
@@ -169,17 +180,10 @@
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="5*"/>
                 </Grid.ColumnDefinitions>
-                <Border
-                    Grid.Column="0"
-                    Style="{StaticResource borderRight}">
-                    <ListBox
-                        x:Name="listChapters"
-                        Style="{StaticResource listBox}"/>
+                <Border Grid.Column="0" Style="{StaticResource borderRight}">
+                    <ListBox x:Name="listChapters"/>
                 </Border>
-                <ScrollViewer
-                    Grid.Column="1"
-                    x:Name="scrollViewer"
-                    Style="{StaticResource scrollViewer}">
+                <ScrollViewer Grid.Column="1" x:Name="scrollViewer">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*"/>
@@ -188,21 +192,15 @@
                         </Grid.ColumnDefinitions>
                         <Viewbox Grid.Column="1">
                             <StackPanel>
-                                <TextBlock
-                                    x:Name="chapTitle"
-                                    Style="{StaticResource tBlockChapTitle}"/>
+                                <TextBlock x:Name="chapTitle" Style="{StaticResource tChapTitle}"/>
                                 <StackPanel x:Name="spContent"/>
                             </StackPanel>
                         </Viewbox>
                     </Grid>
                 </ScrollViewer>
             </Grid>
-            <Border
-                Grid.Row="2"
-                Style="{StaticResource borderTopCustom}">
-                <TextBlock
-                    x:Name="elemLastUpdate"
-                    Style="{StaticResource tBlockLastUpdate}"/>
+            <Border Grid.Row="2" Style="{StaticResource borderTopCustom}">
+                <TextBlock x:Name="elemLastUpdate" Style="{StaticResource tLastUpdate}"/>
             </Border>
         </Grid>
     </DockPanel>

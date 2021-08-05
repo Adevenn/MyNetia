@@ -9,17 +9,23 @@ namespace MyNetia.Model
     public static class DB_Manager
     {
         public static List<string> elemTitles { get; private set; }
-        public static List<string> elemSubtitles { get; private set; }
         private static NpgsqlConnection connection;
 
         /// <summary>
-        /// Setup connection and app datas
+        /// Return true if connection succeed, false if fails
         /// </summary>
-        public static void setup()
+        /// <returns></returns>
+        public static bool testConnection()
         {
-            string connString = "Server = localhost; Port = 5432; Database = MyNetia; Username = Adeven; Password = 1963258740";
+            string connString = $"Server = {UserSettings.serverIP}; Port = {UserSettings.port}; Database = {UserSettings.database}; Username = {UserSettings.userName}; Password = {UserSettings.password}";
             connection = new NpgsqlConnection(connString);
-            getTitles();
+            try
+            {
+                connection.Open();
+                connection.Close();
+                return true;
+            }
+            catch { return false; }
         }
 
         /// <summary>
@@ -159,38 +165,13 @@ namespace MyNetia.Model
         }
 
         /// <summary>
-        /// Select every element subtitle in the database and store them in elemSubtitles
-        /// </summary>
-        public static void getSubtitles()
-        {
-            lock (connection)
-            {
-                //Connect to DB
-                connection.Open();
-
-                //SELECT TITLES
-                NpgsqlCommand cmd = new NpgsqlCommand("SELECT subtitle FROM elements ORDER BY subtitle", connection);
-                NpgsqlDataReader reader = cmd.ExecuteReader();
-
-                //STORE TITLES
-                elemSubtitles = new List<string>();
-                while (reader.Read())
-                    elemSubtitles.Add(reader.GetString(0));
-
-                //DISCONNECT FROM DB
-                cmd.Dispose();
-                connection.Close();
-            }
-        }
-
-        /// <summary>
         /// Select the element if it exists, else return a new element
         /// </summary>
         /// <param name="title"></param>
         /// <returns></returns>
         public static Element getElement(string title)
         {
-            if (isElementExist(title))
+            if (checkTitleAvailablity(title))
             {
                 string subtitle;
                 DateTime lastUpdate;
@@ -326,7 +307,7 @@ namespace MyNetia.Model
         /// </summary>
         /// <param name="title"></param>
         /// <returns></returns>
-        public static bool isElementExist(string title)
+        public static bool checkTitleAvailablity(string title)
         {
             for (int i = 0; i < elemTitles.Count; i++)
             {
