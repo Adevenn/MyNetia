@@ -14,38 +14,29 @@
     <Window.Resources>
 
         <Style x:Key="{x:Type TextBlock}" TargetType="TextBlock" BasedOn="{StaticResource tBlockBase}">
-            <Setter Property="FontSize" Value="18"/>
             <Setter Property="HorizontalAlignment" Value="Right"/>
-            <Setter Property="Padding" Value="5"/>
         </Style>
 
         <Style x:Key="txtBlockError" TargetType="TextBlock" BasedOn="{StaticResource tBlockBase}">
             <Setter Property="Visibility" Value="Hidden"/>
-            <Setter Property="FontSize" Value="18"/>
             <Setter Property="Foreground" Value="{StaticResource Background2}"/>
             <Setter Property="Text" Value="*"/>
             <Setter Property="HorizontalAlignment" Value="Right"/>
         </Style>
 
         <Style x:Key="{x:Type TextBox}" TargetType="TextBox" BasedOn="{StaticResource tBoxBase}">
-            <Setter Property="FontSize" Value="18"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="Height" Value="40"/>
             <Setter Property="Width" Value="200"/>
-            <Setter Property="Margin" Value="20, 0"/>
         </Style>
 
         <Style x:Key="{x:Type ComboBox}" TargetType="ComboBox" BasedOn="{StaticResource comboBoxBase}">
             <Setter Property="Height" Value="40"/>
             <Setter Property="Width" Value="200"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="Margin" Value="20, 0"/>
         </Style>
 
         <Style x:Key="{x:Type Button}" TargetType="Button" BasedOn="{StaticResource btnBase}">
             <EventSetter Event="Click" Handler="valid_Click"/>
-            <Setter Property="Height" Value="40"/>
-            <Setter Property="Width" Value="150"/>
         </Style>
         
     </Window.Resources>

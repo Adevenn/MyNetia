@@ -12,9 +12,8 @@
         MinWidth="600" MaxWidth="600">
     
     <Window.Resources>
-        
+
         <Style x:Key="{x:Type TextBlock}" BasedOn="{StaticResource tBlockBase}" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="20"/>
             <Setter Property="Margin" Value="30"/>
         </Style>
         

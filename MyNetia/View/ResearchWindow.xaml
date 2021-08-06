@@ -19,11 +19,8 @@
             <EventSetter Event="KeyDown" Handler="onKeyDown"/>
             <EventSetter Event="TextChanged" Handler="onTextChanged"/>
             <Setter Property="Text" Value="{Binding Path=selection, UpdateSourceTrigger=PropertyChanged}"/>
-            <Setter Property="FontSize" Value="20"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Height" Value="30"/>
             <Setter Property="Width" Value="Auto"/>
-            <Setter Property="Padding" Value="10, 0"/>
         </Style>
         <!--#endregion-->
         

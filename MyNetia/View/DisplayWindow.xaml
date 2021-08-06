@@ -73,12 +73,10 @@
         </Style>
 
         <Style x:Key="tTxtSubsubtitle" BasedOn="{StaticResource tBlock}" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="20"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
         </Style>
 
         <Style x:Key="tTxtText" BasedOn="{StaticResource tBlock}" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="20"/>
             <Setter Property="HorizontalAlignment" Value="Right"/>
         </Style>
 
@@ -89,7 +87,6 @@
         </Style>
 
         <Style x:Key="tElemSubtitle" BasedOn="{StaticResource tBlock}" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="20"/>
             <Setter Property="Text" Value="{Binding Path=elem.subtitle, UpdateSourceTrigger=PropertyChanged}"/>
         </Style>
 
@@ -99,7 +96,6 @@
         </Style>
 
         <Style x:Key="tLastUpdate" BasedOn="{StaticResource tBlock}" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="20"/>
             <Setter Property="Margin" Value="0, 10"/>
             <Setter Property="HorizontalAlignment" Value="Right"/>
         </Style>
