@@ -201,12 +201,8 @@
                     </BeginStoryboard>
                 </EventTrigger>
             </Grid.Triggers>
-            <Label
-                Style="{StaticResource labelTitleBar}"
-                Content="Admin"/>
-            <StackPanel
-                Orientation="Horizontal"
-                HorizontalAlignment="Right">
+            <TextBlock Style="{StaticResource tBlockTitleBar}" Text="Admin"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button
                     Click="btnInfo_Click"
                     Style="{StaticResource btnTitleBar}"
@@ -364,12 +360,6 @@
                         </StackPanel>
                     </Border>
                     <ItemsControl ItemsSource="{Binding Path=matchingResearch}"/>
-                </StackPanel>
-            </TabItem>
-            <TabItem Header="Options">
-                <StackPanel Style="{StaticResource spV}">
-                    <TextBlock Text="Work in progress"/>
-                    <TextBlock Text="This'll content every others infos, like database server, themes, etc .."/>
                 </StackPanel>
             </TabItem>
         </TabControl>

@@ -136,9 +136,7 @@
                     </BeginStoryboard>
                 </EventTrigger>
             </Grid.Triggers>
-            <StackPanel
-                Orientation="Horizontal"
-                HorizontalAlignment="Right">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button
                     x:Name="minBtn"
                     Click="minBtn_Click"

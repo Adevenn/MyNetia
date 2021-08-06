@@ -13,24 +13,19 @@
     
     <Window.Resources>
         
-        <!--#region Label Style-->
-        <Style x:Key="label" BasedOn="{StaticResource labelBase}" TargetType="Label">
+        <Style x:Key="{x:Type TextBlock}" BasedOn="{StaticResource tBlockBase}" TargetType="TextBlock">
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="Height" Value="60"/>
             <Setter Property="VerticalAlignment" Value="Top"/>
-            <Setter Property="HorizontalContentAlignment" Value="Left"/>
             <Setter Property="Margin" Value="0, 10"/>
         </Style>
-        <!--#endregion-->
 
-        <!--#region Button Style-->
-        <Style x:Key="btnConfirm" BasedOn="{StaticResource btnBase}" TargetType="Button">
+        <Style x:Key="{x:Type Button}" BasedOn="{StaticResource btnBase}" TargetType="Button">
             <Setter Property="Height" Value="40"/>
             <Setter Property="Width" Value="120"/>
             <Setter Property="Margin" Value="10"/>
         </Style>
-        <!--#endregion-->
-        
+
     </Window.Resources>
     
     <DockPanel>
@@ -41,8 +36,7 @@
             Style="{StaticResource gridTitleBar}"
             MouseDown="titleBar_MouseDown">
             <Grid.Triggers>
-                <EventTrigger
-                    RoutedEvent="Grid.MouseEnter">
+                <EventTrigger RoutedEvent="Grid.MouseEnter">
                     <BeginStoryboard>
                         <Storyboard>
                             <DoubleAnimation
@@ -52,8 +46,7 @@
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger>
-                <EventTrigger
-                    RoutedEvent="Grid.MouseLeave">
+                <EventTrigger RoutedEvent="Grid.MouseLeave">
                     <BeginStoryboard>
                         <Storyboard>
                             <DoubleAnimation
@@ -64,12 +57,8 @@
                     </BeginStoryboard>
                 </EventTrigger>
             </Grid.Triggers>
-            <Label
-                Style="{StaticResource labelTitleBar}"
-                Content="Confirmation"/>
-            <StackPanel
-                Orientation="Horizontal"
-                HorizontalAlignment="Right">
+            <TextBlock Style="{StaticResource tBlockTitleBar}" Text="Confirmation"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button
                     x:Name="minBtn"
                     Click="minBtn_Click"
@@ -84,16 +73,10 @@
         </Grid>
         <!--#endregion-->
         <StackPanel Style="{StaticResource spV}">
-            <Label x:Name="label" Style="{StaticResource label}"/>
+            <TextBlock x:Name="tBlock"/>
             <StackPanel Style="{StaticResource spH}">
-                <Button
-                    Style="{StaticResource btnConfirm}"
-                    Click="btnYes_Click"
-                    Content="Yes"/>
-                <Button
-                    Style="{StaticResource btnConfirm}"
-                    Click="btnNo_Click"
-                    Content="No"/>
+                <Button Click="btnYes_Click" Content="Yes"/>
+                <Button Click="btnNo_Click" Content="No"/>
             </StackPanel>
         </StackPanel>
     </DockPanel>

@@ -93,7 +93,7 @@
         <Setter Property="FontSize" Value="12"/>
         <Setter Property="Height" Value="20"/>
         <Setter Property="Width" Value="20"/>
-        <Setter Property="Margin" Value="5, 0, 5, 0"/>
+        <Setter Property="Margin" Value="5, 0"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -271,21 +271,6 @@
     </Style>
     <!--#endregion-->
 
-    <!--#region Label Style-->
-    <Style x:Key="labelBase" TargetType="Label">
-        <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
-        <Setter Property="FontFamily" Value="{StaticResource OrkneyLight}"/>
-        <Setter Property="HorizontalAlignment" Value="Left"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
-    </Style>
-
-    <Style x:Key="labelTitleBar" BasedOn="{StaticResource labelBase}" TargetType="Label">
-        <Setter Property="FontSize" Value="20"/>
-        <Setter Property="Height" Value="33"/>
-        <Setter Property="Margin" Value="5, 0, 0, 0"/>
-    </Style>
-    <!--#endregion-->
-
     <!--#region ListBox Style-->
     <Style x:Key="listBoxBase" TargetType="ListBox">
         <Setter Property="Background" Value="{StaticResource Background}"/>
@@ -426,7 +411,16 @@
 
     <!--#region TextBlock Style-->
     <Style x:Key="tBlockBase" TargetType="TextBlock">
+        <Setter Property="Background" Value="{StaticResource Background}"/>
+        <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="10, 0"/>
+    </Style>
+
+    <Style x:Key="tBlockTitleBar" TargetType="TextBlock" BasedOn="{StaticResource tBlockBase}">
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Height" Value="33"/>
     </Style>
     <!--#endregion-->
 

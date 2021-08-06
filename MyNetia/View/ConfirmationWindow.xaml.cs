@@ -8,7 +8,7 @@ namespace MyNetia
         public ConfirmationWindow(string text)
         {
             InitializeComponent();
-            label.Content = text;
+            tBlock.Text = text;
         }
 
         #region EVENTS

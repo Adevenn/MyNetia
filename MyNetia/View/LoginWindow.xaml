@@ -73,7 +73,7 @@
                     </BeginStoryboard>
                 </EventTrigger>
             </Grid.Triggers>
-            <Label Style="{StaticResource labelTitleBar}" Content="Login"/>
+            <TextBlock Style="{StaticResource tBlockTitleBar}" Text="Login"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button
                     x:Name="minBtn"

@@ -13,14 +13,16 @@
     
     <Window.Resources>
         
-        <Style x:Key="tBlock" TargetType="TextBlock" BasedOn="{StaticResource tBlockBase}">
+        <Style x:Key="{x:Type TextBlock}" TargetType="TextBlock" BasedOn="{StaticResource tBlockBase}">
             <Setter Property="Text" Value="{Binding Path=content, UpdateSourceTrigger=PropertyChanged}"/>
             <Setter Property="Width" Value="150"/>
         </Style>
 
-        <Style x:Key="btn" TargetType="Button" BasedOn="{StaticResource btnBase}">
-            
+        <Style x:Key="{x:Type Button}" TargetType="Button" BasedOn="{StaticResource btnBase}">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="MinWidth" Value="60"/>
         </Style>
+        
     </Window.Resources>
 
     <DockPanel>
@@ -31,8 +33,7 @@
             Style="{StaticResource gridTitleBar}"
             MouseDown="titleBar_MouseDown">
             <Grid.Triggers>
-                <EventTrigger
-                    RoutedEvent="Grid.MouseEnter">
+                <EventTrigger RoutedEvent="Grid.MouseEnter">
                     <BeginStoryboard>
                         <Storyboard>
                             <DoubleAnimation
@@ -42,8 +43,7 @@
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger>
-                <EventTrigger
-                    RoutedEvent="Grid.MouseLeave">
+                <EventTrigger RoutedEvent="Grid.MouseLeave">
                     <BeginStoryboard>
                         <Storyboard>
                             <DoubleAnimation
@@ -54,9 +54,7 @@
                     </BeginStoryboard>
                 </EventTrigger>
             </Grid.Triggers>
-            <Label
-                Style="{StaticResource labelTitleBar}"
-                Content="Confirmation"/>
+            <TextBlock Style="{StaticResource tBlockTitleBar}" Text="Confirmation"/>
             <StackPanel
                 Orientation="Horizontal"
                 HorizontalAlignment="Right">
@@ -75,20 +73,11 @@
         <!--#endregion-->
         <StackPanel Style="{StaticResource spV}">
             <StackPanel Style="{StaticResource spH}">
-                <TextBlock Style="{StaticResource tBlock}"/>
-                <Button
-                    Style="{StaticResource btn}"
-                    Content="_>"
-                    Click="reasearch_Click"/>
+                <TextBlock/>
+                <Button Content="_>" Click="reasearch_Click"/>
             </StackPanel>
-            <Button
-                Style="{StaticResource btn}"
-                Content="Delete"
-                Click="delete_Click"/>
-            <Button
-                Style="{StaticResource btn}"
-                Content="Make null"
-                Click="null_Click"/>
+            <Button Content="Delete" Click="delete_Click"/>
+            <Button Content="Make null" Click="null_Click"/>
         </StackPanel>
     </DockPanel>
 </Window>

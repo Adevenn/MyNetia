@@ -15,7 +15,7 @@
     <Window.Resources>
         
         <!--#region TextBox Style-->
-        <Style x:Key="tBox" BasedOn="{StaticResource tBoxBase}" TargetType="TextBox">
+        <Style x:Key="{x:Type TextBox}" BasedOn="{StaticResource tBoxBase}" TargetType="TextBox">
             <EventSetter Event="KeyDown" Handler="onKeyDown"/>
             <EventSetter Event="TextChanged" Handler="onTextChanged"/>
             <Setter Property="Text" Value="{Binding Path=selection, UpdateSourceTrigger=PropertyChanged}"/>
@@ -58,12 +58,8 @@
                     </BeginStoryboard>
                 </EventTrigger>
             </Grid.Triggers>
-            <Label
-                Style="{StaticResource labelTitleBar}"
-                Content="MyNetia"/>
-            <StackPanel
-                Orientation="Horizontal"
-                HorizontalAlignment="Right">
+            <TextBlock Style="{StaticResource tBlockTitleBar}" Text="MyNetia"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button
                     x:Name="minBtn"
                     Click="minBtn_Click"
@@ -84,9 +80,7 @@
         <!--#endregion-->
         <StackPanel DockPanel.Dock="Top">
             <Border Style="{StaticResource borderBot}">
-                <TextBox
-                    x:Name="txtBox"
-                    Style="{StaticResource tBox}"/>
+                <TextBox x:Name="txtBox"/>
             </Border>
             <ItemsControl ItemsSource="{Binding Path=matchingResearch}"/>
         </StackPanel>

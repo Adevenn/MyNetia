@@ -11,18 +11,15 @@
         Closing="Window_Closing"
         MinHeight="500" MaxHeight="500"
         MinWidth="500" Width="700">
-    
+
     <Window.Resources>
-        <Style x:Key="label" BasedOn="{StaticResource labelBase}" TargetType="Label">
-            <Setter Property="FontSize" Value="17"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        </Style>
-        
+
         <Style x:Key="{x:Type TextBlock}" BasedOn="{StaticResource tBlockBase}" TargetType="TextBlock">
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="15"/>
         </Style>
+        
     </Window.Resources>
     
     <DockPanel>
@@ -54,12 +51,8 @@
                     </BeginStoryboard>
                 </EventTrigger>
             </Grid.Triggers>
-            <Label
-                Style="{StaticResource labelTitleBar}"
-                Content="Help"/>
-            <StackPanel
-                Orientation="Horizontal"
-                HorizontalAlignment="Right">
+            <TextBlock Style="{StaticResource tBlockTitleBar}" Text="Help"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button
                     x:Name="minBtn"
                     Click="minBtn_Click"

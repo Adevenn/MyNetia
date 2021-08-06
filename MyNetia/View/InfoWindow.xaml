@@ -12,10 +12,12 @@
         MinWidth="600" MaxWidth="600">
     
     <Window.Resources>
+        
         <Style x:Key="{x:Type TextBlock}" BasedOn="{StaticResource tBlockBase}" TargetType="TextBlock">
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="Margin" Value="30"/>
         </Style>
+        
     </Window.Resources>
     
     <DockPanel>
@@ -26,8 +28,7 @@
             Style="{StaticResource gridTitleBar}"
             MouseDown="titleBar_MouseDown">
             <Grid.Triggers>
-                <EventTrigger
-                    RoutedEvent="Grid.MouseEnter">
+                <EventTrigger RoutedEvent="Grid.MouseEnter">
                     <BeginStoryboard>
                         <Storyboard>
                             <DoubleAnimation
@@ -37,8 +38,7 @@
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger>
-                <EventTrigger
-                    RoutedEvent="Grid.MouseLeave">
+                <EventTrigger RoutedEvent="Grid.MouseLeave">
                     <BeginStoryboard>
                         <Storyboard>
                             <DoubleAnimation
@@ -49,26 +49,18 @@
                     </BeginStoryboard>
                 </EventTrigger>
             </Grid.Triggers>
-            <Label
-                Style="{StaticResource labelTitleBar}"
-                Height="33">
-                Infos
-            </Label>
-            <StackPanel
-                Orientation="Horizontal"
-                HorizontalAlignment="Right">
+            <TextBlock Style="{StaticResource tBlockTitleBar}" Text="Infos"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button
                     x:Name="minBtn"
                     Click="minBtn_Click"
-                    Style="{StaticResource btnTitleBar}">
-                    -
-                </Button>
+                    Style="{StaticResource btnTitleBar}"
+                    Content="-"/>
                 <Button
                     x:Name="closeBtn"
                     Click="closeBtn_Click"
-                    Style="{StaticResource btnTitleBar}">
-                    x
-                </Button>
+                    Style="{StaticResource btnTitleBar}"
+                    Content="x"/>
             </StackPanel>
         </Grid>
         <!--#endregion-->
