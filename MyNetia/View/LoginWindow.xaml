@@ -88,10 +88,8 @@
         <!--#endregion-->
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -105,19 +103,19 @@
                 Grid.Column="4" Grid.Row="0"
                 Style="{StaticResource setupBtn}"/>
             <TextBlock
-                Grid.Column="1" Grid.Row="1"
+                Grid.Column="0" Grid.Row="1"
                 Text="User name :"/>
             <TextBox
-                Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1"
+                Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1"
                 Text="{Binding Path=login, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock
-                Grid.Column="1" Grid.Row="2"
+                Grid.Column="0" Grid.Row="2"
                 Text="Password :"/>
             <PasswordBox
-                Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="2"
+                Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2"
                 x:Name="passwordBox"/>
             <Button
-                Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3"
+                Grid.ColumnSpan="3" Grid.Row="3" Grid.RowSpan="2"
                 Style="{StaticResource validBtn}"/>
         </Grid>
     </DockPanel>
