@@ -3,11 +3,6 @@
     public static class UserSettings
     {
         private static Ini ini = new Ini(FileManager.CONFIG_PATH);
-        public static string theme
-        {
-            get => ini.Read("THEME", "UserSettings");
-            set => ini.Write("THEME", value, "UserSettings");
-        }
         public static string serverIP
         {
             get => ini.Read("SERVER_IP", "UserSettings");

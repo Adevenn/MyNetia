@@ -10,20 +10,7 @@ namespace MyNetia.View
     public partial class SetupWindow : Window, INotifyPropertyChanged
     {
         private readonly Regex ipv4Regex = new Regex(@"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$");
-        private int _themes;
         private string _server, _port, _database, _userName;
-        public int themes
-        {
-            get => _themes;
-            set
-            {
-                if (_themes != value)
-                {
-                    _themes = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
         public string server
         {
             get => _server;
@@ -85,8 +72,6 @@ namespace MyNetia.View
         /// </summary>
         private void setupValues()
         {
-            if (UserSettings.theme == "") themes = 0;
-            else themes = int.Parse(UserSettings.theme);
             server = UserSettings.serverIP;
             port = UserSettings.port;
             database = UserSettings.database;
@@ -102,7 +87,6 @@ namespace MyNetia.View
         {
             if (checkValues())
             {
-                UserSettings.theme = themes.ToString();
                 UserSettings.serverIP = server;
                 UserSettings.port = port;
                 UserSettings.database = database;

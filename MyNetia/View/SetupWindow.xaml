@@ -8,7 +8,8 @@
         Style="{StaticResource window}"
         WindowStartupLocation="CenterScreen"
         Title="Setup"
-        MinHeight="400" MaxHeight="400" MinWidth="600" MaxWidth="600">
+        MinHeight="400" MaxHeight="400"
+        MinWidth="600" MaxWidth="600">
 
     <Window.Resources>
 
@@ -111,7 +112,6 @@
                 <RowDefinition Height="45"/>
                 <RowDefinition Height="45"/>
                 <RowDefinition Height="45"/>
-                <RowDefinition Height="45"/>
                 <RowDefinition Height="60"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
@@ -119,69 +119,55 @@
                 Grid.Column="0" Grid.Row="1"
                 Style="{StaticResource spH}"
                 HorizontalAlignment="Right">
-                <TextBlock Text="Theme :"/>
-                <TextBlock Style="{StaticResource txtBlockError}"/>
-            </StackPanel>
-            <ComboBox
-                Grid.Column="1" Grid.Row="1"
-                SelectedIndex="{Binding Path=themes, UpdateSourceTrigger=PropertyChanged}">
-                <ComboBoxItem Content="Red"/>
-                <ComboBoxItem Content="Blue"/>
-                <ComboBoxItem Content="Black"/>
-            </ComboBox>
-            <StackPanel
-                Grid.Column="0" Grid.Row="2"
-                Style="{StaticResource spH}"
-                HorizontalAlignment="Right">
                 <TextBlock Text="PostgreSQL server ip :"/>
                 <TextBlock x:Name="ipError" Style="{StaticResource txtBlockError}"/>
             </StackPanel>
             <TextBox
-                Grid.Column="1" Grid.Row="2"
+                Grid.Column="1" Grid.Row="1"
                 Text="{Binding Path=server, UpdateSourceTrigger=PropertyChanged}"/>
             <StackPanel
-                Grid.Column="0" Grid.Row="3"
+                Grid.Column="0" Grid.Row="2"
                 Style="{StaticResource spH}"
                 HorizontalAlignment="Right">
                 <TextBlock Text="Port :"/>
                 <TextBlock x:Name="portError" Style="{StaticResource txtBlockError}"/>
             </StackPanel>
             <TextBox
-                Grid.Column="1" Grid.Row="3"
+                Grid.Column="1" Grid.Row="2"
                 Text="{Binding Path=port, UpdateSourceTrigger=PropertyChanged}"/>
             <StackPanel
-                Grid.Column="0" Grid.Row="4"
+                Grid.Column="0" Grid.Row="3"
                 Style="{StaticResource spH}"
                 HorizontalAlignment="Right">
                 <TextBlock Text="Database :"/>
                 <TextBlock x:Name="dbError" Style="{StaticResource txtBlockError}"/>
             </StackPanel>
             <TextBox
-                Grid.Column="1" Grid.Row="4"
+                Grid.Column="1" Grid.Row="3"
                 Text="{Binding Path=database, UpdateSourceTrigger=PropertyChanged}"/>
             <StackPanel
-                Grid.Column="0" Grid.Row="5"
+                Grid.Column="0" Grid.Row="4"
                 Style="{StaticResource spH}"
                 HorizontalAlignment="Right">
                 <TextBlock Text="Username :"/>
                 <TextBlock x:Name="userNameError" Style="{StaticResource txtBlockError}"/>
             </StackPanel>
             <TextBox
-                Grid.Column="1" Grid.Row="5"
+                Grid.Column="1" Grid.Row="4"
                 Text="{Binding Path=userName, UpdateSourceTrigger=PropertyChanged}"/>
             <StackPanel
-                Grid.Column="0" Grid.Row="6"
+                Grid.Column="0" Grid.Row="5"
                 Style="{StaticResource spH}"
                 HorizontalAlignment="Right">
                 <TextBlock Text="Password :"/>
                 <TextBlock x:Name="pswError" Style="{StaticResource txtBlockError}"/>
             </StackPanel>
             <PasswordBox
-                Grid.Column="1" Grid.Row="6"
+                Grid.Column="1" Grid.Row="5"
                 x:Name="passwordBox"/>
             <Button
-                Grid.ColumnSpan="2" Grid.Row="7"
-                Content="Valid"/>
+                Grid.ColumnSpan="2" Grid.Row="6"
+                Content="Login"/>
         </Grid>
     </DockPanel>
 </Window>
