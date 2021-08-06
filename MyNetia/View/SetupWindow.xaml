@@ -8,7 +8,7 @@
         Style="{StaticResource window}"
         WindowStartupLocation="CenterScreen"
         Title="Setup"
-        MinHeight="400" MaxHeight="400"
+        MinHeight="500" MaxHeight="500"
         MinWidth="600" MaxWidth="600">
 
     <Window.Resources>
@@ -97,19 +97,19 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="45"/>
-                <RowDefinition Height="45"/>
-                <RowDefinition Height="45"/>
-                <RowDefinition Height="45"/>
-                <RowDefinition Height="45"/>
                 <RowDefinition Height="60"/>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="80"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <StackPanel
                 Grid.Column="0" Grid.Row="1"
                 Style="{StaticResource spH}"
                 HorizontalAlignment="Right">
-                <TextBlock Text="PostgreSQL server ip :"/>
+                <TextBlock Text="Server ip :"/>
                 <TextBlock x:Name="ipError" Style="{StaticResource txtBlockError}"/>
             </StackPanel>
             <TextBox

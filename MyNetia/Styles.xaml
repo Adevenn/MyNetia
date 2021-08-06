@@ -329,8 +329,8 @@
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Height" Value="40"/>
         <Setter Property="Width" Value="200"/>
-        <Setter Property="Margin" Value="10, 0"/>
-        <Setter Property="Padding" Value="4, 0"/>
+        <Setter Property="Margin" Value="10"/>
+        <Setter Property="Padding" Value="5, 0"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type PasswordBox}">
@@ -386,7 +386,7 @@
 
     <Style x:Key="{x:Type TabItem}" TargetType="TabItem">
         <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
-        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="FontSize" Value="20"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TabItem">
@@ -424,7 +424,7 @@
         <Setter Property="FontSize" Value="20"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Height" Value="40"/>
-        <Setter Property="Margin" Value="10, 0"/>
+        <Setter Property="Margin" Value="10"/>
         <Setter Property="Padding" Value="5"/>
     </Style>
 
@@ -444,7 +444,8 @@
         <Setter Property="FontSize" Value="20"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Height" Value="40"/>
-        <Setter Property="Padding" Value="4, 0"/>
+        <Setter Property="Margin" Value="10"/>
+        <Setter Property="Padding" Value="5, 0"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TextBox}">

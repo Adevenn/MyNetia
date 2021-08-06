@@ -14,7 +14,7 @@
     <Window.Resources>
         
         <Style x:Key="{x:Type TextBlock}" TargetType="TextBlock" BasedOn="{StaticResource tBlockBase}">
-            <Setter Property="Text" Value="{Binding Path=content, UpdateSourceTrigger=PropertyChanged}"/>
+            <Setter Property="Text" Value="{Binding Path=path, UpdateSourceTrigger=PropertyChanged}"/>
             <Setter Property="Width" Value="150"/>
         </Style>
 
