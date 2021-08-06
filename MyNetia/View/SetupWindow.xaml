@@ -103,7 +103,7 @@
                 <RowDefinition Height="60"/>
                 <RowDefinition Height="60"/>
                 <RowDefinition Height="80"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="2*"/>
             </Grid.RowDefinitions>
             <StackPanel
                 Grid.Column="0" Grid.Row="1"
@@ -156,7 +156,7 @@
                 Grid.Column="1" Grid.Row="5"
                 x:Name="passwordBox"/>
             <Button
-                Grid.ColumnSpan="2" Grid.Row="6"
+                Grid.ColumnSpan="2" Grid.Row="6" Grid.RowSpan="2"
                 Content="Login"/>
         </Grid>
     </DockPanel>
