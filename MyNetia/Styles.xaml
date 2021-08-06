@@ -430,7 +430,7 @@
         <Setter Property="FontSize" Value="18"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="Margin" Value="8, 8, 8, 0"/>
-        <Setter Property="Padding" Value="2"/>
+        <Setter Property="Padding" Value="2, 2, 0, 0"/>
     </Style>
     <!--#endregion-->
 
