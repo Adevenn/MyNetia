@@ -93,6 +93,7 @@
         <Style x:Key="tElemTitle" BasedOn="{StaticResource tBlockBase}" TargetType="TextBlock">
             <Setter Property="Text" Value="{Binding Path=elem.title, UpdateSourceTrigger=PropertyChanged}"/>
             <Setter Property="FontSize" Value="50"/>
+            <Setter Property="Height" Value="80"/>
         </Style>
 
         <Style x:Key="tLastUpdate" BasedOn="{StaticResource tBlock}" TargetType="TextBlock">
@@ -153,7 +154,7 @@
         <!--#endregion-->
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="80"/>
+                <RowDefinition Height="100"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="40"/>
             </Grid.RowDefinitions>

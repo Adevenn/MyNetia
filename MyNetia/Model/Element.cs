@@ -8,7 +8,7 @@ namespace MyNetia.Model
 {
     public class Element : INotifyPropertyChanged
     {
-        private string _title;
+        private string _title, _subtitle;
         public string title
         {
             get => _title;
@@ -21,7 +21,6 @@ namespace MyNetia.Model
                 }
             }
         }
-        private string _subtitle;
         public string subtitle
         {
             get => _subtitle;
@@ -57,14 +56,6 @@ namespace MyNetia.Model
             this.lastUpdate = DateTime.Now;
         }
 
-        public Element(string title, string subtitle, ObservableCollection<Chapter> chapters)
-        {
-            this.title = title;
-            this.subtitle = subtitle;
-            this.chapters = chapters;
-            this.lastUpdate = DateTime.Now;
-        }
-
         public Element(string title, string subtitle, ObservableCollection<Chapter> chapters, DateTime lastUpdate)
         {
             this.title = title;
@@ -73,6 +64,10 @@ namespace MyNetia.Model
             this.lastUpdate = lastUpdate;
         }
 
+        /// <summary>
+        /// Return all chapters title of the element
+        /// </summary>
+        /// <returns></returns>
         public ObservableCollection<string> getChapTitles()
         {
             ObservableCollection<string> titles = new ObservableCollection<string>();
@@ -81,6 +76,10 @@ namespace MyNetia.Model
             return titles;
         }
 
+        /// <summary>
+        /// Return all texts of the element
+        /// </summary>
+        /// <returns></returns>
         public List<ObservableCollection<TextManager>> getAllTexts()
         {
             List<ObservableCollection<TextManager>> allTextsList = new List<ObservableCollection<TextManager>>();
@@ -89,6 +88,10 @@ namespace MyNetia.Model
             return allTextsList;
         }
 
+        /// <summary>
+        /// Return all images of the element
+        /// </summary>
+        /// <returns></returns>
         public List<ObservableCollection<ImageManager>> getAllImg()
         {
             List<ObservableCollection<ImageManager>> allImagesList = new List<ObservableCollection<ImageManager>>();
@@ -97,6 +100,11 @@ namespace MyNetia.Model
             return allImagesList;
         }
 
+        /// <summary>
+        /// Check if the title already exists as chapter title
+        /// </summary>
+        /// <param name="title"></param>
+        /// <returns></returns>
         public bool isChapTitleUnique(string title)
         {
             foreach(Chapter ch in chapters)
