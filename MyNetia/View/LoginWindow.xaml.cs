@@ -62,14 +62,37 @@ namespace MyNetia.View
         }
 
         /// <summary>
+        /// Check values and show if an error occurs
+        /// </summary>
+        /// <returns></returns>
+        private bool checkValues()
+        {
+            bool isValid = true;
+            if (string.IsNullOrWhiteSpace(userName))
+            {
+                userNameError.Visibility = Visibility.Visible;
+                isValid = false;
+            }
+            else { userNameError.Visibility = Visibility.Hidden; }
+            if (string.IsNullOrWhiteSpace(passwordBox.Password))
+            {
+                pswError.Visibility = Visibility.Visible;
+                isValid = false;
+            }
+            else { pswError.Visibility = Visibility.Hidden; }
+            return isValid;
+        }
+
+        /// <summary>
         /// Verify infos and open research window if infos are corrects
         /// </summary>
         private void login()
         {
-            if (!string.IsNullOrWhiteSpace(passwordBox.Password))
+            if (checkValues())
             {
                 UserSettings.userName = userName;
                 UserSettings.password = passwordBox.Password;
+
                 if (DB_Manager.testConnection())
                 {
                     ResearchWindow research = new ResearchWindow();
