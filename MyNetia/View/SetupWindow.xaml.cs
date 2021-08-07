@@ -79,32 +79,24 @@ namespace MyNetia.View
         }
 
         /// <summary>
-        /// Save user settings and check connection
+        /// Try to login when Enter is pressed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void login_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                login();
+        }
+
+        /// <summary>
+        /// Try to login
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void valid_Click(object sender, RoutedEventArgs e)
         {
-            if (checkValues())
-            {
-                UserSettings.serverIP = server;
-                UserSettings.port = port;
-                UserSettings.database = database;
-                UserSettings.userName = userName;
-                UserSettings.password = passwordBox.Password;
-
-                if (DB_Manager.testConnection())
-                {
-                    ResearchWindow research = new ResearchWindow();
-                    research.Show();
-                    Close();
-                }
-                else
-                {
-                    InfoWindow info = new InfoWindow("Connection failed, verify your infos");
-                    info.ShowDialog();
-                }
-            }
+            login();
         }
 
         /// <summary>
@@ -145,6 +137,33 @@ namespace MyNetia.View
             }
             else { pswError.Visibility = Visibility.Hidden; }
             return isValid;
+        }
+
+        /// <summary>
+        /// Save user settings and check connection
+        /// </summary>
+        private void login()
+        {
+            if (checkValues())
+            {
+                UserSettings.serverIP = server;
+                UserSettings.port = port;
+                UserSettings.database = database;
+                UserSettings.userName = userName;
+                UserSettings.password = passwordBox.Password;
+
+                if (DB_Manager.testConnection())
+                {
+                    ResearchWindow research = new ResearchWindow();
+                    research.Show();
+                    Close();
+                }
+                else
+                {
+                    InfoWindow info = new InfoWindow("Connection failed, verify your infos");
+                    info.ShowDialog();
+                }
+            }
         }
 
         #region TITLE BAR

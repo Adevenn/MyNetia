@@ -18,14 +18,15 @@
         </Style>
 
         <Style x:Key="{x:Type TextBox}" TargetType="TextBox" BasedOn="{StaticResource tBoxBase}">
+            <EventSetter Event="KeyDown" Handler="login_KeyDown"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="Width" Value="200"/>
         </Style>
 
         <Style x:Key="setupBtn" TargetType="Button" BasedOn="{StaticResource btnBase}">
             <EventSetter Event="Click" Handler="loadSetup_Click"/>
-            <Setter Property="FontSize" Value="12"/>
             <Setter Property="Content" Value="Change setup"/>
+            <Setter Property="FontSize" Value="12"/>
             <Setter Property="Height" Value="30"/>
             <Setter Property="Width" Value="100"/>
         </Style>
@@ -107,13 +108,14 @@
                 Text="User name :"/>
             <TextBox
                 Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1"
-                Text="{Binding Path=login, UpdateSourceTrigger=PropertyChanged}"/>
+                Text="{Binding Path=userName, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock
                 Grid.Column="0" Grid.Row="2"
                 Text="Password :"/>
             <PasswordBox
                 Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2"
-                x:Name="passwordBox"/>
+                x:Name="passwordBox"
+                KeyDown="login_KeyDown"/>
             <Button
                 Grid.ColumnSpan="3" Grid.Row="3" Grid.RowSpan="2"
                 Style="{StaticResource validBtn}"/>

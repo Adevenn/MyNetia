@@ -17,22 +17,10 @@
             <Setter Property="HorizontalAlignment" Value="Right"/>
         </Style>
 
-        <Style x:Key="txtBlockError" TargetType="TextBlock" BasedOn="{StaticResource tBlockBase}">
-            <Setter Property="Visibility" Value="Hidden"/>
-            <Setter Property="Foreground" Value="{StaticResource Background2}"/>
-            <Setter Property="Text" Value="*"/>
-            <Setter Property="HorizontalAlignment" Value="Right"/>
-        </Style>
-
         <Style x:Key="{x:Type TextBox}" TargetType="TextBox" BasedOn="{StaticResource tBoxBase}">
+            <EventSetter Event="KeyDown" Handler="login_KeyDown"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="Width" Value="200"/>
-        </Style>
-
-        <Style x:Key="{x:Type ComboBox}" TargetType="ComboBox" BasedOn="{StaticResource comboBoxBase}">
-            <Setter Property="Height" Value="40"/>
-            <Setter Property="Width" Value="200"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
         </Style>
 
         <Style x:Key="{x:Type Button}" TargetType="Button" BasedOn="{StaticResource btnBase}">
@@ -154,7 +142,8 @@
             </StackPanel>
             <PasswordBox
                 Grid.Column="1" Grid.Row="5"
-                x:Name="passwordBox"/>
+                x:Name="passwordBox"
+                KeyDown="login_KeyDown"/>
             <Button
                 Grid.ColumnSpan="2" Grid.Row="6" Grid.RowSpan="2"
                 Content="Login"/>

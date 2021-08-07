@@ -8,15 +8,15 @@ namespace MyNetia.View
 {
     public partial class LoginWindow : Window, INotifyPropertyChanged
     {
-        private string _login = UserSettings.userName;
-        public string login
+        private string _userName = UserSettings.userName;
+        public string userName
         {
-            get => _login;
+            get => _userName;
             set
             {
-                if (_login != value)
+                if (_userName != value)
                 {
-                    _login = value;
+                    _userName = value;
                     OnPropertyChanged();
                 }
             }
@@ -29,15 +29,46 @@ namespace MyNetia.View
         }
 
         /// <summary>
-        /// Verify infos and open research window if infos are corrects
+        /// Try to login
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void valid_Click(object sender, RoutedEventArgs e)
         {
+            login();
+        }
+
+        /// <summary>
+        /// Load the setup window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void loadSetup_Click(object sender, RoutedEventArgs e)
+        {
+            SetupWindow setup = new SetupWindow();
+            setup.Show();
+            Close();
+        }
+
+        /// <summary>
+        /// Try to login when Enter is pressed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void login_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                login();
+        }
+
+        /// <summary>
+        /// Verify infos and open research window if infos are corrects
+        /// </summary>
+        private void login()
+        {
             if (!string.IsNullOrWhiteSpace(passwordBox.Password))
             {
-                UserSettings.userName = login;
+                UserSettings.userName = userName;
                 UserSettings.password = passwordBox.Password;
                 if (DB_Manager.testConnection())
                 {
@@ -51,18 +82,6 @@ namespace MyNetia.View
                     info.ShowDialog();
                 }
             }
-        }
-
-        /// <summary>
-        /// Load the setup window
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void loadSetup_Click(object sender, RoutedEventArgs e)
-        {
-            SetupWindow setup = new SetupWindow();
-            setup.Show();
-            Close();
         }
 
         #region TITLE BAR

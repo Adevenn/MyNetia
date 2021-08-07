@@ -223,13 +223,13 @@ namespace MyNetia
         }
 
         /// <summary>
-        /// Delete the current chapter when Return + LeftAlt are pressed
+        /// Delete the current chapter when Enter + LeftAlt are pressed
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void chapTitle_KeyDown(object sender, KeyEventArgs e)
         {
-            if (Keyboard.IsKeyDown(Key.LeftAlt) && Keyboard.IsKeyDown(Key.Return))
+            if (Keyboard.IsKeyDown(Key.LeftAlt) && Keyboard.IsKeyDown(Key.Enter))
             {
                 ConfirmationWindow window = new ConfirmationWindow($"Do you realy want to delete\n{chapTitle} ?")
                 {
@@ -271,7 +271,7 @@ namespace MyNetia
         private void listImg_KeyDown(object sender, KeyEventArgs e)
         {
             //Create a new image zone
-            if (e.Key == Key.Return)
+            if (e.Key == Key.Enter)
             {
                 images.Add(new ImageManager());
                 listImg.SelectedIndex = listImg.Items.Count - 1;
@@ -301,7 +301,7 @@ namespace MyNetia
         }
 
         /// <summary>
-        /// Add a text in the list
+        /// Add text inside texts
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -311,7 +311,7 @@ namespace MyNetia
         }
 
         /// <summary>
-        /// Add an image in the list
+        /// Add image inside images
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -354,7 +354,7 @@ namespace MyNetia
         }
 
         /// <summary>
-        /// Valid element content and save it in the database
+        /// Valid element content and send it to database
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -452,7 +452,7 @@ namespace MyNetia
         /// <param name="e"></param>
         private void selectionDelete_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Return && DB_Manager.checkTitleAvailablity(selectionDel))
+            if (e.Key == Key.Enter && DB_Manager.checkTitleAvailablity(selectionDel))
             {
                 //Confirm delete element
                 ConfirmationWindow window = new ConfirmationWindow($"Do you want to delete\n{selectionDel} ?")

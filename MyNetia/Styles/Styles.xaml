@@ -433,6 +433,13 @@
         <Setter Property="Margin" Value="8, 8, 8, 0"/>
         <Setter Property="Padding" Value="2, 2, 0, 0"/>
     </Style>
+
+    <Style x:Key="txtBlockError" TargetType="TextBlock" BasedOn="{StaticResource tBlockBase}">
+        <Setter Property="Visibility" Value="Hidden"/>
+        <Setter Property="Foreground" Value="{StaticResource Background2}"/>
+        <Setter Property="Text" Value="*"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+    </Style>
     <!--#endregion-->
 
     <!--#region TextBox Style-->
