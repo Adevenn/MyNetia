@@ -55,6 +55,18 @@ namespace MyNetia
                 }
             }
         }
+        public string selectionDel
+        {
+            get => _selectionDel;
+            set
+            {
+                if (_selectionDel != value)
+                {
+                    _selectionDel = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         private ObservableCollection<TextManager> _texts;
         public ObservableCollection<TextManager> texts
         {
@@ -77,6 +89,19 @@ namespace MyNetia
                 if (_images != value)
                 {
                     _images = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private ObservableCollection<string> _matchingResearch;
+        public ObservableCollection<string> matchingResearch
+        {
+            get => _matchingResearch;
+            set
+            {
+                if (value != _matchingResearch)
+                {
+                    _matchingResearch = value;
                     OnPropertyChanged();
                 }
             }
@@ -112,31 +137,6 @@ namespace MyNetia
             "Chapter image :\n" +
             "   - Enter => New image zone\n" +
             "   - LAlt + Enter => Delete image zone";
-        public string selectionDel
-        {
-            get => _selectionDel;
-            set
-            {
-                if (_selectionDel != value)
-                {
-                    _selectionDel = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        private ObservableCollection<string> _matchingResearch;
-        public ObservableCollection<string> matchingResearch
-        {
-            get => _matchingResearch;
-            set
-            {
-                if (value != _matchingResearch)
-                {
-                    _matchingResearch = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
 
         public AdminWindow()
         {
@@ -183,7 +183,7 @@ namespace MyNetia
             {
                 //Set by default 1 empty chapter
                 if (currentElem.chapters.Count == 0)
-                    currentElem.chapters.Add(new Chapter("1"));
+                    currentElem.addChapter();
                 //Select by default the first item if nothing is selected
                 if (listChapters.SelectedIndex == -1)
                     listChapters.SelectedIndex = 0;
@@ -202,7 +202,7 @@ namespace MyNetia
         /// <param name="e"></param>
         private void addChapter_Click(object sender, RoutedEventArgs e)
         {
-            currentElem.chapters.Add(new Chapter((listChapters.Items.Count + 1).ToString()));
+            currentElem.addChapter();
             listChapters.SelectedIndex = listChapters.Items.Count - 1;
         }
         

@@ -48,7 +48,7 @@ namespace MyNetia.Model
 
         public Chapter(string title)
         {
-            this.title = "Chapter " + title;
+            this.title = title;
             this.texts = new ObservableCollection<TextManager>();
             this.texts.Add(new TextManager(Types.none));
             this.images = new ObservableCollection<ImageManager>();

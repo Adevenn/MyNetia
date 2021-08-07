@@ -52,7 +52,7 @@ namespace MyNetia.Model
         {
             this.title = title;
             this.subtitle = "";
-            this.chapters.Add(new Chapter("1"));
+            addChapter();
             this.lastUpdate = DateTime.Now;
         }
 
@@ -62,6 +62,25 @@ namespace MyNetia.Model
             this.subtitle = subtitle;
             this.chapters = chapters;
             this.lastUpdate = lastUpdate;
+        }
+
+        /// <summary>
+        /// Add a new chapter and make sure the new chapter title is unique
+        /// </summary>
+        public void addChapter()
+        {
+            int i = 0;
+            string title;
+            while (true)
+            {
+                title = "Chapter " + i;
+                if (isChapTitleUnique(title))
+                {
+                    chapters.Add(new Chapter(title));
+                    break;
+                }
+                i++;
+            }
         }
 
         /// <summary>
@@ -107,7 +126,7 @@ namespace MyNetia.Model
         /// <returns></returns>
         public bool isChapTitleUnique(string title)
         {
-            foreach(Chapter ch in chapters)
+            foreach (Chapter ch in chapters)
             {
                 if (ch.title == title)
                     return false;
