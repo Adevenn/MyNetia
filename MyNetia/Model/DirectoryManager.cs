@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Text.RegularExpressions;
 
 namespace MyNetia.Model
 {
@@ -26,18 +25,6 @@ namespace MyNetia.Model
         {
             try { Directory.CreateDirectory(path); }
             catch (Exception e) { throw new Exception(e.Message); }
-        }
-
-        /// <summary>
-        /// Return true if the name is valid, return false if the name is not valid
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static bool isValidName(string name)
-        {
-            Regex containsABadCharacter = new Regex("[" + Regex.Escape(new string(Path.GetInvalidPathChars())) + "]");
-            if (containsABadCharacter.IsMatch(name) || string.IsNullOrWhiteSpace(name)) { return false; };
-            return true;
         }
     }
 }

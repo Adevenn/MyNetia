@@ -51,6 +51,8 @@ namespace MyNetia
                 if (_chapTitle != value)
                 {
                     _chapTitle = value;
+                    int id = listChapters.SelectedIndex;
+                    currentElem.chapters[id].title = chapTitle;
                     OnPropertyChanged();
                 }
             }
@@ -63,6 +65,7 @@ namespace MyNetia
                 if (_selectionDel != value)
                 {
                     _selectionDel = value;
+                    matchingResearchUpdate();
                     OnPropertyChanged();
                 }
             }
@@ -157,17 +160,18 @@ namespace MyNetia
         {
             if (e.Key == Key.Return)
             {
-                if (DirectoryManager.isValidName(selectAddUpdate))
+                if (DB_Manager.isValidName(selectAddUpdate))
                 {
                     currentElem = DB_Manager.getElement(selectAddUpdate);
                     oldElemTitle = currentElem.title;
                     listChapters.SelectedIndex = 0;
                     isElemSelected = Visibility.Visible;
+                    elemTitleError.Visibility = Visibility.Hidden;
                 }
                 else
                 {
-                    //TODO : Display something in the window : *invalid
                     isElemSelected = Visibility.Hidden;
+                    elemTitleError.Visibility = Visibility.Visible;
                 }
             }
         }
@@ -204,22 +208,6 @@ namespace MyNetia
         {
             currentElem.addChapter();
             listChapters.SelectedIndex = listChapters.Items.Count - 1;
-        }
-        
-        /// <summary>
-        /// Update item inside ListBox when title text has changed
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void chapTitle_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            int id = listChapters.SelectedIndex;
-            if(currentElem.isChapTitleUnique(chapTitle))
-                currentElem.chapters[id].title = chapTitle;
-            else
-            {
-                //TODO : * to show the name is not correct
-            }
         }
 
         /// <summary>
@@ -360,19 +348,30 @@ namespace MyNetia
         /// <param name="e"></param>
         private void valid_Click(object sender, RoutedEventArgs e)
         {
-            new Thread(() =>
+            if (currentElem.checkChapTitles())
             {
-                if (DB_Manager.checkTitleAvailablity(oldElemTitle))
-                    DB_Manager.updateElement(oldElemTitle, currentElem);
-                else
-                    DB_Manager.addElement(currentElem);
-                DB_Manager.getTitles();
-                matchingResearchUpdate();
-            }).Start();
+                new Thread(() =>
+                {
+                    if (DB_Manager.checkTitleAvailablity(oldElemTitle))
+                        DB_Manager.updateElement(oldElemTitle, currentElem);
+                    else
+                        DB_Manager.addElement(currentElem);
+                    DB_Manager.getTitles();
+                    matchingResearchUpdate();
+                }).Start();
 
-            //Show Validation image
-            imageValid.Visibility = Visibility.Visible;
-            animImageOpacity(imageValid);
+                //Show Validation image
+                imageValid.Visibility = Visibility.Visible;
+                animImageOpacity(imageValid);
+            }
+            else
+            {
+                InfoWindow info = new InfoWindow("Chapters title MUST be unique")
+                {
+                    Owner = this
+                };
+                info.ShowDialog();
+            }
         }
         #endregion
 
@@ -476,16 +475,6 @@ namespace MyNetia
                 //Set Keyboard focus at the end
                 selectDelete.CaretIndex = selectionDel.Length;
             }
-        }
-
-        /// <summary>
-        /// Update the matching list when text has changed
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void onTextChangedDelete(object sender, TextChangedEventArgs e)
-        {
-            matchingResearchUpdate();
         }
 
         /// <summary>

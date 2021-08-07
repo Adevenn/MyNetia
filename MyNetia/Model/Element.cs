@@ -120,11 +120,24 @@ namespace MyNetia.Model
         }
 
         /// <summary>
+        /// Return false if 2 chapters have the same title, else return true
+        /// </summary>
+        /// <returns></returns>
+        public bool checkChapTitles()
+        {
+            for (int i = 0; i < chapters.Count; i++)
+                for (int j = 0; j < chapters.Count; j++)
+                    if (chapters[i].title == chapters[j].title && j != i)
+                        return false;
+            return true;
+        }
+
+        /// <summary>
         /// Check if the title already exists as chapter title
         /// </summary>
         /// <param name="title"></param>
         /// <returns></returns>
-        public bool isChapTitleUnique(string title)
+        private bool isChapTitleUnique(string title)
         {
             foreach (Chapter ch in chapters)
             {

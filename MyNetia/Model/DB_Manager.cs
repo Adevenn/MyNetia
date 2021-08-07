@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Text.RegularExpressions;
 
 namespace MyNetia.Model
 {
@@ -331,6 +332,17 @@ namespace MyNetia.Model
                     matchList.Add(s);
             }
             return matchList;
+        }
+
+        /// <summary>
+        /// Return true if the name is valid, return false if the name is not valid
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static bool isValidName(string name)
+        {
+            Regex validCharacters = new Regex(@"[a-zA-Z0-9_-]+$");
+            return validCharacters.IsMatch(name) && !string.IsNullOrWhiteSpace(name);
         }
     }
 }

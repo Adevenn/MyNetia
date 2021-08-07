@@ -15,25 +15,14 @@
     <Window.Resources>
 
         <!--#region TextBox Style-->
-        <Style x:Key="tBox" BasedOn="{StaticResource tBoxBase}" TargetType="TextBox">
+        <Style x:Key="{x:Type TextBox}" BasedOn="{StaticResource tBoxBase}" TargetType="TextBox">
             <Setter Property="Width" Value="330"/>
         </Style>
 
-        <Style x:Key="tBoxChapTitle" TargetType="TextBox" BasedOn="{StaticResource tBox}">
-            <EventSetter Event="TextChanged" Handler="chapTitle_TextChanged"/>
-            <EventSetter Event="KeyDown" Handler="chapTitle_KeyDown"/>
-            <Setter Property="Text" Value="{Binding Path=chapTitle, UpdateSourceTrigger=PropertyChanged}"/>
-        </Style>
-
-        <Style x:Key="tBoxDelete" TargetType="TextBox" BasedOn="{StaticResource tBox}">
-            <Setter Property="Text" Value="{Binding Path=selectionDel, UpdateSourceTrigger=PropertyChanged}"/>
-            <EventSetter Event="KeyDown" Handler="selectionDelete_KeyDown"/>
-            <EventSetter Event="TextChanged" Handler="onTextChangedDelete"/>
-        </Style>
-
-        <Style x:Key="tBoxMultiLines" TargetType="TextBox" BasedOn="{StaticResource tBox}">
+        <Style x:Key="tBoxMultiLines" TargetType="TextBox" BasedOn="{StaticResource tBoxBase}">
             <Setter Property="AcceptsReturn" Value="True"/>
             <Setter Property="Height" Value="100"/>
+            <Setter Property="Width" Value="330"/>
             <Setter Property="Margin" Value="10, 20"/>
         </Style>
         <!--#endregion-->
@@ -65,7 +54,7 @@
             <Setter Property="Margin" Value="50, 10"/>
         </Style>
 
-        <Style x:Key="btnValid" BasedOn="{StaticResource btnBase}" TargetType="Button">
+        <Style x:Key="btnValid" TargetType="Button" BasedOn="{StaticResource btnBase}">
             <EventSetter Event="Click" Handler="valid_Click"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
@@ -216,10 +205,8 @@
                         <Border Style="{StaticResource borderBot}">
                             <StackPanel Style="{StaticResource spH}">
                                 <TextBlock Text="Select element :"/>
-                                <TextBox
-                                    Style="{StaticResource tBox}"
-                                    KeyDown="selectAddUpdate_KeyDown"
-                                    Text="{Binding Path=selectAddUpdate, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBlock x:Name="elemTitleError" Style="{StaticResource txtBlockError}"/>
+                                <TextBox KeyDown="selectAddUpdate_KeyDown" Text="{Binding Path=selectAddUpdate, UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>
                         </Border>
                     </StackPanel>
@@ -237,22 +224,20 @@
                         </Grid.RowDefinitions>
                         <TextBlock
                             Grid.Column="0" Grid.Row="0"
-                            HorizontalAlignment="Right"
-                            Text="Title :"/>
-                        <TextBox
-                            Grid.Column="1" Grid.Row="0"
-                            Style="{StaticResource tBox}"
-                            HorizontalAlignment="Left"
-                            Text="{Binding Path=currentElem.title, UpdateSourceTrigger=PropertyChanged}"/>
+                            Text="Title :"
+                            HorizontalAlignment="Right"/>
                         <TextBlock
                             Grid.Column="0" Grid.Row="1"
-                            HorizontalAlignment="Right"
-                            Text="Subtitle :"/>
+                            Text="Subtitle :"
+                            HorizontalAlignment="Right"/>
+                        <TextBox
+                            Grid.Column="1" Grid.Row="0"
+                            Text="{Binding Path=currentElem.title, UpdateSourceTrigger=PropertyChanged}"
+                            HorizontalAlignment="Left"/>
                         <TextBox
                             Grid.Column="1" Grid.Row="1"
-                            Style="{StaticResource tBox}"
-                            HorizontalAlignment="Left"
-                            Text="{Binding Path=currentElem.subtitle, UpdateSourceTrigger=PropertyChanged}"/>
+                            Text="{Binding Path=currentElem.subtitle, UpdateSourceTrigger=PropertyChanged}"
+                            HorizontalAlignment="Left"/>
                     </Grid>
                     <Border
                         DockPanel.Dock="Left"
@@ -297,7 +282,8 @@
                                         Text="Chapter title :"/>
                                     <TextBox
                                         Grid.Column="1" Grid.Row="0"
-                                        Style="{StaticResource tBoxChapTitle}"/>
+                                        KeyDown="chapTitle_KeyDown"
+                                        Text="{Binding Path=chapTitle, UpdateSourceTrigger=PropertyChanged}"/>
                                     <StackPanel
                                         Grid.Column="0" Grid.Row="1"
                                         Style="{StaticResource spH}"
@@ -340,7 +326,10 @@
                     <Border Style="{StaticResource borderBot}">
                         <StackPanel Style="{StaticResource spH}">
                             <TextBlock Text="Select element :"/>
-                            <TextBox x:Name="selectDelete" Style="{StaticResource tBoxDelete}"/>
+                            <TextBox
+                                x:Name="selectDelete"
+                                Text="{Binding Path=selectionDel, UpdateSourceTrigger=PropertyChanged}"
+                                KeyDown="selectionDelete_KeyDown"/>
                         </StackPanel>
                     </Border>
                     <ItemsControl ItemsSource="{Binding Path=matchingResearch}"/>

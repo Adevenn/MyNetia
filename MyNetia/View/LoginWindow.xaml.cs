@@ -101,7 +101,10 @@ namespace MyNetia.View
                 }
                 else
                 {
-                    InfoWindow info = new InfoWindow("Connection failed, verify your infos");
+                    InfoWindow info = new InfoWindow("Connection failed, verify your infos")
+                    {
+                        Owner = this
+                    };
                     info.ShowDialog();
                 }
             }
