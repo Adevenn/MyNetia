@@ -30,7 +30,7 @@ namespace MyNetia
                 for (int j = i; j < i + 3; j++)
                 {
                     if (j < list.Count)
-                        s.Children.Add(setLabel(list[j]));
+                        s.Children.Add(setTextBlock(list[j]));
                     else
                         break;
                 }
@@ -46,18 +46,17 @@ namespace MyNetia
         {
             List<string> commands = currentApp.commandsList();
             foreach (string txt in commands)
-                stackCommands.Children.Add(setLabel(txt));
+                stackCommands.Children.Add(setTextBlock(txt));
         }
 
         /// <summary>
         /// Create a custom Label
         /// </summary>
-        /// <param name="content"></param>
+        /// <param name="text"></param>
         /// <returns></returns>
-        private Label setLabel(string content) => new Label
+        private TextBlock setTextBlock(string text) => new TextBlock
         {
-            Content = content,
-            Style = (Style)Resources["label"]
+            Text = text
         };
 
         /// <summary>
