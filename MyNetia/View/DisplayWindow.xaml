@@ -88,6 +88,7 @@
 
         <Style x:Key="tElemSubtitle" BasedOn="{StaticResource tBlock}" TargetType="TextBlock">
             <Setter Property="Text" Value="{Binding Path=elem.subtitle, UpdateSourceTrigger=PropertyChanged}"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
         </Style>
 
         <Style x:Key="tElemTitle" BasedOn="{StaticResource tBlockBase}" TargetType="TextBlock">
