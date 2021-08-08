@@ -51,9 +51,9 @@ namespace MyNetia.Model
         public Element(string title)
         {
             this.title = title;
-            this.subtitle = "";
+            subtitle = "";
             addChapter();
-            this.lastUpdate = DateTime.Now;
+            lastUpdate = DateTime.Now;
         }
 
         public Element(string title, string subtitle, ObservableCollection<Chapter> chapters, DateTime lastUpdate)
@@ -67,21 +67,7 @@ namespace MyNetia.Model
         /// <summary>
         /// Add a new chapter and make sure the new chapter title is unique
         /// </summary>
-        public void addChapter()
-        {
-            int i = 0;
-            string title;
-            while (true)
-            {
-                title = "Chapter " + i;
-                if (isChapTitleUnique(title))
-                {
-                    chapters.Add(new Chapter(title));
-                    break;
-                }
-                i++;
-            }
-        }
+        public void addChapter() => chapters.Add(new Chapter("New Chapter"));
 
         /// <summary>
         /// Return all chapters title of the element
@@ -129,21 +115,6 @@ namespace MyNetia.Model
                 for (int j = 0; j < chapters.Count; j++)
                     if (chapters[i].title == chapters[j].title && j != i)
                         return false;
-            return true;
-        }
-
-        /// <summary>
-        /// Check if the title already exists as chapter title
-        /// </summary>
-        /// <param name="title"></param>
-        /// <returns></returns>
-        private bool isChapTitleUnique(string title)
-        {
-            foreach (Chapter ch in chapters)
-            {
-                if (ch.title == title)
-                    return false;
-            }
             return true;
         }
 
