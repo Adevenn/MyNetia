@@ -10,14 +10,7 @@
     </WindowChrome>
 
     <!--#region Font Family-->
-    <FontFamily x:Key="OrkneyBold">pack://application:,,,/Fonts/#Orkney Bold</FontFamily>
-    <FontFamily x:Key="OrkneyBoldItalic">pack://application:,,,/Fonts/#Orkney Bold Italic</FontFamily>
-    <FontFamily x:Key="OrkneyLightItalic">pack://application:,,,/Fonts/#Orkney Light Italic</FontFamily>
     <FontFamily x:Key="OrkneyLight">pack://application:,,,/Fonts/#Orkney Light</FontFamily>
-    <FontFamily x:Key="OrkneyMediumItalic">pack://application:,,,/Fonts/#Orkney Medium Italic</FontFamily>
-    <FontFamily x:Key="OrkneyMedium">pack://application:,,,/Fonts/#Orkney Medium</FontFamily>
-    <FontFamily x:Key="OrkneyRegularItalic">pack://application:,,,/Fonts/#Orkney Regular Italic</FontFamily>
-    <FontFamily x:Key="OrkneyRegular">pack://application:,,,/Fonts/#Orkney Regular</FontFamily>
     <!--#endregion-->
 
     <!--#region Brushes-->
