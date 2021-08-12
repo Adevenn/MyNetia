@@ -15,6 +15,7 @@
 
         <Style x:Key="{x:Type TextBlock}" BasedOn="{StaticResource tBlockBase}" TargetType="TextBlock">
             <Setter Property="Margin" Value="30"/>
+            <Setter Property="Height" Value="auto"/>
         </Style>
         
     </Window.Resources>
