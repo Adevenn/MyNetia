@@ -242,7 +242,7 @@ namespace MyNetia
             if (Keyboard.IsKeyDown(Key.LeftCtrl) && Keyboard.IsKeyDown(Key.Enter))
                 texts.Add(new TextManager(Types.none));
             //Remove text zone
-            if (Keyboard.IsKeyDown(Key.LeftAlt) && Keyboard.IsKeyDown(Key.Enter) && listTxt.SelectedIndex != -1)
+            if (Keyboard.IsKeyDown(Key.LeftAlt) && Keyboard.IsKeyDown(Key.Enter))
             {
                 int id = listTxt.SelectedIndex;
                 texts.RemoveAt(id);
@@ -278,14 +278,13 @@ namespace MyNetia
         }
 
         /// <summary>
-        /// Select the item that has the keyboard focus
+        /// Add image inside images
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void itemList_PreviewGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        private void addImg_Click(object sender, RoutedEventArgs e)
         {
-            ListBoxItem item = (ListBoxItem)sender;
-            item.IsSelected = true;
+            images.Add(new ImageManager());
         }
 
         /// <summary>
@@ -296,16 +295,6 @@ namespace MyNetia
         private void addTxt_Click(object sender, RoutedEventArgs e)
         {
             texts.Add(new TextManager(Types.none));
-        }
-
-        /// <summary>
-        /// Add image inside images
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void addImg_Click(object sender, RoutedEventArgs e)
-        {
-            images.Add(new ImageManager());
         }
 
         /// <summary>
