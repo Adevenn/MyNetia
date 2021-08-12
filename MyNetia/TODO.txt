@@ -10,3 +10,4 @@
 	puis un seconde section pour afficher les mots clées en rapport avec la selection
 	(Mots clées peuvent etre ChaptersTitles, subtitle, etc..)
 - Ajouter plus de personnalisation des texts (Ex : ToggleButton to mark as complete)
+- Ajouter 2 tailles de fenetres infos ou adapter la taille en fct du contenu
