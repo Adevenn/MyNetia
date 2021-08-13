@@ -17,7 +17,7 @@
         <!--#region TextBox Style-->
         <Style x:Key="{x:Type TextBox}" BasedOn="{StaticResource tBoxBase}" TargetType="TextBox">
             <EventSetter Event="KeyDown" Handler="onKeyDown"/>
-            <EventSetter Event="TextChanged" Handler="onTextChanged"/>
+	    <EventSetter Event="TextChanged" Handler="onTextChanged"/>
             <Setter Property="Text" Value="{Binding Path=selection, UpdateSourceTrigger=PropertyChanged}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Height" Value="30"/>

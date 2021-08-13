@@ -337,7 +337,6 @@
     <!--#region PasswordBox Style-->
     <Style x:Key="{x:Type PasswordBox}" TargetType="PasswordBox">
         <Setter Property="IsTabStop" Value="True"/>
-        <Setter Property="FocusVisualStyle" Value="{StaticResource focusVisualStyle}"/>
         <Setter Property="Background" Value="{StaticResource Background}"/>
         <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
         <Setter Property="BorderBrush" Value="{StaticResource Border}"/>
@@ -466,7 +465,6 @@
     <!--#region TextBox Style-->
     <Style x:Key="tBoxBase" TargetType="TextBox">
         <Setter Property="IsTabStop" Value="True"/>
-        <Setter Property="FocusVisualStyle" Value="{StaticResource focusVisualStyle}"/>
         <Setter Property="Background" Value="{StaticResource Background}"/>
         <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
         <Setter Property="BorderBrush" Value="{StaticResource Border}"/>

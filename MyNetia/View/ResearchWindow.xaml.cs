@@ -43,6 +43,8 @@ namespace MyNetia
             DB_Manager.getTitles();
             DataContext = this;
             InitializeComponent();
+            txtBox.Focus();
+            txtBox.Select(0, 0);
             matchingResearchUpdate();
         }
 
@@ -101,12 +103,6 @@ namespace MyNetia
                             break;
                     }
                 }
-            }
-            else if (e.Key.Equals(Key.Tab) && matchingResearch.Count > 0)
-            {
-                selection = matchingResearch[0];
-                //Set Keyboard focus at the end
-                txtBox.CaretIndex = selection.Length;
             }
         }
         #endregion

@@ -460,12 +460,6 @@ namespace MyNetia
                     }).Start();
                 }
             }
-            else if (e.Key == Key.Tab && matchingResearch.Count > 0)
-            {
-                selectionDel = matchingResearch[0];
-                //Set Keyboard focus at the end
-                selectDelete.CaretIndex = selectionDel.Length;
-            }
         }
 
         /// <summary>
