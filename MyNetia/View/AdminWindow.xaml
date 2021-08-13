@@ -227,7 +227,10 @@
                             <StackPanel Style="{StaticResource spH}">
                                 <TextBlock Text="Select element :"/>
                                 <TextBlock x:Name="elemTitleError" Style="{StaticResource txtBlockError}"/>
-                                <TextBox KeyDown="selectAddUpdate_KeyDown" Text="{Binding Path=selectAddUpdate, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBox
+                                    x:Name="selectElem"
+                                    KeyDown="selectAddUpdate_KeyDown"
+                                    Text="{Binding Path=selectAddUpdate, UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>
                         </Border>
                     </StackPanel>

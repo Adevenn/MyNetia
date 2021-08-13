@@ -146,6 +146,8 @@ namespace MyNetia
             DataContext = this;
             InitializeComponent();
             matchingResearchUpdate();
+            selectElem.Focus();
+            selectElem.Select(0, 0);
         }
 
 

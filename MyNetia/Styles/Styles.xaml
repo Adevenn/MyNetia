@@ -9,6 +9,7 @@
         <WindowChrome.CaptionHeight>0</WindowChrome.CaptionHeight>
     </WindowChrome>
 
+    
     <!--#region Font Family-->
     <FontFamily x:Key="OrkneyLight">pack://application:,,,/Fonts/#Orkney Light</FontFamily>
     <!--#endregion-->
@@ -25,6 +26,22 @@
     <SolidColorBrush x:Key="Border" Color="#2C394B"/>
     <SolidColorBrush x:Key="Foreground" Color="#FCDAB7"/>
     -->
+    <!--#endregion-->
+
+    <!--#region FocusVisual Style-->
+    <Style x:Key="focusVisualStyle">
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Rectangle
+                        StrokeThickness="1"  
+                        Stroke="{StaticResource Foreground}"  
+                        StrokeDashArray="1 2"  
+                        SnapsToDevicePixels="true"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <!--#endregion-->
 
     <!--#region Border Style-->
@@ -59,6 +76,8 @@
 
     <!--#region Button Style-->
     <Style x:Key="btnEssential" TargetType="Button">
+        <Setter Property="IsTabStop" Value="True"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource focusVisualStyle}"/>
         <Setter Property="Background" Value="{StaticResource Background}"/>
         <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
@@ -145,6 +164,7 @@
 
     <!--#region ComboBoxItem Style-->
     <Style x:Key="{x:Type ComboBoxItem}" TargetType="{x:Type ComboBoxItem}">
+        <Setter Property="IsTabStop" Value="False"/>
         <Setter Property="SnapsToDevicePixels" Value="true"/>
         <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
         <Setter Property="FontFamily" Value="{StaticResource OrkneyLight}"/>
@@ -175,6 +195,8 @@
 
     <!--#region ComboBox Style-->
     <Style x:Key="{x:Type ComboBox}" TargetType="{x:Type ComboBox}">
+        <Setter Property="IsTabStop" Value="True"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource focusVisualStyle}"/>
         <Setter Property="SnapsToDevicePixels" Value="true"/>
         <Setter Property="OverridesDefaultStyle" Value="true"/>
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden"/>
@@ -271,6 +293,7 @@
 
     <!--#region ListBox Style-->
     <Style x:Key="listBoxBase" TargetType="ListBox">
+        <Setter Property="IsTabStop" Value="False"/>
         <Setter Property="Background" Value="{StaticResource Background}"/>
         <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
         <Setter Property="SelectionMode" Value="Single"/>
@@ -282,6 +305,7 @@
     
     <!--#region ListBoxItem Style-->
     <Style x:Key="listBoxItemBase" TargetType="ListBoxItem">
+        <Setter Property="IsTabStop" Value="False"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBoxItem">
@@ -312,6 +336,8 @@
     
     <!--#region PasswordBox Style-->
     <Style x:Key="{x:Type PasswordBox}" TargetType="PasswordBox">
+        <Setter Property="IsTabStop" Value="True"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource focusVisualStyle}"/>
         <Setter Property="Background" Value="{StaticResource Background}"/>
         <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
         <Setter Property="BorderBrush" Value="{StaticResource Border}"/>
@@ -377,6 +403,8 @@
     </Style>
 
     <Style x:Key="{x:Type TabItem}" TargetType="TabItem">
+        <Setter Property="IsTabStop" Value="True"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource focusVisualStyle}"/>
         <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
         <Setter Property="FontSize" Value="20"/>
         <Setter Property="Template">
@@ -437,6 +465,8 @@
 
     <!--#region TextBox Style-->
     <Style x:Key="tBoxBase" TargetType="TextBox">
+        <Setter Property="IsTabStop" Value="True"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource focusVisualStyle}"/>
         <Setter Property="Background" Value="{StaticResource Background}"/>
         <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
         <Setter Property="BorderBrush" Value="{StaticResource Border}"/>
@@ -471,13 +501,13 @@
 
     <!--#region Window Style-->
     <Style x:Key="window" TargetType="{x:Type Window}">
+        <Setter Property="IsTabStop" Value="False"/>
         <Setter Property="Background" Value="{StaticResource Background}"/>
         <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
         <Setter Property="WindowStyle" Value="None"/>
         <Setter Property="FontFamily" Value="{StaticResource OrkneyLight}"/>
-        <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
         <Setter Property="WindowChrome.WindowChrome" Value="{StaticResource WindowChromeKey}"/>
     </Style>
     <!--#endregion-->
-    
-</ResourceDictionary>
+
+    </ResourceDictionary>

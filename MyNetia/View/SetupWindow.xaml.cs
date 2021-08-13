@@ -65,6 +65,9 @@ namespace MyNetia.View
             DataContext = this;
             InitializeComponent();
             setupValues();
+            tBoxServer.Focus();
+            tBoxServer.Select(tBoxServer.Text.Length, 0);
+
         }
 
         /// <summary>

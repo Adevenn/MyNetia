@@ -26,6 +26,8 @@ namespace MyNetia.View
         {
             DataContext = this;
             InitializeComponent();
+            tBoxUserName.Focus();
+            tBoxUserName.Select(tBoxUserName.Text.Length, 0);
         }
 
         /// <summary>
