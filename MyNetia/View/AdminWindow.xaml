@@ -98,6 +98,17 @@
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
+                        <Style.Triggers>
+                            <EventTrigger RoutedEvent="PreviewGotKeyboardFocus">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(ListBoxItem.IsSelected)">
+                                            <DiscreteBooleanKeyFrame KeyTime="0" Value="True"/>
+                                        </BooleanAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Style.Triggers>
                     </Style>
                 </Setter.Value>
             </Setter>
