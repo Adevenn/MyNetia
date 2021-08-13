@@ -69,19 +69,12 @@
             <Setter Property="HorizontalAlignment" Value="Right"/>
         </Style>
 
-        <Style x:Key="tChapTitle" BasedOn="{StaticResource tBlock}" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="60"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="FontStyle" Value="Italic"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="0, 60, 0, 20"/>
-        </Style>
-
         <Style x:Key="tTxtTitle" BasedOn="{StaticResource tBlock}" TargetType="TextBlock">
             <Setter Property="FontSize" Value="50"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="FontStyle" Value="Italic"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Width" Value="{Binding ActualWidth, ElementName=parentElementName}"/>
         </Style>
 
         <Style x:Key="tTxtSubtitle" BasedOn="{StaticResource tBlock}" TargetType="TextBlock">
@@ -97,7 +90,7 @@
         </Style>
 
         <Style x:Key="tTxtText" BasedOn="{StaticResource tBlock}" TargetType="TextBlock">
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
         </Style>
 
         <Style x:Key="tLastUpdate" BasedOn="{StaticResource tBlock}" TargetType="TextBlock">
@@ -183,18 +176,13 @@
                     <ListBox x:Name="listChapters"/>
                 </Border>
                 <ScrollViewer Grid.Column="1" x:Name="scrollViewer">
-                    <Grid>
+                    <Grid x:Name="gridContent">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="18*"/>
+                            <ColumnDefinition Width="9*"/>
+                            <ColumnDefinition Width="9*"/>
                             <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
-                        <Viewbox Grid.Column="1">
-                            <StackPanel>
-                                <TextBlock x:Name="chapTitle" Style="{StaticResource tChapTitle}"/>
-                                <StackPanel x:Name="spContent"/>
-                            </StackPanel>
-                        </Viewbox>
                     </Grid>
                 </ScrollViewer>
             </Grid>

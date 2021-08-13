@@ -266,9 +266,9 @@ namespace MyNetia.Model
                 {
                     int type = reader.GetInt32(0);
                     if (type == 0)
-                        txtList.Add(new TextManager(Types.none));
+                        txtList.Add(new TextManager(TypesTxt.none));
                     else
-                        txtList.Add(new TextManager((Types)type, reader.GetString(1)));
+                        txtList.Add(new TextManager((TypesTxt)type, reader.GetString(1)));
                 }
                 connection.Close();
                 return txtList;

@@ -50,7 +50,7 @@ namespace MyNetia.Model
         {
             this.title = title;
             this.texts = new ObservableCollection<TextManager>();
-            this.texts.Add(new TextManager(Types.none));
+            this.texts.Add(new TextManager(TypesTxt.none));
             this.images = new ObservableCollection<ImageManager>();
             this.images.Add(new ImageManager());
         }

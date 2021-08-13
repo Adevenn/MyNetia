@@ -240,14 +240,14 @@ namespace MyNetia
         {
             //Create a new text zone
             if (Keyboard.IsKeyDown(Key.LeftCtrl) && Keyboard.IsKeyDown(Key.Enter))
-                texts.Add(new TextManager(Types.none));
+                texts.Add(new TextManager(TypesTxt.none));
             //Remove text zone
             if (Keyboard.IsKeyDown(Key.LeftAlt) && Keyboard.IsKeyDown(Key.Enter))
             {
                 int id = listTxt.SelectedIndex;
                 texts.RemoveAt(id);
                 if (texts.Count == 0)
-                    texts.Add(new TextManager(Types.none));
+                    texts.Add(new TextManager(TypesTxt.none));
             }
         }
 
@@ -294,7 +294,7 @@ namespace MyNetia
         /// <param name="e"></param>
         private void addTxt_Click(object sender, RoutedEventArgs e)
         {
-            texts.Add(new TextManager(Types.none));
+            texts.Add(new TextManager(TypesTxt.none));
         }
 
         /// <summary>

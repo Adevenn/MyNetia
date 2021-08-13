@@ -55,7 +55,7 @@ namespace MyNetia
         private void listChapters_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Chapter ch = (Chapter)listChapters.SelectedItem;
-            setUI(ch, spContent);
+            setUI(ch);
             scrollViewer.ScrollToTop();
         }
         #endregion
@@ -68,47 +68,96 @@ namespace MyNetia
         /// <param name="txt"></param>
         /// <param name="img"></param>
         /// <param name="sp"></param>
-        private void setUI(Chapter ch, StackPanel sp)
+        private void setUI(Chapter ch)
         {
-            chapTitle.Text = ch.title;
+            gridContent.Children.Clear();
+            gridContent.RowDefinitions.Clear();
             ObservableCollection<TextManager> texts = ch.texts;
             ObservableCollection<ImageManager> images = ch.images;
-            sp.Children.Clear();
+            TextBlock t;
+            Image i;
             int idTxt = 0;
             int idImg = 0;
             while (true)
             {
-                StackPanel spHoriz = setStackPanel();
+                t = null;
+                i = null;
                 if (idTxt < texts.Count)
                 {
-                    switch ((Types)texts[idTxt].type)
+                    if ((TypesTxt)texts[idTxt].type != TypesTxt.none)
                     {
-                        case Types.title:
-                            spHoriz.Children.Add(setTitle(texts[idTxt].text));
-                            break;
-                        case Types.subtitle:
-                            spHoriz.Children.Add(setSubtitle(texts[idTxt].text));
-                            break;
-                        case Types.subsubtitle:
-                            spHoriz.Children.Add(setSubsubtitle(texts[idTxt].text));
-                            break;
-                        case Types.text:
-                            spHoriz.Children.Add(setText(texts[idTxt].text));
-                            break;
+                        t = setupText(texts, idTxt);
+                        gridContent.Children.Add(t);
                     }
                     idTxt++;
                 }
                 if (idImg < images.Count)
                 {
                     if (images[idImg].fileName != "")
-                        spHoriz.Children.Add(setImage(images[idImg].datas));
+                    {
+                        i = setImage(images[idImg].datas);
+                        gridContent.Children.Add(i);
+                    }
                     idImg++;
                 }
-                sp.Children.Add(spHoriz);
+                assignToRow(t, i);
                 if (idTxt >= texts.Count && idImg >= images.Count)
                     break;
             }
         }
+
+        /// <summary>
+        /// Return a new TextBlock correctly setup
+        /// </summary>
+        /// <param name="texts"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        private TextBlock setupText(ObservableCollection<TextManager> texts, int id)
+        {
+            switch ((TypesTxt)texts[id].type)
+            {
+                case TypesTxt.title:
+                    return setTitle(texts[id].text);
+                case TypesTxt.subtitle:
+                    return setSubtitle(texts[id].text);
+                case TypesTxt.subsubtitle:
+                    return setSubsubtitle(texts[id].text);
+                case TypesTxt.text:
+                    return setText(texts[id].text);
+                case TypesTxt.none:
+                default:
+                    return null;
+            }
+        }
+
+        /// <summary>
+        /// Assign text et image elements to the correct collum and row
+        /// </summary>
+        /// <param name="t"></param>
+        /// <param name="i"></param>
+        private void assignToRow(TextBlock t, Image i)
+        {
+            RowDefinition row = new RowDefinition();
+            row.Height = GridLength.Auto;
+            gridContent.RowDefinitions.Add(row);
+            if (t == null)
+            {
+                Grid.SetColumnSpan(i, 4);
+                Grid.SetRow(i, gridContent.RowDefinitions.Count -1);
+            }
+            else if (i == null)
+            {
+                Grid.SetColumnSpan(t, 4);
+                Grid.SetRow(t, gridContent.RowDefinitions.Count -1);
+            }
+            else
+            {
+                Grid.SetColumn(t, 1);
+                Grid.SetRow(t, gridContent.RowDefinitions.Count -1);
+                Grid.SetColumn(i, 2);
+                Grid.SetRow(i, gridContent.RowDefinitions.Count -1);
+            }
+         }
 
         /// <summary>
         /// Create a custom Title from TextBox
@@ -162,15 +211,6 @@ namespace MyNetia
         private Image setImage(byte[] imageFile) => new Image
         {
             Source = loadImage(imageFile)
-        };
-
-        /// <summary>
-        /// Create a custom StackPanel
-        /// </summary>
-        /// <returns></returns>
-        private StackPanel setStackPanel() => new StackPanel
-        {
-            Style = (Style)Resources["spHCustom"]
         };
         #endregion
 

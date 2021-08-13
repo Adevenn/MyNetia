@@ -32,7 +32,7 @@ namespace MyNetia.Model
             }
         }
 
-        public TextManager(Types t, string value = null)
+        public TextManager(TypesTxt t, string value = null)
         {
             type = (int)t;
             if (type != 0)
