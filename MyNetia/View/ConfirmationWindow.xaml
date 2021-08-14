@@ -72,7 +72,7 @@
         <StackPanel Style="{StaticResource spV}">
             <TextBlock x:Name="tBlock"/>
             <StackPanel Style="{StaticResource spH}">
-                <Button Click="btnYes_Click" Content="Yes"/>
+                <Button x:Name="btnYes" Click="btnYes_Click" Content="Yes"/>
                 <Button Click="btnNo_Click" Content="No"/>
             </StackPanel>
         </StackPanel>

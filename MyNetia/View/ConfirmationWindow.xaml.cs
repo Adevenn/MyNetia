@@ -9,6 +9,7 @@ namespace MyNetia
         {
             InitializeComponent();
             tBlock.Text = text;
+            btnYes.Focus();
         }
 
         #region EVENTS
