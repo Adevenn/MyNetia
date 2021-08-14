@@ -248,8 +248,6 @@ namespace MyNetia
             {
                 int id = listTxt.SelectedIndex;
                 texts.RemoveAt(id);
-                if (texts.Count == 0)
-                    texts.Add(new TextManager(TypesTxt.none));
             }
         }
 
