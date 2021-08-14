@@ -140,7 +140,11 @@ namespace MyNetia
             RowDefinition row = new RowDefinition();
             row.Height = GridLength.Auto;
             gridContent.RowDefinitions.Add(row);
-            if (t == null)
+            if (t == null && i == null)
+            {
+                //Misconfig by the user ...
+            }
+            else if (t == null)
             {
                 Grid.SetColumnSpan(i, 4);
                 Grid.SetRow(i, gridContent.RowDefinitions.Count -1);
