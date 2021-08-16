@@ -24,7 +24,7 @@ namespace MyNetia.Model
             get => _type;
             set
             {
-                if(_type != value)
+                if (_type != value)
                 {
                     _type = value;
                     OnPropertyChanged();
@@ -32,10 +32,10 @@ namespace MyNetia.Model
             }
         }
 
-        public TextManager(TypesTxt t, string value = null)
+        public TextManager(TypesTxt type, string value = null)
         {
-            type = (int)t;
-            if (type != 0)
+            this.type = (int)type;
+            if (this.type != 0)
                 text = value;
         }
 

@@ -93,9 +93,9 @@ namespace MyNetia
                 }
                 if (idImg < images.Count)
                 {
-                    if (images[idImg].fileName != "")
+                    if ((TypesImage)images[idImg].type != TypesImage.none)
                     {
-                        i = setImage(images[idImg].datas);
+                        i = setupImage(images, idImg);
                         gridContent.Children.Add(i);
                     }
                     idImg++;
@@ -114,20 +114,32 @@ namespace MyNetia
         /// <returns></returns>
         private TextBlock setupText(ObservableCollection<TextManager> texts, int id)
         {
-            switch ((TypesTxt)texts[id].type)
+            return (TypesTxt)texts[id].type switch
             {
-                case TypesTxt.title:
-                    return setTitle(texts[id].text);
-                case TypesTxt.subtitle:
-                    return setSubtitle(texts[id].text);
-                case TypesTxt.subsubtitle:
-                    return setSubsubtitle(texts[id].text);
-                case TypesTxt.text:
-                    return setText(texts[id].text);
-                case TypesTxt.none:
-                default:
-                    return null;
-            }
+                TypesTxt.title => setTitle(texts[id].text),
+                TypesTxt.subtitle => setSubtitle(texts[id].text),
+                TypesTxt.subsubtitle => setSubsubtitle(texts[id].text),
+                TypesTxt.text => setText(texts[id].text),
+                _ => null,
+            };
+        }
+        
+        /// <summary>
+        /// Return a new Image correctly setup
+        /// </summary>
+        /// <param name="images"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        private Image setupImage(ObservableCollection<ImageManager> images, int id)
+        {
+            return (TypesImage)images[id].type switch
+            {
+                TypesImage.small => setSmallImage(images[id].datas),
+                TypesImage.medium => setMediumImage(images[id].datas),
+                TypesImage.big => setBigImage(images[id].datas),
+                TypesImage.extraBig => setExtraBigImage(images[id].datas),
+                _ => null,
+            };
         }
 
         /// <summary>
@@ -137,31 +149,36 @@ namespace MyNetia
         /// <param name="i"></param>
         private void assignToRow(TextBlock t, Image i)
         {
-            RowDefinition row = new RowDefinition();
-            row.Height = GridLength.Auto;
+            RowDefinition row = new RowDefinition
+            {
+                Height = GridLength.Auto
+            };
             gridContent.RowDefinitions.Add(row);
-            if (t == null && i == null)
+            if (t != null || i != null)
             {
-                //Misconfig by the user ...
-            }
-            else if (t == null)
-            {
-                Grid.SetColumnSpan(i, 4);
-                Grid.SetRow(i, gridContent.RowDefinitions.Count -1);
-            }
-            else if (i == null)
-            {
-                Grid.SetColumnSpan(t, 4);
-                Grid.SetRow(t, gridContent.RowDefinitions.Count -1);
+                if (t == null)
+                {
+                    Grid.SetColumnSpan(i, 4);
+                    Grid.SetRow(i, gridContent.RowDefinitions.Count - 1);
+                }
+                else if (i == null)
+                {
+                    Grid.SetColumnSpan(t, 4);
+                    Grid.SetRow(t, gridContent.RowDefinitions.Count - 1);
+                }
+                else
+                {
+                    Grid.SetColumn(t, 1);
+                    Grid.SetRow(t, gridContent.RowDefinitions.Count - 1);
+                    Grid.SetColumn(i, 2);
+                    Grid.SetRow(i, gridContent.RowDefinitions.Count - 1);
+                }
             }
             else
             {
-                Grid.SetColumn(t, 1);
-                Grid.SetRow(t, gridContent.RowDefinitions.Count -1);
-                Grid.SetColumn(i, 2);
-                Grid.SetRow(i, gridContent.RowDefinitions.Count -1);
+                //Misconfig by the user ...
             }
-         }
+        }
 
         /// <summary>
         /// Create a custom Title from TextBox
@@ -208,13 +225,47 @@ namespace MyNetia
         };
 
         /// <summary>
-        /// Create a custom image
+        /// Create a custom small image
         /// </summary>
         /// <param name="imageFile"></param>
         /// <returns></returns>
-        private Image setImage(byte[] imageFile) => new Image
+        private Image setSmallImage(byte[] imageFile) => new Image
         {
-            Source = loadImage(imageFile)
+            Source = loadImage(imageFile),
+            Style = (Style)Resources["smallImg"]
+        };
+
+        /// <summary>
+        /// Create a custom medium image
+        /// </summary>
+        /// <param name="imageFile"></param>
+        /// <returns></returns>
+        private Image setMediumImage(byte[] imageFile) => new Image
+        {
+            Source = loadImage(imageFile),
+            Style = (Style)Resources["mediumImg"]
+        };
+
+        /// <summary>
+        /// Create a custom big image
+        /// </summary>
+        /// <param name="imageFile"></param>
+        /// <returns></returns>
+        private Image setBigImage(byte[] imageFile) => new Image
+        {
+            Source = loadImage(imageFile),
+            Style = (Style)Resources["bigImg"]
+        };
+
+        /// <summary>
+        /// Create a custom extra big image
+        /// </summary>
+        /// <param name="imageFile"></param>
+        /// <returns></returns>
+        private Image setExtraBigImage(byte[] imageFile) => new Image
+        {
+            Source = loadImage(imageFile),
+            Style = (Style)Resources["extraBigImg"]
         };
         #endregion
 

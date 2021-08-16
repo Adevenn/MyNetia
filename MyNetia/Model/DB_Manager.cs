@@ -82,11 +82,12 @@ namespace MyNetia.Model
                         //INSERT IMAGES
                         foreach (ImageManager img in images[i])
                         {
-                            cmd = new NpgsqlCommand("INSERT INTO images (idchap, idelem, filename, image) VALUES (@p, @p2, @p3, @p4)", connection);
+                            cmd = new NpgsqlCommand("INSERT INTO images (idchap, idelem, filename, image, type) VALUES (@p, @p2, @p3, @p4, @p5)", connection);
                             cmd.Parameters.AddWithValue("p", chapTitles[i]);
                             cmd.Parameters.AddWithValue("p2", elem.title);
                             cmd.Parameters.AddWithValue("p3", img.fileName);
                             cmd.Parameters.AddWithValue("p4", img.datas);
+                            cmd.Parameters.AddWithValue("p5", img.type);
                             cmd.ExecuteNonQuery();
                         }
                     }
@@ -284,12 +285,12 @@ namespace MyNetia.Model
         /// <returns></returns>
         private static ObservableCollection<ImageManager> getImagesFromChapter(string idElem, string idChap)
         {
-            ObservableCollection<ImageManager> imgList = new ObservableCollection<ImageManager>();
             try
             {
+                ObservableCollection<ImageManager> imgList = new ObservableCollection<ImageManager>();
                 connection.Open();
                 imgList = new ObservableCollection<ImageManager>();
-                NpgsqlCommand cmd = new NpgsqlCommand("SELECT filename, image FROM images WHERE idelem = @p AND idchap = @p2", connection);
+                NpgsqlCommand cmd = new NpgsqlCommand("SELECT filename, image, type FROM images WHERE idelem = @p AND idchap = @p2", connection);
                 cmd.Parameters.AddWithValue("p", idElem);
                 cmd.Parameters.AddWithValue("p2", idChap);
                 DataTable dt = new DataTable();
@@ -297,7 +298,7 @@ namespace MyNetia.Model
                 nda.Fill(dt);
                 connection.Close();
                 foreach (DataRow row in dt.Rows)
-                    imgList.Add(new ImageManager((string)row["filename"], (byte[])row["image"]));
+                    imgList.Add(new ImageManager((string)row["filename"], (byte[])row["image"], (TypesImage)row["type"]));
                 return imgList;
             }
             catch (NpgsqlException e) { throw new NpgsqlException(e.Message); }

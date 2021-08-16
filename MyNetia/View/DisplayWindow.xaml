@@ -21,16 +21,32 @@
         <!--#endregion-->
         
         <!--#region Image Style-->
-        <Style x:Key="{x:Type Image}" TargetType="Image">
+        <Style x:Key="image" TargetType="Image">
             <Setter Property="Stretch" Value="Uniform"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="MinHeight" Value="256"/>
-            <Setter Property="MaxHeight" Value="512"/>
-            <Setter Property="MinWidth" Value="256"/>
-            <Setter Property="MaxWidth" Value="512"/>
             <Setter Property="Margin" Value="15"/>
         </Style>
-        <!--#endregion-->
+
+	<Style x:Key="smallImg" TargetType="Image" BasedOn="{StaticResource image}">
+            <Setter Property="MaxHeight" Value="128"/>
+            <Setter Property="MaxWidth" Value="128"/>
+	</Style>
+
+	<Style x:Key="mediumImg" TargetType="Image" BasedOn="{StaticResource image}">
+            <Setter Property="Height" Value="256"/>
+            <Setter Property="Width" Value="256"/>
+	</Style>
+
+	<Style x:Key="bigImg" TargetType="Image" BasedOn="{StaticResource image}">
+            <Setter Property="Height" Value="512"/>
+            <Setter Property="Width" Value="512"/>
+	</Style>
+	    
+	<Style x:Key="extraBigImg" TargetType="Image" BasedOn="{StaticResource image}">
+	    <Setter Property="Height" Value="1024"/>
+	    <Setter Property="Width" Value="1024"/>
+	</Style>
+	<!--#endregion-->
 
         <!--#region ListBox Style-->
         <Style x:Key="{x:Type ListBox}" BasedOn="{StaticResource listBoxBase}" TargetType="ListBox">

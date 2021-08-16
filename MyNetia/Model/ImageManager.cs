@@ -31,17 +31,33 @@ namespace MyNetia.Model
                 }
             }
         }
+        private int _type;
+        public int type
+        {
+            get => _type;
+            set
+            {
+                if (_type != value)
+                {
+                    _type = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
 
         public ImageManager()
         {
             fileName = "";
             datas = new byte[0];
+            type = (int)TypesImage.none;
         }
 
-        public ImageManager(string fileName, byte[] datas)
+        public ImageManager(string fileName, byte[] datas, TypesImage type)
         {
             this.fileName = fileName;
             this.datas = datas;
+            this.type = (int)type;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

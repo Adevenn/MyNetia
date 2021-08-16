@@ -23,6 +23,7 @@
             <Setter Property="Width" Value="200"/>
         </Style>
 
+        <!--#region Button Style-->
         <Style x:Key="setupBtn" TargetType="Button" BasedOn="{StaticResource btnBase}">
             <EventSetter Event="Click" Handler="loadSetup_Click"/>
             <Setter Property="Content" Value="Change setup"/>
@@ -35,7 +36,8 @@
             <EventSetter Event="Click" Handler="valid_Click"/>
             <Setter Property="Content" Value="Login"/>
         </Style>
-        
+        <!--#endregion-->
+	
     </Window.Resources>
     
     <DockPanel>
