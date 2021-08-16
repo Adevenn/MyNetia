@@ -12,10 +12,10 @@
     <PackageIconUrl />
     <PackageLicenseFile>Licence.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>2.0.1.0</AssemblyVersion>
-    <FileVersion>2.0.1.0</FileVersion>
+    <AssemblyVersion>2.0.3.0</AssemblyVersion>
+    <FileVersion>2.0.3.0</FileVersion>
     <PackageReleaseNotes>v-2.0.1</PackageReleaseNotes>
-    <Version>2.0.1</Version>
+    <Version>2.0.3</Version>
     <Description>This application is a personnal encyclopedia. Everything you want to remember can be saved in MyNetia. Notes, summaries, quick reminders, ToDo list, etc</Description>
   </PropertyGroup>
 
