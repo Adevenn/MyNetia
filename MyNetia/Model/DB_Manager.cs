@@ -182,13 +182,11 @@ namespace MyNetia.Model
                 ObservableCollection<TextManager> txtList;
                 ObservableCollection<ImageManager> imgList;
 
-                //SELECT ELEMENT
-                object[] values = getElemValues(title);
+                //SELECT ELEMENT && CHAPTERS TITLE
+                object[] values = getValues(title);
                 subtitle = (string)values[0];
                 lastUpdate = (DateTime)values[1];
-
-                //SELECT CHAPTERS
-                chapTitles = getChapTitles(title);
+                chapTitles = (ObservableCollection<string>)values[2];
 
                 //STORE CHAPTERS DATAS
                 foreach (string ch in chapTitles)
@@ -207,42 +205,25 @@ namespace MyNetia.Model
         /// </summary>
         /// <param name="idElem"></param>
         /// <returns></returns>
-        private static object[] getElemValues(string idElem)
+        private static object[] getValues(string idElem)
         {
-            object[] values = new object[2];
+            object[] values = new object[3];
             try
             {
                 connection.Open();
-                NpgsqlCommand cmd = new NpgsqlCommand("SELECT subtitle, lastupdate FROM elements WHERE title = @p;", connection);
+                NpgsqlCommand cmd = new NpgsqlCommand("SELECT e.subtitle, e.lastupdate, c.title FROM elements as e, chapters as c WHERE e.title = c.idelem AND e.title = @p", connection);
                 cmd.Parameters.AddWithValue("p", idElem);
-                NpgsqlDataReader reader = cmd.ExecuteReader();
-                reader.Read();
-                values[0] = reader.GetString(0);
-                values[1] = reader.GetDateTime(1);
+                DataTable dt = new DataTable();
+                NpgsqlDataAdapter nda = new NpgsqlDataAdapter(cmd);
+                nda.Fill(dt);
                 connection.Close();
+                values[0] = (string)dt.Rows[0]["subtitle"];
+                values[1] = (DateTime)dt.Rows[0]["lastupdate"];
+                ObservableCollection<string> ch = new ObservableCollection<string>();
+                foreach (DataRow row in dt.Rows)
+                    ch.Add((string)row["title"]);
+                values[2] = ch;
                 return values;
-            }
-            catch (NpgsqlException e) { throw new NpgsqlException(e.Message); }
-        }
-
-        /// <summary>
-        /// Get chapters titles from idElem in database
-        /// </summary>
-        /// <param name="idElem"></param>
-        /// <returns></returns>
-        private static ObservableCollection<string> getChapTitles(string idElem)
-        {
-            ObservableCollection<string> chapTitles = new ObservableCollection<string>();
-            try
-            {
-                connection.Open();
-                NpgsqlCommand cmd = new NpgsqlCommand("SELECT title FROM chapters WHERE idelem = @p", connection);
-                cmd.Parameters.AddWithValue("p", idElem);
-                NpgsqlDataReader reader = cmd.ExecuteReader();
-                while (reader.Read())
-                    chapTitles.Add(reader.GetString(0));
-                connection.Close();
-                return chapTitles;
             }
             catch (NpgsqlException e) { throw new NpgsqlException(e.Message); }
         }
