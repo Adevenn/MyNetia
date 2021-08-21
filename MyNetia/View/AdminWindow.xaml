@@ -33,12 +33,25 @@
         </Style>
         <!--#endregion-->
 
+        <!--#region RichTextBox Style-->
+        <Style x:Key="{x:Type RichTextBox}" TargetType="RichTextBox">
+            <Setter Property="Background" Value="{StaticResource Background}"/>
+            <Setter Property="FontFamily" Value="{StaticResource OrkneyLight}"/>
+            <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Border}"/>
+            <Setter Property="SelectionBrush" Value="{StaticResource Background2}"/>
+            <Setter Property="Width" Value="330"/>
+            <Setter Property="Height" Value="150"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+        </Style>
+        <!--#endregion-->
+
         <!--#region Image style-->
-        <Style x:Key="{x:Type Image}" TargetType="Image">
-            <Setter Property="Source" Value="/AppResources/Images/Valid_MyNetia.png"/>
-            <Setter Property="Visibility" Value="Hidden"/>
-            <Setter Property="Height" Value="40"/>
-            <Setter Property="Width" Value="70"/>
+        <Style x:Key="validImg" TargetType="Image">
+	        <Setter Property="Source" Value="/AppResources/Images/Valid_MyNetia.png"/>
+	        <Setter Property="Visibility" Value="Hidden"/>
+	        <Setter Property="Height" Value="40"/>
+	        <Setter Property="Width" Value="70"/>
         </Style>
         <!--#endregion-->
 
@@ -60,7 +73,7 @@
         </Style>
         <!--#endregion-->
 
-        <!--#region ListBox Style-->
+	    <!--#region ListBox Style-->
         <Style x:Key="listBoxChapters" BasedOn="{StaticResource listBoxBase}" TargetType="ListBox">
             <EventSetter Event="SelectionChanged" Handler="listChapters_SelectionChanged"/>
             <EventSetter Event="PreviewMouseMove" Handler="listChapters_PreviewMouseMove"/>
@@ -95,19 +108,19 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="ListBoxItem">
-				    <Border Style="{StaticResource borderFull}">
-					<StackPanel>
+				                    <Border Style="{StaticResource borderFull}">
+					                    <StackPanel>
                                             <ComboBox SelectedIndex="{Binding type, UpdateSourceTrigger=PropertyChanged}">
                                                 <ComboBoxItem Content="None"/>
                                                 <ComboBoxItem Content="Small"/>
                                                 <ComboBoxItem Content="Medium"/>
                                                 <ComboBoxItem Content="Big"/>
-						<ComboBoxItem Content="Extra Big"/>
-					    </ComboBox>
+						                    <ComboBoxItem Content="Extra Big"/>
+					                        </ComboBox>
                                             <Button Style="{StaticResource btnImg}" Content="{Binding fileName, UpdateSourceTrigger=PropertyChanged}"/>
-				        </StackPanel>
-				    </Border>
-				</ControlTemplate>
+				                        </StackPanel>
+				                    </Border>
+				                </ControlTemplate>
                             </Setter.Value>
                         </Setter>
                         <Style.Triggers>
@@ -243,7 +256,7 @@
                                     x:Name="selectElem"
                                     KeyDown="selectAddUpdate_KeyDown"
                                     Text="{Binding Path=selectAddUpdate, UpdateSourceTrigger=PropertyChanged}"/>
-                            </StackPanel>
+			    </StackPanel>
                         </Border>
                     </StackPanel>
                     <Grid
@@ -335,6 +348,9 @@
                                         Grid.Column="1" Grid.Row="1"
                                         x:Name="listTxt"
                                         Style="{StaticResource listBoxTxt}"/>
+                                    <Button Style="{StaticResource btnBase}" Click="editTextBtn_Click">
+                                        <RichTextBox IsEnabled="False"/>
+                                    </Button>
                                     <StackPanel
                                         Grid.Column="0" Grid.Row="2"
                                         Style="{StaticResource spH}"
@@ -352,7 +368,7 @@
                         </Border>
                         <StackPanel Grid.Row="1" Style="{StaticResource spH}">
                             <Button Style="{StaticResource btnValid}" Content="Valid"/>
-                            <Image x:Name="imageValid"/>
+                            <Image x:Name="imageValid" Style="{StaticResource validImg}"/>
                         </StackPanel>
                     </Grid>
                 </DockPanel>

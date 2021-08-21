@@ -20,7 +20,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="AppResources\Images\Bold.png" />
     <None Remove="AppResources\Images\DefaultImage.png" />
+    <None Remove="AppResources\Images\Italic.png" />
+    <None Remove="AppResources\Images\TxtCenter.png" />
+    <None Remove="AppResources\Images\TxtFullLine.png" />
+    <None Remove="AppResources\Images\TxtLeft.png" />
+    <None Remove="AppResources\Images\TxtRight.png" />
+    <None Remove="AppResources\Images\Underline.png" />
     <None Remove="AppResources\Images\Valid_MyNetia.png" />
     <None Remove="ReadMe.txt" />
     <Content Include="Licence.txt">
@@ -31,6 +38,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="AppResources\Images\Bold.png" />
+    <Resource Include="AppResources\Images\Italic.png" />
+    <Resource Include="AppResources\Images\TxtCenter.png" />
+    <Resource Include="AppResources\Images\TxtFullLine.png" />
+    <Resource Include="AppResources\Images\TxtLeft.png" />
+    <Resource Include="AppResources\Images\TxtRight.png" />
+    <Resource Include="AppResources\Images\Underline.png" />
     <Resource Include="AppResources\Images\Valid_MyNetia.png" />
   </ItemGroup>
 

@@ -362,8 +362,13 @@ namespace MyNetia
                 info.ShowDialog();
             }
         }
-        #endregion
 
+        private void editTextBtn_Click(object sender, RoutedEventArgs e)
+        {
+            RichTextBoxEditWindow rtbWindow = new RichTextBoxEditWindow();
+            rtbWindow.ShowDialog();
+        }
+        #endregion
 
         #region Drag and drop ItemListBox
         private void listChaptersItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
