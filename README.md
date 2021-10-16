@@ -2,7 +2,7 @@ DEPRECATED PROJECT
 
 ------> go to : https://github.com/Adevenn/my_netia_client
 
-The project has been migrate to Flutter to make the app runnable on each device type (Windows, Linux, Android, IOS).
+The project has been migrated to Flutter to make the app runnable on each device type (Windows, Linux, Android, IOS).
 
 ---
 
